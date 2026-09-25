@@ -104,7 +104,42 @@ jobs:
           else
             echo "No test_output.txt found"
           fi
-          
+
+      - name: Show failure details
+        if: always()
+        run: |
+          python - <<'PY'
+          import re
+          from pathlib import Path
+
+          files = list(Path("SWE-ABS/swe-bench/logs").rglob("test_output.txt"))
+
+          print("=== FAILURE DETAILS ===")
+
+          if not files:
+              print("No test_output.txt found")
+              raise SystemExit
+
+          text = files[0].read_text(
+              encoding="utf-8",
+              errors="replace"
+          )
+
+          # Remove ANSI colour codes
+          text = re.sub(r"\x1b\[[0-9;]*m", "", text)
+
+          start = text.find("=== FAILURES ===")
+          end = text.find("short test summary info")
+
+          if start == -1:
+              print("No FAILURES section found")
+          else:
+              if end == -1:
+                  end = len(text)
+
+              print(text[start:end])
+          PY
+      
       - name: Upload evaluation logs
         if: always()
         uses: actions/upload-artifact@v4
