@@ -1,0 +1,24 @@
+name: Runner Check
+
+on:
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check system
+        run: |
+          echo "=== SYSTEM ==="
+          uname -a
+          python --version
+
+          echo "=== DOCKER ==="
+          docker --version
+          docker info --format '{{.ServerVersion}}'
+
+          echo "=== RESOURCES ==="
+          nproc
+          free -h
+          df -h /
