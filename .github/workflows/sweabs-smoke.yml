@@ -56,6 +56,37 @@ jobs:
                       print(f"{n:4}: {lines[n-1]}")
           PY
 
+      - name: Log exact patch application errors
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path(
+              "SWE-ABS/swe-bench/swebench/harness/run_evaluation.py"
+          )
+
+          text = path.read_text()
+
+          old = '''            else:
+                      logger.info(f"Failed to apply patch to container: {git_apply_cmd}")'''
+
+          new = '''            else:
+                      logger.info(
+                          f"Failed to apply patch to container: {git_apply_cmd}\\n"
+                          f"{val.output.decode(UTF8)}"
+                      )'''
+
+          if old not in text:
+              raise RuntimeError("Target logging block not found")
+
+          text = text.replace(old, new, 1)
+
+          compile(text, str(path), "exec")
+          path.write_text(text)
+
+          print("Failure-output logging enabled")
+          PY
+          
       - name: Install SWE-bench harness
         run: |
           python -m pip install --upgrade pip
