@@ -65,25 +65,58 @@ jobs:
           )
 
           text = path.read_text()
+          lines = text.splitlines()
 
-          old = '''            else:
-                      logger.info(f"Failed to apply patch to container: {git_apply_cmd}")'''
+          target = (
+              'logger.info('
+              'f"Failed to apply patch to container: {git_apply_cmd}")'
+          )
 
-          new = '''            else:
-                      logger.info(
-                          f"Failed to apply patch to container: {git_apply_cmd}\\n"
-                          f"{val.output.decode(UTF8)}"
-                      )'''
+          matches = [
+              i for i, line in enumerate(lines)
+              if line.strip() == target
+          ]
 
-          if old not in text:
-              raise RuntimeError("Target logging block not found")
+          print("Target occurrences found:", len(matches))
 
-          text = text.replace(old, new, 1)
+          if len(matches) != 1:
+              raise RuntimeError(
+                  f"Expected exactly 1 target line, found {len(matches)}"
+              )
 
-          compile(text, str(path), "exec")
-          path.write_text(text)
+          i = matches[0]
+
+          original_line = lines[i]
+          indent = original_line[:len(original_line) - len(original_line.lstrip())]
+
+          replacement = [
+              indent + "logger.info(",
+              indent + '    f"Failed to apply patch to container: {git_apply_cmd}\\n"',
+              indent + "    f\"{val.output.decode(UTF8)}\"",
+              indent + ")",
+          ]
+
+          lines[i:i + 1] = replacement
+
+          new_text = "\n".join(lines) + "\n"
+
+          compile(new_text, str(path), "exec")
+          path.write_text(new_text)
 
           print("Failure-output logging enabled")
+
+          print("")
+          print("=== MODIFIED PATCH FAILURE LOGGING ===")
+
+          new_lines = new_text.splitlines()
+
+          for n, line in enumerate(new_lines, start=1):
+              if "Failed to apply patch to container" in line:
+                  start = max(1, n - 2)
+                  end = min(len(new_lines), n + 4)
+
+                  for j in range(start, end + 1):
+                      print(f"{j:4}: {new_lines[j-1]}")
           PY
 
       - name: Install SWE-bench harness
@@ -109,6 +142,7 @@ jobs:
           ]
 
           assert len(rows) == 1
+
           r = rows[0]
 
           assert r["resolved"] is True
@@ -132,6 +166,7 @@ jobs:
       - name: Run SWE-ABS evaluation
         run: |
           set -o pipefail
+
           cd SWE-ABS/swe-bench
 
           python -m swebench.harness.run_evaluation \
@@ -154,9 +189,13 @@ jobs:
 
           find . -type f -name patch.diff -print || true
 
-          PATCH_FILE="$(find . -type f \
-            -path '*astropy__astropy-12907/patch.diff' \
-            -print -quit)"
+          PATCH_FILE="$(
+            find . \
+              -type f \
+              -path '*astropy__astropy-12907/patch.diff' \
+              -print \
+              -quit
+          )"
 
           if [ -z "$PATCH_FILE" ]; then
             echo "ERROR: astropy__astropy-12907 patch.diff not found"
@@ -168,10 +207,12 @@ jobs:
 
           echo ""
           echo "=== numbered patch ==="
+
           nl -ba "$PATCH_FILE"
 
           echo ""
           echo "=== visible line endings / hidden chars ==="
+
           sed -n 'l' "$PATCH_FILE"
 
       - name: Inspect run_instance log
@@ -181,6 +222,7 @@ jobs:
             find SWE-ABS/swe-bench/logs \
               -name run_instance.log \
               -print \
+              2>/dev/null \
               | head -n 1
           )"
 
@@ -194,6 +236,7 @@ jobs:
 
           echo ""
           echo "=== FULL RUN INSTANCE LOG ==="
+
           cat "$LOG_FILE"
 
       - name: Show test output
@@ -222,7 +265,8 @@ jobs:
             find SWE-ABS/swe-bench/logs \
               -name test_output.txt \
               -print \
-              2>/dev/null | head -n 1
+              2>/dev/null \
+              | head -n 1
           )"
 
           echo "=== RAW FAILURE DETAILS ==="
