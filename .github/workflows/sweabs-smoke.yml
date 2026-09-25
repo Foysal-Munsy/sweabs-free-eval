@@ -44,36 +44,71 @@ jobs:
               "patch --batch --forward --fuzz=5 -p1 -i",
           ]'''
 
-          assert old_cmds in text, "Could not find GIT_APPLY_CMDS"
-          text = text.replace(old_cmds, new_cmds, 1)
+          if old_cmds not in text:
+              raise RuntimeError("Could not find original GIT_APPLY_CMDS block")
 
-          old_loop = '''        for git_apply_cmd in GIT_APPLY_CMDS:
+          text = text.replace(
+              old_cmds,
+              new_cmds,
+              1
+          )
+
+          old_loop = '''        applied_patch = False
+          for git_apply_cmd in GIT_APPLY_CMDS:
               val = container.exec_run(
+                  f"{git_apply_cmd} {DOCKER_PATCH}",
+                  workdir=DOCKER_WORKDIR,
+                  user=DOCKER_USER,
+              )
+              if val.exit_code == 0:
+                  logger.info(f"{APPLY_PATCH_PASS}:\\n{val.output.decode(UTF8)}")
+                  applied_patch = True
+                  break
+              else:
+                  logger.info(f"Failed to apply patch to container: {git_apply_cmd}")
           '''
 
-          new_loop = '''        for attempt, git_apply_cmd in enumerate(GIT_APPLY_CMDS):
+          new_loop = '''        applied_patch = False
+          for attempt, git_apply_cmd in enumerate(GIT_APPLY_CMDS):
               if attempt:
                   container.exec_run(
-                      ["/bin/bash", "-c",
-                       "git reset --hard HEAD && git clean -fd"],
+                      ["/bin/bash", "-lc", "git reset --hard HEAD && git clean -fd"],
                       workdir=DOCKER_WORKDIR,
                       user=DOCKER_USER,
                   )
 
               val = container.exec_run(
+                  f"{git_apply_cmd} {DOCKER_PATCH}",
+                  workdir=DOCKER_WORKDIR,
+                  user=DOCKER_USER,
+              )
+
+              if val.exit_code == 0:
+                  logger.info(f"{APPLY_PATCH_PASS}:\\n{val.output.decode(UTF8)}")
+                  applied_patch = True
+                  break
+              else:
+                  logger.info(f"Failed to apply patch to container: {git_apply_cmd}")
           '''
 
-          assert old_loop in text, "Could not find patch loop"
-          text = text.replace(old_loop, new_loop, 1)
+          if old_loop not in text:
+              raise RuntimeError("Could not find original patch loop")
 
-          # Verify Python syntax before saving
+          text = text.replace(
+              old_loop,
+              new_loop,
+              1
+          )
+
+          # Verify final file is valid Python
           compile(text, str(path), "exec")
+
           path.write_text(text)
 
+          print("GIT_APPLY_CMDS replaced: OK")
+          print("Patch retry loop replaced: OK")
+          print("Python syntax check: OK")
           print("Safe patch logic installed")
-          print("Syntax check: OK")
-          print("Removed: git apply --reject")
-          print("Added: reset between attempts + patch --forward")
           PY
           
       - name: Install SWE-bench harness
