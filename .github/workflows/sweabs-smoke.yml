@@ -1,4 +1,4 @@
-name: SWE-ABS Smoke Test
+name: SWE-ABS Final Smoke Test
 
 on:
   workflow_dispatch:
@@ -21,7 +21,10 @@ jobs:
         run: |
           git clone --depth 1 https://github.com/OpenAgentEval/SWE-ABS.git
 
-      - name: Backport safe patch retry logic
+          echo "=== SWE-ABS COMMIT ==="
+          git -C SWE-ABS rev-parse HEAD
+
+      - name: Backport safe patch application logic
         run: |
           python - <<'PY'
           from pathlib import Path
@@ -33,23 +36,20 @@ jobs:
           lines = path.read_text().splitlines()
 
           # ---------------------------------------------------------
-          # 1. Replace only GIT_APPLY_CMDS.
-          #    Mirrors current official SWE-bench retry commands.
+          # 1. Replace bundled patch commands with the safer
+          #    current SWE-bench command sequence.
           # ---------------------------------------------------------
-
           cmd_start = next(
-              i
-              for i, line in enumerate(lines)
+              i for i, line in enumerate(lines)
               if line.strip() == "GIT_APPLY_CMDS = ["
           )
 
           cmd_end = next(
-              i
-              for i in range(cmd_start + 1, len(lines))
+              i for i in range(cmd_start + 1, len(lines))
               if lines[i].strip() == "]"
           )
 
-          indent = (
+          base_indent = (
               lines[cmd_start][
                   :len(lines[cmd_start])
                   - len(lines[cmd_start].lstrip())
@@ -57,21 +57,20 @@ jobs:
           )
 
           lines[cmd_start:cmd_end + 1] = [
-              indent + "GIT_APPLY_CMDS = [",
-              indent + '    "git apply --verbose",',
-              indent + '    "git apply --verbose --3way",',
-              indent + '    "git apply --verbose --reject",',
-              indent + '    "patch --batch --forward --fuzz=5 -p1 -i",',
-              indent + "]",
+              base_indent + "GIT_APPLY_CMDS = [",
+              base_indent + '    "git apply --verbose",',
+              base_indent + '    "git apply --verbose --3way",',
+              base_indent + '    "git apply --verbose --reject",',
+              base_indent
+              + '    "patch --batch --forward --fuzz=5 -p1 -i",',
+              base_indent + "]",
           ]
 
           # ---------------------------------------------------------
-          # 2. Find the existing retry loop.
+          # 2. Find bundled retry loop.
           # ---------------------------------------------------------
-
           loop_index = next(
-              i
-              for i, line in enumerate(lines)
+              i for i, line in enumerate(lines)
               if line.strip()
               == "for git_apply_cmd in GIT_APPLY_CMDS:"
           )
@@ -85,11 +84,6 @@ jobs:
 
           child_indent = loop_indent + "    "
 
-          # Change:
-          # for git_apply_cmd in ...
-          #
-          # to:
-          # for attempt, git_apply_cmd in enumerate(...)
           lines[loop_index] = (
               loop_indent
               + "for attempt, git_apply_cmd "
@@ -97,9 +91,8 @@ jobs:
           )
 
           # ---------------------------------------------------------
-          # 3. Before every retry, restore pristine repository state.
+          # 3. Restore clean tree before every fallback attempt.
           # ---------------------------------------------------------
-
           reset_block = [
               child_indent + "if attempt:",
               child_indent + "    container.exec_run(",
@@ -109,70 +102,82 @@ jobs:
               child_indent + "        workdir=DOCKER_WORKDIR,",
               child_indent + "        user=DOCKER_USER,",
               child_indent + "    )",
-              "",
           ]
 
-          lines[
-              loop_index + 1:loop_index + 1
-          ] = reset_block
-
-          new_text = "\n".join(lines) + "\n"
+          lines[loop_index + 1:loop_index + 1] = reset_block
 
           # ---------------------------------------------------------
-          # 4. Safety checks before writing.
+          # 4. Add official-style reverse check before declaring
+          #    total patch application failure.
           # ---------------------------------------------------------
-
-          assert '"git apply --verbose --3way"' in new_text
-          assert (
-              '"patch --batch --forward --fuzz=5 -p1 -i"'
-              in new_text
+          fail_index = next(
+              i for i in range(loop_index + len(reset_block) + 1, len(lines))
+              if lines[i].strip() == "if not applied_patch:"
           )
-          assert (
-              "for attempt, git_apply_cmd "
-              "in enumerate(GIT_APPLY_CMDS):"
-              in new_text
+
+          fail_indent = (
+              lines[fail_index][
+                  :len(lines[fail_index])
+                  - len(lines[fail_index].lstrip())
+              ]
           )
-          assert "git checkout -- . ; git clean -fd" in new_text
 
-          # Verify resulting source is valid Python.
-          compile(new_text, str(path), "exec")
+          reverse_block = [
+              fail_indent + "if not applied_patch:",
+              fail_indent + "    reverse_check = container.exec_run(",
+              fail_indent
+              + '        f"git apply --check --reverse {DOCKER_PATCH}",',
+              fail_indent + "        workdir=DOCKER_WORKDIR,",
+              fail_indent + "        user=DOCKER_USER,",
+              fail_indent + "    )",
+              fail_indent + "    if reverse_check.exit_code == 0:",
+              fail_indent
+              + '        logger.info('
+              + 'f"{APPLY_PATCH_PASS}: verified already applied")',
+              fail_indent + "        applied_patch = True",
+          ]
 
-          path.write_text(new_text)
+          lines[fail_index:fail_index] = reverse_block
 
-          print("Safe retry logic installed: OK")
+          text = "\n".join(lines) + "\n"
+
+          # ---------------------------------------------------------
+          # 5. For audit logging use diff HEAD instead of plain diff.
+          #    This lets the log include staged changes from --3way.
+          # ---------------------------------------------------------
+          old_diff = '"git -c core.fileMode=false diff"'
+          new_diff = '"git -c core.fileMode=false diff HEAD"'
+
+          diff_count = text.count(old_diff)
+
+          if diff_count < 1:
+              raise RuntimeError(
+                  "Could not find git diff logging command"
+              )
+
+          text = text.replace(old_diff, new_diff)
+
+          # ---------------------------------------------------------
+          # 6. Safety checks.
+          # ---------------------------------------------------------
+          required = [
+              '"git apply --verbose --3way"',
+              '"git apply --verbose --reject"',
+              '"patch --batch --forward --fuzz=5 -p1 -i"',
+              "git checkout -- . ; git clean -fd",
+              "git apply --check --reverse",
+              "git -c core.fileMode=false diff HEAD",
+          ]
+
+          for item in required:
+              assert item in text, item
+
+          compile(text, str(path), "exec")
+          path.write_text(text)
+
+          print("Safe patch logic installed: OK")
+          print("git diff HEAD audit logging installed: OK")
           print("Python syntax check: OK")
-
-          # ---------------------------------------------------------
-          # 5. Print only relevant modified source.
-          # ---------------------------------------------------------
-
-          final_lines = new_text.splitlines()
-
-          print("")
-          print("=== MODIFIED GIT_APPLY_CMDS ===")
-
-          for i, line in enumerate(final_lines, start=1):
-              if line.strip() == "GIT_APPLY_CMDS = [":
-                  for n in range(i, min(i + 7, len(final_lines) + 1)):
-                      print(f"{n:4}: {final_lines[n-1]}")
-                  break
-
-          print("")
-          print("=== MODIFIED RETRY LOOP ===")
-
-          for i, line in enumerate(final_lines, start=1):
-              if (
-                  "for attempt, git_apply_cmd "
-                  "in enumerate(GIT_APPLY_CMDS):"
-                  in line
-              ):
-                  start = max(1, i - 2)
-                  end = min(len(final_lines), i + 22)
-
-                  for n in range(start, end + 1):
-                      print(f"{n:4}: {final_lines[n-1]}")
-
-                  break
           PY
 
       - name: Install SWE-bench harness
@@ -180,11 +185,14 @@ jobs:
           python -m pip install --upgrade pip
           pip install -e ./SWE-ABS/swe-bench
 
-      - name: Create exact prediction
+      - name: Create exact trajectory prediction
         run: |
           python - <<'PY'
           import json
           from datasets import load_dataset
+
+          instance_id = "astropy__astropy-12907"
+          sample = 1
 
           ds = load_dataset(
               "tarsur385/swe-verified-gemini3-flash-trajectories",
@@ -192,35 +200,37 @@ jobs:
           )
 
           rows = [
-              r for r in ds
-              if r["instance_id"] == "astropy__astropy-12907"
-              and r["sample"] == 1
+              row for row in ds
+              if row["instance_id"] == instance_id
+              and row["sample"] == sample
           ]
 
-          assert len(rows) == 1
+          assert len(rows) == 1, (
+              f"Expected exactly one trajectory, got {len(rows)}"
+          )
 
-          r = rows[0]
+          row = rows[0]
 
-          assert r["resolved"] is True
-          assert r["patch"].strip()
+          assert row["resolved"] is True
+          assert row["patch"].strip()
 
-          pred = {
-              "instance_id": r["instance_id"],
+          prediction = {
+              "instance_id": instance_id,
               "model_name_or_path":
                   "openhands-gemini3-flash-sample-1",
-              "model_patch": r["patch"],
+              "model_patch": row["patch"],
           }
 
           with open("one_prediction.jsonl", "w") as f:
-              f.write(json.dumps(pred) + "\n")
+              f.write(json.dumps(prediction) + "\n")
 
-          print("instance:", r["instance_id"])
-          print("sample:", r["sample"])
-          print("standard resolved:", r["resolved"])
-          print("patch length:", len(r["patch"]))
+          print("instance_id:", instance_id)
+          print("sample:", sample)
+          print("standard evaluation resolved:", row["resolved"])
+          print("patch characters:", len(row["patch"]))
           PY
 
-      - name: Run SWE-ABS evaluation
+      - name: Run SWE-ABS strengthened evaluation
         run: |
           set -o pipefail
 
@@ -231,43 +241,35 @@ jobs:
             --split test \
             --predictions_path ../../one_prediction.jsonl \
             --instance_ids astropy__astropy-12907 \
-            --run_id gha_smoke_astropy_12907_fixed \
+            --run_id final_smoke_astropy_12907 \
             --max_workers 1 \
             --timeout 1800 \
             2>&1 | tee ../../gha_smoke.log
 
-      - name: Verify intended patch before tests
+      - name: Verify intended patch
         if: always()
         run: |
           python - <<'PY'
           from pathlib import Path
 
-          files = list(
+          logs = list(
               Path("SWE-ABS/swe-bench/logs").rglob(
                   "run_instance.log"
               )
           )
 
-          if not files:
+          if len(logs) != 1:
               raise RuntimeError(
-                  "run_instance.log not found"
+                  f"Expected 1 run_instance.log, found {len(logs)}"
               )
 
-          log_file = files[0]
-
-          text = log_file.read_text(
+          text = logs[0].read_text(
               encoding="utf-8",
               errors="replace"
           )
 
-          print("RUN LOG:")
-          print(log_file)
-
           start = text.find("Git diff before:")
-          end = text.find(
-              "Eval script for",
-              start
-          )
+          end = text.find("Eval script for", start)
 
           if start == -1:
               raise RuntimeError(
@@ -275,166 +277,127 @@ jobs:
               )
 
           if end == -1:
-              end = len(text)
+              raise RuntimeError(
+                  "Could not find end of Git diff before section"
+              )
 
           diff_before = text[start:end]
 
-          print("")
-          print("=== GIT DIFF BEFORE TESTS ===")
+          print("=== GIT DIFF HEAD BEFORE TESTS ===")
           print(diff_before)
 
-          expected_file = (
+          required_file = (
               "diff --git "
               "a/astropy/modeling/separable.py "
               "b/astropy/modeling/separable.py"
           )
 
-          expected_change = (
+          required_old = (
+              "cright[-right.shape[0]:, "
+              "-right.shape[1]:] = 1"
+          )
+
+          required_new = (
               "cright[-right.shape[0]:, "
               "-right.shape[1]:] = right"
           )
 
-          if expected_file not in diff_before:
+          if required_file not in diff_before:
               raise RuntimeError(
-                  "FAIL: separable.py is NOT present "
-                  "in Git diff before tests"
+                  "separable.py is missing from pre-test diff"
               )
 
-          if expected_change not in diff_before:
+          if required_old not in diff_before:
               raise RuntimeError(
-                  "FAIL: intended '= right' change "
-                  "is NOT active before tests"
+                  "Expected old separable.py line is missing"
+              )
+
+          if required_new not in diff_before:
+              raise RuntimeError(
+                  "Expected '= right' fix is missing"
               )
 
           print("")
           print(
-              "VERIFIED: separable.py intended "
-              "change is active before tests"
+              "VERIFIED: intended separable.py patch "
+              "is active before strengthened tests"
           )
           PY
 
-      - name: Show patch application section
-        if: always()
-        run: |
-          python - <<'PY'
-          from pathlib import Path
-
-          files = list(
-              Path("SWE-ABS/swe-bench/logs").rglob(
-                  "run_instance.log"
-              )
-          )
-
-          if not files:
-              print("No run_instance.log found")
-              raise SystemExit
-
-          text = files[0].read_text(
-              encoding="utf-8",
-              errors="replace"
-          )
-
-          start = text.find(
-              "Intermediate patch for"
-          )
-
-          end = text.find(
-              "Eval script for",
-              start
-          )
-
-          if start == -1:
-              print(
-                  "Patch application section not found"
-              )
-              raise SystemExit
-
-          if end == -1:
-              end = len(text)
-
-          print(
-              "=== PATCH APPLICATION SECTION ==="
-          )
-          print(text[start:end])
-          PY
-
-      - name: Show pytest summary
+      - name: Verify strengthened tests
         if: always()
         run: |
           python - <<'PY'
           import re
           from pathlib import Path
 
-          files = list(
+          outputs = list(
               Path("SWE-ABS/swe-bench/logs").rglob(
                   "test_output.txt"
               )
           )
 
-          print("=== PYTEST SUMMARY ===")
+          if len(outputs) != 1:
+              raise RuntimeError(
+                  f"Expected 1 test_output.txt, found {len(outputs)}"
+              )
 
-          if not files:
-              print("No test_output.txt found")
-              raise SystemExit
-
-          text = files[0].read_text(
+          text = outputs[0].read_text(
               encoding="utf-8",
               errors="replace"
           )
 
-          # Strip ANSI colour codes.
-          text = re.sub(
+          # Remove ANSI colour codes.
+          clean = re.sub(
               r"\x1b\[[0-9;]*m",
               "",
               text
           )
 
-          for line in text.splitlines():
+          print("=== PYTEST RESULT ===")
+
+          for line in clean.splitlines():
               if (
                   "collected " in line
-                  or " PASSED " in line
-                  or " FAILED " in line
-                  or " ERROR " in line
-                  or re.search(
-                      r"\d+ passed",
-                      line
-                  )
-                  or re.search(
-                      r"\d+ failed",
-                      line
-                  )
+                  or "PASSED " in line
+                  or "FAILED " in line
+                  or "ERROR " in line
+                  or re.search(r"\d+ passed", line)
+                  or re.search(r"\d+ failed", line)
               ):
                   print(line)
+
+          if "collected 11 items" not in clean:
+              raise RuntimeError(
+                  "Expected 11 strengthened tests "
+                  "were not collected"
+              )
+
+          if re.search(r"\bFAILED\b", clean):
+              raise RuntimeError(
+                  "At least one strengthened test failed"
+              )
+
+          if re.search(r"\bERROR\b", clean):
+              raise RuntimeError(
+                  "At least one strengthened test errored"
+              )
+
+          if not re.search(r"\b11 passed\b", clean):
+              raise RuntimeError(
+                  "Did not find final '11 passed' result"
+              )
+
+          print("")
+          print("SMOKE TEST VERIFIED: 11/11 passed")
           PY
 
-      - name: Show final run report
-        if: always()
-        run: |
-          LOG_FILE="$(
-            find SWE-ABS/swe-bench/logs \
-              -name run_instance.log \
-              -print \
-              2>/dev/null \
-              | head -n 1
-          )"
-
-          if [ -z "$LOG_FILE" ]; then
-            echo "No run_instance.log found"
-            exit 0
-          fi
-
-          echo "=== FINAL REPORT LINES ==="
-
-          grep -aE \
-            "report:|Result for|resolved:" \
-            "$LOG_FILE" \
-            || true
-
-      - name: Upload evaluation logs
+      - name: Upload smoke-test evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: sweabs-smoke-logs-fixed
+          name: sweabs-final-smoke-evidence
           path: |
+            one_prediction.jsonl
             gha_smoke.log
             SWE-ABS/swe-bench/logs/
