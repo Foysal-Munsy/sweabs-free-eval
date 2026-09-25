@@ -1,0 +1,102 @@
+name: SWE-ABS Smoke Test
+
+on:
+  workflow_dispatch:
+
+jobs:
+  evaluate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Clone SWE-ABS
+        run: |
+          git clone --depth 1 https://github.com/OpenAgentEval/SWE-ABS.git
+
+      - name: Install SWE-bench harness
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ./SWE-ABS/swe-bench
+
+      - name: Create exact prediction
+        run: |
+          python - <<'PY'
+          import json
+          from datasets import load_dataset
+
+          ds = load_dataset(
+              "tarsur385/swe-verified-gemini3-flash-trajectories",
+              split="train"
+          )
+
+          rows = [
+              r for r in ds
+              if r["instance_id"] == "astropy__astropy-12907"
+              and r["sample"] == 1
+          ]
+
+          assert len(rows) == 1
+          r = rows[0]
+
+          assert r["resolved"] is True
+          assert r["patch"].strip()
+
+          pred = {
+              "instance_id": r["instance_id"],
+              "model_name_or_path": "openhands-gemini3-flash-sample-1",
+              "model_patch": r["patch"],
+          }
+
+          with open("one_prediction.jsonl", "w") as f:
+              f.write(json.dumps(pred) + "\n")
+
+          print("instance:", r["instance_id"])
+          print("sample:", r["sample"])
+          print("resolved:", r["resolved"])
+          print("patch length:", len(r["patch"]))
+          PY
+
+      - name: Run SWE-ABS evaluation
+        run: |
+          set -o pipefail
+          cd SWE-ABS/swe-bench
+
+          python -m swebench.harness.run_evaluation \
+            --dataset_name OpenAgentLab/SWE-Bench_Verified_ABS \
+            --split test \
+            --predictions_path ../../one_prediction.jsonl \
+            --instance_ids astropy__astropy-12907 \
+            --run_id gha_smoke_astropy_12907 \
+            --max_workers 1 \
+            --timeout 1800 \
+            2>&1 | tee ../../gha_smoke.log
+
+      - name: Show test output
+        if: always()
+        run: |
+          echo "=== TEST OUTPUT FILES ==="
+          find SWE-ABS/swe-bench/logs -name test_output.txt -print 2>/dev/null || true
+
+          echo ""
+          echo "=== PYTEST RESULT LINES ==="
+
+          find SWE-ABS/swe-bench/logs -name test_output.txt -exec \
+            grep -aE "PASSED|FAILED|ERROR|collected|passed in|failed in" {} \; \
+            2>/dev/null || true
+
+      - name: Upload evaluation logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sweabs-smoke-logs
+          path: |
+            gha_smoke.log
+            SWE-ABS/swe-bench/logs/
