@@ -21,6 +21,144 @@ jobs:
         run: |
           git clone --depth 1 https://github.com/OpenAgentEval/SWE-ABS.git
 
+      - name: Fix patch application logic
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path(
+              "SWE-ABS/swe-bench/swebench/harness/run_evaluation.py"
+          )
+
+          text = path.read_text()
+
+          # Detect constant names used by this bundled SWE-bench version
+          workdir = (
+              "CONTAINER_WORKDIR"
+              if "CONTAINER_WORKDIR" in text
+              else "DOCKER_WORKDIR"
+          )
+
+          user = (
+              "CONTAINER_USER"
+              if "CONTAINER_USER" in text
+              else "DOCKER_USER"
+          )
+
+          patch_file = (
+              "CONTAINER_PATCH_FILE"
+              if "CONTAINER_PATCH_FILE" in text
+              else "DOCKER_PATCH"
+          )
+
+          # Replace old command list with safer current-style sequence
+          cmd_start = text.index("GIT_APPLY_CMDS = [")
+          cmd_end = text.index("]\n", cmd_start) + 2
+
+          new_cmds = """GIT_APPLY_CMDS = [
+              "git apply --verbose",
+              "git apply --verbose --3way",
+              "git apply --verbose --reject",
+              "patch --batch --forward --fuzz=5 -p1 -i",
+          ]
+          """
+
+          text = text[:cmd_start] + new_cmds + text[cmd_end:]
+
+          # Replace the old patch-application block
+          block_start = text.index(
+              "        # Attempt to apply patch to container"
+          )
+
+          block_end = text.index(
+              "        # Get git diff before running eval script",
+              block_start
+          )
+
+          new_block = r'''        # Attempt to apply patch to container
+          applied_patch = False
+
+          for attempt, git_apply_cmd in enumerate(GIT_APPLY_CMDS):
+
+              if attempt:
+                  container.exec_run(
+                      ["/bin/bash", "-c",
+                       "git checkout -- . ; git clean -fd"],
+                      workdir=__WORKDIR__,
+                      user=__USER__,
+                  )
+
+              val = container.exec_run(
+                  f"{git_apply_cmd} __PATCH__",
+                  workdir=__WORKDIR__,
+                  user=__USER__,
+              )
+
+              if val.exit_code == 0:
+                  logger.info(
+                      f"{APPLY_PATCH_PASS}:\n"
+                      f"{val.output.decode('utf-8')}"
+                  )
+                  applied_patch = True
+                  break
+
+              logger.info(
+                  f"Failed to apply patch to container: "
+                  f"{git_apply_cmd}"
+              )
+
+          if not applied_patch:
+              reverse_check = container.exec_run(
+                  f"git apply --check --reverse __PATCH__",
+                  workdir=__WORKDIR__,
+                  user=__USER__,
+              )
+
+              if reverse_check.exit_code == 0:
+                  logger.info(
+                      f"{APPLY_PATCH_PASS}: verified already applied"
+                  )
+                  applied_patch = True
+
+          if not applied_patch:
+              logger.info(
+                  f"{APPLY_PATCH_FAIL}:\n"
+                  f"{val.output.decode('utf-8')}"
+              )
+
+              raise EvaluationError(
+                  instance_id,
+                  f"{APPLY_PATCH_FAIL}:\n"
+                  f"{val.output.decode('utf-8')}",
+                  logger,
+              )
+
+          '''
+
+          new_block = (
+              new_block
+              .replace("__WORKDIR__", workdir)
+              .replace("__USER__", user)
+              .replace("__PATCH__", patch_file)
+          )
+
+          text = (
+              text[:block_start]
+              + new_block
+              + text[block_end:]
+          )
+
+          path.write_text(text)
+
+          # Syntax check
+          compile(text, str(path), "exec")
+
+          print("Harness patch applied successfully")
+          print("workdir constant:", workdir)
+          print("user constant:", user)
+          print("patch constant:", patch_file)
+          PY
+          
       - name: Install SWE-bench harness
         run: |
           python -m pip install --upgrade pip
