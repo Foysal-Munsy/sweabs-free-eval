@@ -91,7 +91,20 @@ jobs:
           find SWE-ABS/swe-bench/logs -name test_output.txt -exec \
             grep -aE "PASSED|FAILED|ERROR|collected|passed in|failed in" {} \; \
             2>/dev/null || true
+            
+      - name: Show failure details
+        if: always()
+        run: |
+          TEST_FILE=$(find SWE-ABS/swe-bench/logs -name test_output.txt | head -n 1)
 
+          echo "=== FAILURE DETAILS ==="
+
+          if [ -n "$TEST_FILE" ]; then
+            sed -n '/=== FAILURES ===/,/short test summary info/p' "$TEST_FILE"
+          else
+            echo "No test_output.txt found"
+          fi
+          
       - name: Upload evaluation logs
         if: always()
         uses: actions/upload-artifact@v4
