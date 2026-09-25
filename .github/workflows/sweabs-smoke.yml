@@ -113,7 +113,24 @@ jobs:
             --max_workers 1 \
             --timeout 1800 \
             2>&1 | tee ../../gha_smoke.log
+            
+      - name: Inspect run_instance log
+        if: always()
+        run: |
+          LOG_FILE="$(find SWE-ABS/swe-bench/logs -name run_instance.log -print | head -n 1)"
 
+          echo "=== RUN INSTANCE LOG FILE ==="
+          echo "$LOG_FILE"
+
+          if [ -z "$LOG_FILE" ]; then
+            echo "ERROR: run_instance.log not found"
+            exit 1
+          fi
+
+          echo ""
+          echo "=== FULL RUN INSTANCE LOG ==="
+          cat "$LOG_FILE"
+          
       - name: Inspect exact saved patch.diff
         if: always()
         shell: bash
