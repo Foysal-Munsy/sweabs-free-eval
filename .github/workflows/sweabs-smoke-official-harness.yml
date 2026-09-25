@@ -1,0 +1,91 @@
+name: SWE-ABS Smoke Official Harness
+
+on:
+  workflow_dispatch:
+
+jobs:
+  evaluate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Clone official SWE-bench
+        run: |
+          git clone --depth 1 https://github.com/SWE-bench/SWE-bench.git
+          pip install -e ./SWE-bench
+
+      - name: Create exact prediction
+        run: |
+          python - <<'PY'
+          import json
+          from datasets import load_dataset
+
+          ds = load_dataset(
+              "tarsur385/swe-verified-gemini3-flash-trajectories",
+              split="train"
+          )
+
+          r = next(
+              x for x in ds
+              if x["instance_id"] == "astropy__astropy-12907"
+              and x["sample"] == 1
+          )
+
+          pred = {
+              "instance_id": r["instance_id"],
+              "model_name_or_path": "openhands-gemini3-flash-sample-1",
+              "model_patch": r["patch"],
+          }
+
+          with open("one_prediction.jsonl", "w") as f:
+              f.write(json.dumps(pred) + "\n")
+
+          print("instance:", r["instance_id"])
+          print("resolved:", r["resolved"])
+          print("patch length:", len(r["patch"]))
+          PY
+
+      - name: Run evaluation
+        run: |
+          set -o pipefail
+
+          cd SWE-bench
+
+          python -m swebench.harness.run_evaluation \
+            --dataset_name OpenAgentLab/SWE-Bench_Verified_ABS \
+            --split test \
+            --predictions_path ../one_prediction.jsonl \
+            --instance_ids astropy__astropy-12907 \
+            --run_id gha_official_smoke_12907 \
+            --max_workers 1 \
+            --timeout 1800 \
+            2>&1 | tee ../official_smoke.log
+
+      - name: Show results
+        if: always()
+        run: |
+          echo "=== TEST OUTPUT FILES ==="
+
+          find SWE-bench -name test_output.txt -print 2>/dev/null || true
+
+          echo ""
+          echo "=== PYTEST RESULTS ==="
+
+          find SWE-bench -name test_output.txt -exec \
+            grep -aE "PASSED|FAILED|ERROR|collected|passed in|failed in" {} \; \
+            2>/dev/null || true
+
+          echo ""
+          echo "=== PATCH LOG ==="
+
+          find SWE-bench -name run_instance.log -exec \
+            grep -aE "Applied Patch|Failed to apply patch|Reversed|Git diff" {} \; \
+            2>/dev/null || true
