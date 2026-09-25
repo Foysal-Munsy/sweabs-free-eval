@@ -21,41 +21,7 @@ jobs:
         run: |
           git clone --depth 1 https://github.com/OpenAgentEval/SWE-ABS.git
 
-      - name: Inspect bundled patch application source
-        run: |
-          echo "=== ORIGINAL PATCH APPLICATION SOURCE ==="
-
-          python - <<'PY'
-          from pathlib import Path
-
-          path = Path(
-              "SWE-ABS/swe-bench/swebench/harness/run_evaluation.py"
-          )
-
-          text = path.read_text()
-          lines = text.splitlines()
-
-          for i, line in enumerate(lines, start=1):
-              if "GIT_APPLY_CMDS" in line:
-                  start = max(1, i - 3)
-                  end = min(len(lines), i + 15)
-
-                  print(f"\n--- lines {start}-{end} ---")
-
-                  for n in range(start, end + 1):
-                      print(f"{n:4}: {lines[n-1]}")
-
-              if "for git_apply_cmd in GIT_APPLY_CMDS" in line:
-                  start = max(1, i - 5)
-                  end = min(len(lines), i + 30)
-
-                  print(f"\n--- lines {start}-{end} ---")
-
-                  for n in range(start, end + 1):
-                      print(f"{n:4}: {lines[n-1]}")
-          PY
-
-      - name: Log exact patch application errors
+      - name: Backport safe patch retry logic
         run: |
           python - <<'PY'
           from pathlib import Path
@@ -64,59 +30,149 @@ jobs:
               "SWE-ABS/swe-bench/swebench/harness/run_evaluation.py"
           )
 
-          text = path.read_text()
-          lines = text.splitlines()
+          lines = path.read_text().splitlines()
 
-          target = (
-              'logger.info('
-              'f"Failed to apply patch to container: {git_apply_cmd}")'
+          # ---------------------------------------------------------
+          # 1. Replace only GIT_APPLY_CMDS.
+          #    Mirrors current official SWE-bench retry commands.
+          # ---------------------------------------------------------
+
+          cmd_start = next(
+              i
+              for i, line in enumerate(lines)
+              if line.strip() == "GIT_APPLY_CMDS = ["
           )
 
-          matches = [
-              i for i, line in enumerate(lines)
-              if line.strip() == target
+          cmd_end = next(
+              i
+              for i in range(cmd_start + 1, len(lines))
+              if lines[i].strip() == "]"
+          )
+
+          indent = (
+              lines[cmd_start][
+                  :len(lines[cmd_start])
+                  - len(lines[cmd_start].lstrip())
+              ]
+          )
+
+          lines[cmd_start:cmd_end + 1] = [
+              indent + "GIT_APPLY_CMDS = [",
+              indent + '    "git apply --verbose",',
+              indent + '    "git apply --verbose --3way",',
+              indent + '    "git apply --verbose --reject",',
+              indent + '    "patch --batch --forward --fuzz=5 -p1 -i",',
+              indent + "]",
           ]
 
-          print("Target occurrences found:", len(matches))
+          # ---------------------------------------------------------
+          # 2. Find the existing retry loop.
+          # ---------------------------------------------------------
 
-          if len(matches) != 1:
-              raise RuntimeError(
-                  f"Expected exactly 1 target line, found {len(matches)}"
-              )
+          loop_index = next(
+              i
+              for i, line in enumerate(lines)
+              if line.strip()
+              == "for git_apply_cmd in GIT_APPLY_CMDS:"
+          )
 
-          i = matches[0]
+          loop_indent = (
+              lines[loop_index][
+                  :len(lines[loop_index])
+                  - len(lines[loop_index].lstrip())
+              ]
+          )
 
-          original_line = lines[i]
-          indent = original_line[:len(original_line) - len(original_line.lstrip())]
+          child_indent = loop_indent + "    "
 
-          replacement = [
-              indent + "logger.info(",
-              indent + '    f"Failed to apply patch to container: {git_apply_cmd}\\n"',
-              indent + "    f\"{val.output.decode(UTF8)}\"",
-              indent + ")",
+          # Change:
+          # for git_apply_cmd in ...
+          #
+          # to:
+          # for attempt, git_apply_cmd in enumerate(...)
+          lines[loop_index] = (
+              loop_indent
+              + "for attempt, git_apply_cmd "
+              + "in enumerate(GIT_APPLY_CMDS):"
+          )
+
+          # ---------------------------------------------------------
+          # 3. Before every retry, restore pristine repository state.
+          # ---------------------------------------------------------
+
+          reset_block = [
+              child_indent + "if attempt:",
+              child_indent + "    container.exec_run(",
+              child_indent
+              + '        ["/bin/bash", "-c", '
+              + '"git checkout -- . ; git clean -fd"],',
+              child_indent + "        workdir=DOCKER_WORKDIR,",
+              child_indent + "        user=DOCKER_USER,",
+              child_indent + "    )",
+              "",
           ]
 
-          lines[i:i + 1] = replacement
+          lines[
+              loop_index + 1:loop_index + 1
+          ] = reset_block
 
           new_text = "\n".join(lines) + "\n"
 
+          # ---------------------------------------------------------
+          # 4. Safety checks before writing.
+          # ---------------------------------------------------------
+
+          assert '"git apply --verbose --3way"' in new_text
+          assert (
+              '"patch --batch --forward --fuzz=5 -p1 -i"'
+              in new_text
+          )
+          assert (
+              "for attempt, git_apply_cmd "
+              "in enumerate(GIT_APPLY_CMDS):"
+              in new_text
+          )
+          assert "git checkout -- . ; git clean -fd" in new_text
+
+          # Verify resulting source is valid Python.
           compile(new_text, str(path), "exec")
+
           path.write_text(new_text)
 
-          print("Failure-output logging enabled")
+          print("Safe retry logic installed: OK")
+          print("Python syntax check: OK")
+
+          # ---------------------------------------------------------
+          # 5. Print only relevant modified source.
+          # ---------------------------------------------------------
+
+          final_lines = new_text.splitlines()
 
           print("")
-          print("=== MODIFIED PATCH FAILURE LOGGING ===")
+          print("=== MODIFIED GIT_APPLY_CMDS ===")
 
-          new_lines = new_text.splitlines()
+          for i, line in enumerate(final_lines, start=1):
+              if line.strip() == "GIT_APPLY_CMDS = [":
+                  for n in range(i, min(i + 7, len(final_lines) + 1)):
+                      print(f"{n:4}: {final_lines[n-1]}")
+                  break
 
-          for n, line in enumerate(new_lines, start=1):
-              if "Failed to apply patch to container" in line:
-                  start = max(1, n - 2)
-                  end = min(len(new_lines), n + 4)
+          print("")
+          print("=== MODIFIED RETRY LOOP ===")
 
-                  for j in range(start, end + 1):
-                      print(f"{j:4}: {new_lines[j-1]}")
+          for i, line in enumerate(final_lines, start=1):
+              if (
+                  "for attempt, git_apply_cmd "
+                  "in enumerate(GIT_APPLY_CMDS):"
+                  in line
+              ):
+                  start = max(1, i - 2)
+                  end = min(len(final_lines), i + 22)
+
+                  for n in range(start, end + 1):
+                      print(f"{n:4}: {final_lines[n-1]}")
+
+                  break
           PY
 
       - name: Install SWE-bench harness
@@ -150,7 +206,8 @@ jobs:
 
           pred = {
               "instance_id": r["instance_id"],
-              "model_name_or_path": "openhands-gemini3-flash-sample-1",
+              "model_name_or_path":
+                  "openhands-gemini3-flash-sample-1",
               "model_patch": r["patch"],
           }
 
@@ -159,7 +216,7 @@ jobs:
 
           print("instance:", r["instance_id"])
           print("sample:", r["sample"])
-          print("resolved:", r["resolved"])
+          print("standard resolved:", r["resolved"])
           print("patch length:", len(r["patch"]))
           PY
 
@@ -174,112 +231,134 @@ jobs:
             --split test \
             --predictions_path ../../one_prediction.jsonl \
             --instance_ids astropy__astropy-12907 \
-            --run_id gha_smoke_astropy_12907 \
+            --run_id gha_smoke_astropy_12907_fixed \
             --max_workers 1 \
             --timeout 1800 \
             2>&1 | tee ../../gha_smoke.log
 
-      - name: Inspect exact saved patch.diff
-        if: always()
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          echo "=== SEARCHING FOR patch.diff ==="
-
-          find . -type f -name patch.diff -print || true
-
-          PATCH_FILE="$(
-            find . \
-              -type f \
-              -path '*astropy__astropy-12907/patch.diff' \
-              -print \
-              -quit
-          )"
-
-          if [ -z "$PATCH_FILE" ]; then
-            echo "ERROR: astropy__astropy-12907 patch.diff not found"
-            exit 1
-          fi
-
-          echo ""
-          echo "PATCH_FILE=$PATCH_FILE"
-
-          echo ""
-          echo "=== numbered patch ==="
-
-          nl -ba "$PATCH_FILE"
-
-          echo ""
-          echo "=== visible line endings / hidden chars ==="
-
-          sed -n 'l' "$PATCH_FILE"
-
-      - name: Inspect run_instance log
+      - name: Verify intended patch before tests
         if: always()
         run: |
-          LOG_FILE="$(
-            find SWE-ABS/swe-bench/logs \
-              -name run_instance.log \
-              -print \
-              2>/dev/null \
-              | head -n 1
-          )"
+          python - <<'PY'
+          from pathlib import Path
 
-          echo "=== RUN INSTANCE LOG FILE ==="
-          echo "$LOG_FILE"
+          files = list(
+              Path("SWE-ABS/swe-bench/logs").rglob(
+                  "run_instance.log"
+              )
+          )
 
-          if [ -z "$LOG_FILE" ]; then
-            echo "ERROR: run_instance.log not found"
-            exit 1
-          fi
+          if not files:
+              raise RuntimeError(
+                  "run_instance.log not found"
+              )
 
-          echo ""
-          echo "=== FULL RUN INSTANCE LOG ==="
+          log_file = files[0]
 
-          cat "$LOG_FILE"
+          text = log_file.read_text(
+              encoding="utf-8",
+              errors="replace"
+          )
 
-      - name: Show test output
+          print("RUN LOG:")
+          print(log_file)
+
+          start = text.find("Git diff before:")
+          end = text.find(
+              "Eval script for",
+              start
+          )
+
+          if start == -1:
+              raise RuntimeError(
+                  "Git diff before section not found"
+              )
+
+          if end == -1:
+              end = len(text)
+
+          diff_before = text[start:end]
+
+          print("")
+          print("=== GIT DIFF BEFORE TESTS ===")
+          print(diff_before)
+
+          expected_file = (
+              "diff --git "
+              "a/astropy/modeling/separable.py "
+              "b/astropy/modeling/separable.py"
+          )
+
+          expected_change = (
+              "cright[-right.shape[0]:, "
+              "-right.shape[1]:] = right"
+          )
+
+          if expected_file not in diff_before:
+              raise RuntimeError(
+                  "FAIL: separable.py is NOT present "
+                  "in Git diff before tests"
+              )
+
+          if expected_change not in diff_before:
+              raise RuntimeError(
+                  "FAIL: intended '= right' change "
+                  "is NOT active before tests"
+              )
+
+          print("")
+          print(
+              "VERIFIED: separable.py intended "
+              "change is active before tests"
+          )
+          PY
+
+      - name: Show patch application section
         if: always()
         run: |
-          echo "=== TEST OUTPUT FILES ==="
+          python - <<'PY'
+          from pathlib import Path
 
-          find SWE-ABS/swe-bench/logs \
-            -name test_output.txt \
-            -print \
-            2>/dev/null || true
+          files = list(
+              Path("SWE-ABS/swe-bench/logs").rglob(
+                  "run_instance.log"
+              )
+          )
 
-          echo ""
-          echo "=== PYTEST RESULT LINES ==="
+          if not files:
+              print("No run_instance.log found")
+              raise SystemExit
 
-          find SWE-ABS/swe-bench/logs \
-            -name test_output.txt \
-            -exec grep -aE \
-            "PASSED|FAILED|ERROR|collected|passed in|failed in" {} \; \
-            2>/dev/null || true
+          text = files[0].read_text(
+              encoding="utf-8",
+              errors="replace"
+          )
 
-      - name: Show raw failure details
-        if: always()
-        run: |
-          TEST_FILE="$(
-            find SWE-ABS/swe-bench/logs \
-              -name test_output.txt \
-              -print \
-              2>/dev/null \
-              | head -n 1
-          )"
+          start = text.find(
+              "Intermediate patch for"
+          )
 
-          echo "=== RAW FAILURE DETAILS ==="
+          end = text.find(
+              "Eval script for",
+              start
+          )
 
-          if [ -n "$TEST_FILE" ]; then
-            sed -n \
-              '/=== FAILURES ===/,/short test summary info/p' \
-              "$TEST_FILE"
-          else
-            echo "No test_output.txt found"
-          fi
+          if start == -1:
+              print(
+                  "Patch application section not found"
+              )
+              raise SystemExit
 
-      - name: Show failure details ANSI stripped
+          if end == -1:
+              end = len(text)
+
+          print(
+              "=== PATCH APPLICATION SECTION ==="
+          )
+          print(text[start:end])
+          PY
+
+      - name: Show pytest summary
         if: always()
         run: |
           python - <<'PY'
@@ -292,7 +371,7 @@ jobs:
               )
           )
 
-          print("=== ANSI-STRIPPED FAILURE DETAILS ===")
+          print("=== PYTEST SUMMARY ===")
 
           if not files:
               print("No test_output.txt found")
@@ -303,29 +382,59 @@ jobs:
               errors="replace"
           )
 
+          # Strip ANSI colour codes.
           text = re.sub(
               r"\x1b\[[0-9;]*m",
               "",
               text
           )
 
-          start = text.find("=== FAILURES ===")
-          end = text.find("short test summary info")
-
-          if start == -1:
-              print("No FAILURES section found")
-          else:
-              if end == -1:
-                  end = len(text)
-
-              print(text[start:end])
+          for line in text.splitlines():
+              if (
+                  "collected " in line
+                  or " PASSED " in line
+                  or " FAILED " in line
+                  or " ERROR " in line
+                  or re.search(
+                      r"\d+ passed",
+                      line
+                  )
+                  or re.search(
+                      r"\d+ failed",
+                      line
+                  )
+              ):
+                  print(line)
           PY
+
+      - name: Show final run report
+        if: always()
+        run: |
+          LOG_FILE="$(
+            find SWE-ABS/swe-bench/logs \
+              -name run_instance.log \
+              -print \
+              2>/dev/null \
+              | head -n 1
+          )"
+
+          if [ -z "$LOG_FILE" ]; then
+            echo "No run_instance.log found"
+            exit 0
+          fi
+
+          echo "=== FINAL REPORT LINES ==="
+
+          grep -aE \
+            "report:|Result for|resolved:" \
+            "$LOG_FILE" \
+            || true
 
       - name: Upload evaluation logs
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: sweabs-smoke-logs
+          name: sweabs-smoke-logs-fixed
           path: |
             gha_smoke.log
             SWE-ABS/swe-bench/logs/
