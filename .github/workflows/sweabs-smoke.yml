@@ -77,14 +77,14 @@ jobs:
                       )'''
 
           if old not in text:
-              raise RuntimeError("Target logging block not found")
+              print("Target logging block not found; skipping patch logging override")
+          else:
+              text = text.replace(old, new, 1)
 
-          text = text.replace(old, new, 1)
+              compile(text, str(path), "exec")
+              path.write_text(text)
 
-          compile(text, str(path), "exec")
-          path.write_text(text)
-
-          print("Failure-output logging enabled")
+              print("Failure-output logging enabled")
           PY
           
       - name: Install SWE-bench harness
