@@ -32,131 +32,48 @@ jobs:
 
           text = path.read_text()
 
-          # Detect constant names used by this bundled SWE-bench version
-          workdir = (
-              "CONTAINER_WORKDIR"
-              if "CONTAINER_WORKDIR" in text
-              else "DOCKER_WORKDIR"
-          )
+          old_cmds = '''GIT_APPLY_CMDS = [
+              "git apply --verbose",
+              "git apply --verbose --reject",
+              "patch --batch --fuzz=5 -p1 -i",
+          ]'''
 
-          user = (
-              "CONTAINER_USER"
-              if "CONTAINER_USER" in text
-              else "DOCKER_USER"
-          )
-
-          patch_file = (
-              "CONTAINER_PATCH_FILE"
-              if "CONTAINER_PATCH_FILE" in text
-              else "DOCKER_PATCH"
-          )
-
-          # Replace old command list with safer current-style sequence
-          cmd_start = text.index("GIT_APPLY_CMDS = [")
-          cmd_end = text.index("]\n", cmd_start) + 2
-
-          new_cmds = """GIT_APPLY_CMDS = [
+          new_cmds = '''GIT_APPLY_CMDS = [
               "git apply --verbose",
               "git apply --verbose --3way",
-              "git apply --verbose --reject",
               "patch --batch --forward --fuzz=5 -p1 -i",
-          ]
-          """
+          ]'''
 
-          text = text[:cmd_start] + new_cmds + text[cmd_end:]
+          assert old_cmds in text, "Could not find GIT_APPLY_CMDS"
+          text = text.replace(old_cmds, new_cmds, 1)
 
-          # Replace the old patch-application block
-          block_start = text.index(
-              "        # Attempt to apply patch to container"
-          )
+          old_loop = '''        for git_apply_cmd in GIT_APPLY_CMDS:
+              val = container.exec_run(
+          '''
 
-          block_end = text.index(
-              "        # Get git diff before running eval script",
-              block_start
-          )
-
-          new_block = r'''        # Attempt to apply patch to container
-          applied_patch = False
-
-          for attempt, git_apply_cmd in enumerate(GIT_APPLY_CMDS):
-
+          new_loop = '''        for attempt, git_apply_cmd in enumerate(GIT_APPLY_CMDS):
               if attempt:
                   container.exec_run(
                       ["/bin/bash", "-c",
-                       "git checkout -- . ; git clean -fd"],
-                      workdir=__WORKDIR__,
-                      user=__USER__,
+                       "git reset --hard HEAD && git clean -fd"],
+                      workdir=DOCKER_WORKDIR,
+                      user=DOCKER_USER,
                   )
 
               val = container.exec_run(
-                  f"{git_apply_cmd} __PATCH__",
-                  workdir=__WORKDIR__,
-                  user=__USER__,
-              )
-
-              if val.exit_code == 0:
-                  logger.info(
-                      f"{APPLY_PATCH_PASS}:\n"
-                      f"{val.output.decode('utf-8')}"
-                  )
-                  applied_patch = True
-                  break
-
-              logger.info(
-                  f"Failed to apply patch to container: "
-                  f"{git_apply_cmd}"
-              )
-
-          if not applied_patch:
-              reverse_check = container.exec_run(
-                  f"git apply --check --reverse __PATCH__",
-                  workdir=__WORKDIR__,
-                  user=__USER__,
-              )
-
-              if reverse_check.exit_code == 0:
-                  logger.info(
-                      f"{APPLY_PATCH_PASS}: verified already applied"
-                  )
-                  applied_patch = True
-
-          if not applied_patch:
-              logger.info(
-                  f"{APPLY_PATCH_FAIL}:\n"
-                  f"{val.output.decode('utf-8')}"
-              )
-
-              raise EvaluationError(
-                  instance_id,
-                  f"{APPLY_PATCH_FAIL}:\n"
-                  f"{val.output.decode('utf-8')}",
-                  logger,
-              )
-
           '''
 
-          new_block = (
-              new_block
-              .replace("__WORKDIR__", workdir)
-              .replace("__USER__", user)
-              .replace("__PATCH__", patch_file)
-          )
+          assert old_loop in text, "Could not find patch loop"
+          text = text.replace(old_loop, new_loop, 1)
 
-          text = (
-              text[:block_start]
-              + new_block
-              + text[block_end:]
-          )
-
+          # Verify Python syntax before saving
+          compile(text, str(path), "exec")
           path.write_text(text)
 
-          # Syntax check
-          compile(text, str(path), "exec")
-
-          print("Harness patch applied successfully")
-          print("workdir constant:", workdir)
-          print("user constant:", user)
-          print("patch constant:", patch_file)
+          print("Safe patch logic installed")
+          print("Syntax check: OK")
+          print("Removed: git apply --reject")
+          print("Added: reset between attempts + patch --forward")
           PY
           
       - name: Install SWE-bench harness
