@@ -8,7 +8,7 @@ import sys
 
 from scripts.pilot import (
     build_prediction, changed_lines, collect_result, generate_plan, pretest_diff,
-    resolved_rows, sha256, build_test_record, merge_results, parse_augmented_pytest,
+    resolved_rows, sha256, build_test_record, merge_results, parse_augmented_pytest, parse_augmented_django, parse_augmented_suite,
 )
 from scripts.patch_harness import patch_source
 
@@ -96,6 +96,25 @@ def run():
         self.assertEqual(manifest["test_dataset_revision"], "d" * 40)
         self.assertEqual(manifest["base_commit"], "c" * 40)
 
+    def test_top_level_django_test_patch_paths_are_detected(self):
+        diff = """diff --git a/tests/utils_tests/test_numberformat.py b/tests/utils_tests/test_numberformat.py
+@@ -1 +1 @@
+-old
++new
+"""
+        fake = SimpleNamespace(load_dataset=lambda *a, **k: [
+            {"instance_id": "repo__repo-1", "test_patch": diff,
+             "base_commit": "c" * 40, "extra": "ok"}])
+        with patch.dict(sys.modules, {"datasets": fake}):
+            _, manifest = build_test_record("d" * 40, "repo__repo-1")
+        self.assertEqual(manifest["augmented_test_files"], ["tests/utils_tests/test_numberformat.py"])
+
+    def test_base_commit_with_test_paths_is_accepted(self):
+        import re
+        expr = r"(?m)^git checkout ([0-9a-f]{40})(?=[ \t]|$)"
+        script = f"git checkout {'a' * 40} tests/t1.py tests/t2.py\ngit checkout {'a' * 40} tests/t1.py tests/t2.py"
+        self.assertEqual(set(re.findall(expr, script)), {'a'*40})
+
     def test_merge_keeps_sample_run_identity(self):
         with tempfile.TemporaryDirectory() as td:
             folder = Path(td)
@@ -123,7 +142,8 @@ class CollectorTests(unittest.TestCase):
         (self.folder / "run_instance.log").write_text(
             "PREPATCH_BASE_COMMIT_VERIFIED: " + self.base + "\n" + DIFF_LOG,
             encoding="utf-8")
-        self.pass_output = """+ : '>>>>> Start Test Output'
+        self.pass_output = """Applied patch foo/tests/test_new.py cleanly.
++ : '>>>>> Start Test Output'
 + pytest -rA foo/tests/test_new.py
 collected 1 item
 ==================== 1 passed in 0.02s ====================
@@ -189,6 +209,51 @@ new file mode 100644
 '''
         self.assertEqual(changed_lines(model), changed_lines(PATCH))
         self.assertIsNone(changed_lines("diff --git a/foo b/foo\nold mode 100644\nnew mode 100755\n"))
+
+    def test_django_unittest_success_and_failure(self):
+        output = """Applied patch tests/utils_tests/test_http_example.py cleanly.
++ : '>>>>> Start Test Output'
++ ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 utils_tests.test_http_example
+test_one (utils_tests.test_http_example.ExampleTests) ... ok
+test_two (utils_tests.test_http_example.ExampleTests) ... ok
+----------------------------------------------------------------------
+Ran 2 tests in 0.002s
+
+OK
++ : '>>>>> End Test Output'
+"""
+        expected = ["tests/utils_tests/test_http_example.py"]
+        status, info = parse_augmented_django(output, expected)
+        self.assertEqual(status, "PASS")
+        self.assertEqual(info["augmented_collected"], 2)
+        self.assertEqual(parse_augmented_suite(output, expected)[0], "PASS")
+        failure = output.replace("test_two (utils_tests.test_http_example.ExampleTests) ... ok",
+                                 "test_two (utils_tests.test_http_example.ExampleTests) ... FAIL")
+        failure = failure.replace("\nOK\n", "\nFAILED (failures=1)\n")
+        status, info = parse_augmented_django(failure, expected)
+        self.assertEqual(status, "FAIL")
+        self.assertEqual(info["augmented_passed"], 1)
+        self.assertEqual(info["augmented_failed"], 1)
+        self.assertIsNone(parse_augmented_django(output, ["tests/other/test_other.py"])[0])
+
+    def test_django_error_requires_review(self):
+        output = """Applied patch tests/utils_tests/test_example.py cleanly.
++ : '>>>>> Start Test Output'
++ ./tests/runtests.py --verbosity 2 --settings=test_sqlite --parallel 1 utils_tests.test_example
+Ran 2 tests in 0.002s
+FAILED (errors=1)
++ : '>>>>> End Test Output'
+"""
+        result, details = parse_augmented_django(output, ["tests/utils_tests/test_example.py"])
+        self.assertIsNone(result)
+        self.assertEqual(details["reason"], "augmented_django_test_errors_require_review")
+
+    def test_augmented_test_patch_application_is_required(self):
+        (self.folder / "test_output.txt").write_text(
+            self.pass_output.replace("Applied patch foo/tests/test_new.py cleanly.", ""))
+        r = self.report()
+        self.assertEqual(r["outcome"], "UNVERIFIED")
+        self.assertEqual(r["reason"], "augmented_test_patch_application_not_proven")
 
     def test_pytest_parser_aborts_on_incomplete_or_wrong_target(self):
         good, detail = parse_augmented_pytest(self.pass_output, ["foo/tests/test_new.py"])
