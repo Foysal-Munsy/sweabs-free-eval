@@ -1,0 +1,179 @@
+name: SWE-ABS Patch Pilot (up to 10 runs)
+
+on:
+  workflow_dispatch:
+    inputs:
+      sample:
+        description: "Gemini 3 Flash sample (1, 2, or 3)"
+        required: true
+        type: choice
+        options: ["1", "2", "3"]
+        default: "1"
+      offset:
+        description: "Start index after sorting this sample's originally passing tasks"
+        required: true
+        type: number
+        default: 0
+      count:
+        description: "Number of patches to evaluate (1-10); first pilot should use 3"
+        required: true
+        type: number
+        default: 3
+
+permissions:
+  contents: read
+
+# A separate result artifact is produced for every exact sample / instance pair.
+# The workflow never writes to the repository.
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.selection.outputs.matrix }}
+      dataset_revision: ${{ steps.selection.outputs.dataset_revision }}
+      test_dataset_revision: ${{ steps.selection.outputs.test_dataset_revision }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install data reader
+        run: python -m pip install 'datasets>=3,<5' 'huggingface_hub>=0.25,<2'
+      - name: Freeze dataset revision and select tasks
+        env:
+          SAMPLE: ${{ inputs.sample }}
+          OFFSET: ${{ inputs.offset }}
+          COUNT: ${{ inputs.count }}
+        run: |
+          python scripts/pilot.py plan --sample "$SAMPLE" --offset "$OFFSET" --count "$COUNT" --output plan.json
+          cat plan.json
+      - name: Export plan for the evaluation matrix
+        id: selection
+        run: |
+          python - <<'PY' >> "$GITHUB_OUTPUT"
+          import json
+          p = json.load(open('plan.json', encoding='utf-8'))
+          print('matrix=' + json.dumps(p['matrix'], separators=(',', ':')))
+          print('dataset_revision=' + p['dataset_revision'])
+          print('test_dataset_revision=' + p['test_dataset_revision'])
+          PY
+      - name: Upload frozen selection manifest
+        uses: actions/upload-artifact@v4
+        with:
+          name: sweabs-pilot-plan
+          path: plan.json
+          retention-days: 14
+
+  evaluate:
+    needs: prepare
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix: ${{ fromJSON(needs.prepare.outputs.matrix) }}
+    env:
+      SAMPLE: ${{ matrix.sample }}
+      INSTANCE_ID: ${{ matrix.instance_id }}
+      PATCH_SHA256: ${{ matrix.patch_sha256 }}
+      DATASET_REVISION: ${{ needs.prepare.outputs.dataset_revision }}
+      TEST_DATASET_REVISION: ${{ needs.prepare.outputs.test_dataset_revision }}
+      RUN_ID: pilot_${{ github.run_id }}_${{ github.run_attempt }}_${{ matrix.sample }}_${{ matrix.index }}
+      # Fixed upstream revision; a different upstream commit requires a new validation.
+      SWE_ABS_SHA: 26b4c736ca3d566d8395d7999304d0264abe7992
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Checkout pinned SWE-ABS version
+        run: |
+          git init SWE-ABS
+          git -C SWE-ABS remote add origin https://github.com/OpenAgentEval/SWE-ABS.git
+          git -C SWE-ABS fetch --depth 1 origin "$SWE_ABS_SHA"
+          git -C SWE-ABS checkout --detach FETCH_HEAD
+          test "$(git -C SWE-ABS rev-parse HEAD)" = "$SWE_ABS_SHA"
+          echo "SWE-ABS commit: $SWE_ABS_SHA"
+      - name: Apply the patch-application fix from the verified smoke workflow
+        run: python scripts/patch_harness.py --file SWE-ABS/swe-bench/swebench/harness/run_evaluation.py
+      - name: Install SWE-bench harness and datasets
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e ./SWE-ABS/swe-bench
+          python -m pip install 'datasets>=3,<5' 'huggingface_hub>=0.25,<2'
+      - name: Build one exact prediction from the frozen dataset revision
+        run: |
+          python scripts/pilot.py prediction \
+            --revision "$DATASET_REVISION" \
+            --sample "$SAMPLE" \
+            --instance-id "$INSTANCE_ID" \
+            --expected-hash "$PATCH_SHA256" \
+            --output one_prediction.jsonl --metadata metadata.json
+      - name: Freeze exact SWE-ABS augmented test record
+        run: |
+          python scripts/pilot.py test-record \
+            --revision "$TEST_DATASET_REVISION" \
+            --instance-id "$INSTANCE_ID" \
+            --output abs_instance.json --metadata metadata.json
+      - name: Evaluate only this patch against SWE-ABS
+        shell: bash
+        run: |
+          set -o pipefail
+          cd SWE-ABS/swe-bench
+          python -m swebench.harness.run_evaluation \
+            --dataset_name ../../abs_instance.json \
+            --split test \
+            --predictions_path ../../one_prediction.jsonl \
+            --instance_ids "$INSTANCE_ID" \
+            --run_id "$RUN_ID" \
+            --max_workers 1 \
+            --timeout 1800 \
+            2>&1 | tee ../../gha_pilot.log
+      - name: Collect patch identity checks and official harness outcome
+        if: always()
+        run: |
+          python scripts/pilot.py collect \
+            --metadata metadata.json \
+            --logs-root SWE-ABS/swe-bench/logs/aug_test_center \
+            --run-id "$RUN_ID" \
+            --instance-id "$INSTANCE_ID" \
+            --sample "$SAMPLE" \
+            --output result.json
+          cat result.json
+      - name: Upload per-patch evidence, including failures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sweabs-result-${{ matrix.sample }}-${{ matrix.index }}
+          if-no-files-found: warn
+          retention-days: 14
+          path: |
+            one_prediction.jsonl
+            abs_instance.json
+            metadata.json
+            result.json
+            gha_pilot.log
+            SWE-ABS/swe-bench/logs/aug_test_center/${{ env.RUN_ID }}/
+
+  summarize:
+    needs: [prepare, evaluate]
+    if: always() && needs.prepare.result == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: sweabs-result-*
+          path: evidence
+      - name: Merge all available results
+        run: |
+          python scripts/pilot.py merge --input-dir evidence --output pilot_results.csv
+          cat pilot_results.csv
+          cat pilot_summary.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sweabs-pilot-summary
+          path: |
+            pilot_results.csv
+            pilot_summary.json
+          retention-days: 14
