@@ -97,7 +97,9 @@ def build_test_record(revision: str, instance_id: str) -> tuple[list[dict[str, A
         raise ValueError(f"No augmented SWE-ABS test patch for {instance_id}")
     target_paths = sorted({m.group(1) for m in re.finditer(
         r"(?m)^diff --git a/[^\n]+ b/([^\n]+)$", row["test_patch"])
-        if "/tests/" in m.group(1) and Path(m.group(1)).name.startswith("test_")})
+        if (m.group(1).startswith("tests/") or "/tests/" in m.group(1))
+        and Path(m.group(1)).name.startswith("test_")
+        and m.group(1).endswith(".py")})
     return [row], {"test_dataset": TEST_DATASET_ID, "test_dataset_revision": revision,
                    "test_patch_sha256": sha256(row["test_patch"]),
                    "base_commit": row["base_commit"],
@@ -201,13 +203,81 @@ def parse_augmented_pytest(output: str, expected_files: list[str]) -> tuple[str 
     return ("FAIL" if failed else "PASS"), details
 
 
+def parse_augmented_django(output: str, expected_files: list[str]) -> tuple[str | None, dict[str, Any]]:
+    """Parse one Django runtests.py invocation with strict target and summary checks.
+
+    The SWE-ABS Django eval script uses Django's unittest-style runner, not
+    pytest. Test case FAIL is NOT equivalent to harness infrastructure error.
+    """
+    text = re.sub(r"\x1b\[[0-9;]*m", "", output)
+    begin, end = ">>>>> Start Test Output", ">>>>> End Test Output"
+    if text.count(begin) != 1 or text.count(end) != 1 or text.index(begin) > text.index(end):
+        return None, {"reason": "augmented_django_markers_missing_or_multiple"}
+    segment = text.split(begin, 1)[1].split(end, 1)[0]
+    command_lines = re.findall(r"(?m)^\+ \./tests/runtests\.py[ \t]+([^\n]+)$", segment)
+    if len(command_lines) != 1:
+        return None, {"reason": "expected_one_augmented_django_command"}
+    # The injected suite is rooted in the Django repository's tests/ directory.
+    expected_modules = sorted({".".join(Path(path).with_suffix("").parts[1:])
+        for path in expected_files if path.startswith("tests/") and path.endswith(".py")})
+    command = command_lines[0].split()
+    if not expected_modules or not set(expected_modules).issubset(command):
+        return None, {"reason": "augmented_django_command_does_not_target_test_patch",
+                      "expected_modules": expected_modules, "command": command}
+
+    ran = re.findall(r"(?m)^Ran (\d+) tests? in [0-9.]+s\s*$", segment)
+    passed_summaries = re.findall(r"(?m)^OK\s*$", segment)
+    failed_summaries = re.findall(r"(?m)^FAILED \(([^\n)]+)\)\s*$", segment)
+    if len(ran) != 1 or len(passed_summaries) + len(failed_summaries) != 1:
+        return None, {"reason": "augmented_django_test_count_or_summary_ambiguous"}
+    count = int(ran[0])
+    details: dict[str, Any] = {"augmented_collected": count, "augmented_runner": "django_unittest",
+                             "augmented_test_modules": expected_modules}
+    if count <= 0:
+        details["reason"] = "augmented_django_no_tests"
+        return None, details
+    if passed_summaries:
+        # Strict OK: no silently skipped/expected-failure tests counted as PASS.
+        details.update(augmented_passed=count, augmented_failed=0,
+                       augmented_skipped=0, augmented_errors=0)
+        return "PASS", details
+    failed = failed_summaries[0]
+    fields = dict(re.findall(r"(failures|errors|skipped|expected failures|unexpected successes)=(\d+)", failed))
+    if not fields or any(k not in ("failures", "errors") and int(v) > 0 for k, v in fields.items()):
+        details["reason"] = "augmented_django_unsupported_summary"
+        return None, details
+    failures = int(fields.get("failures", 0))
+    errors = int(fields.get("errors", 0))
+    if failures + errors == 0 or failures + errors > count:
+        details["reason"] = "augmented_django_failed_summary_inconsistent"
+        return None, details
+    details.update(augmented_passed=count-failures-errors, augmented_failed=failures,
+                   augmented_errors=errors, augmented_skipped=0)
+    # An exception may be a broken test environment rather than a failing fix.
+    if errors:
+        details["reason"] = "augmented_django_test_errors_require_review"
+        return None, details
+    return "FAIL", details
+
+
+def parse_augmented_suite(output: str, expected_files: list[str]) -> tuple[str | None, dict[str, Any]]:
+    """Select an explicitly recognized runner; unsupported runners stay UNVERIFIED."""
+    text = re.sub(r"\x1b\[[0-9;]*m", "", output)
+    has_pytest = bool(re.search(r"(?m)^\+ pytest -rA ", text))
+    has_django = bool(re.search(r"(?m)^\+ \./tests/runtests\.py ", text))
+    if has_pytest == has_django:
+        return None, {"reason": "unsupported_or_multiple_augmented_test_runners"}
+    return (parse_augmented_pytest(output, expected_files) if has_pytest
+            else parse_augmented_django(output, expected_files))
+
+
 def collect_result(metadata: dict[str, Any], logs_root: Path, run_id: str) -> dict[str, Any]:
     instance_id = metadata["instance_id"]
     result: dict[str, Any] = {
         **metadata, "run_id": run_id, "outcome": "UNVERIFIED",
         "reason": "missing_run_directory", "patch_diff_check": "NOT_CHECKED",
         "harness_report_resolved": None,
-        "label_source": "augmented_pytest_not_original_swebench_report",
+        "label_source": "augmented_test_runner_not_original_swebench_report",
     }
     base = logs_root / run_id
     folders = [p for p in base.glob("*/" + instance_id) if p.is_dir()]
@@ -261,18 +331,31 @@ def collect_result(metadata: dict[str, Any], logs_root: Path, run_id: str) -> di
         return result
     output_text = output_path.read_text(encoding="utf-8", errors="replace")
     setup_segment = output_text.split(">>>>> Start Test Output", 1)[0]
+    # Require evidence that every augmented test file in this task's test_patch
+    # was applied. Successful test output alone is insufficient.
+    expected_test_paths = metadata.get("augmented_test_files", [])
+    if not expected_test_paths:
+        result["reason"] = "augmented_test_file_manifest_missing"
+        return result
+    missing_application = [path for path in expected_test_paths
+        if f"Applied patch {path} cleanly." not in setup_segment]
+    if missing_application:
+        result["reason"] = "augmented_test_patch_application_not_proven"
+        result["unproven_augmented_test_paths"] = missing_application
+        return result
+    result["augmented_test_patch_check"] = "ALL_EXPECTED_FILES_APPLIED"
     result["environment_setup_warning"] = any(marker in setup_segment for marker in (
         "error: subprocess-exited-with-error", "ModuleNotFoundError:",
     ))
     if "would be overwritten by checkout" in output_text or "Aborting" in output_text:
         result["reason"] = "checkout_failed_during_augmented_evaluation"
         return result
-    status, details = parse_augmented_pytest(output_text, metadata.get("augmented_test_files", []))
+    status, details = parse_augmented_suite(output_text, metadata.get("augmented_test_files", []))
     result.update(details)
     if status is None:
         result["reason"] = details["reason"]
         return result
-    result.update(outcome=status, reason="verified_augmented_pytest_with_base_and_repository_patch")
+    result.update(outcome=status, reason="verified_augmented_test_runner_with_base_and_repository_patch")
     return result
 
 
