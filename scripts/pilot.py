@@ -95,38 +95,56 @@ def build_test_record(revision: str, instance_id: str) -> tuple[list[dict[str, A
     row = dict(selected[0])
     if not isinstance(row.get("test_patch"), str) or not row["test_patch"].strip():
         raise ValueError(f"No augmented SWE-ABS test patch for {instance_id}")
+    target_paths = sorted({m.group(1) for m in re.finditer(
+        r"(?m)^diff --git a/[^\n]+ b/([^\n]+)$", row["test_patch"])
+        if "/tests/" in m.group(1) and Path(m.group(1)).name.startswith("test_")})
     return [row], {"test_dataset": TEST_DATASET_ID, "test_dataset_revision": revision,
-                   "test_patch_sha256": sha256(row["test_patch"])}
+                   "test_patch_sha256": sha256(row["test_patch"]),
+                   "base_commit": row["base_commit"],
+                   "augmented_test_files": target_paths}
 
 
 def changed_lines(text: str) -> Counter[tuple[str, str, str]] | None:
-    """Compare added/removed hunk lines and paths (not a complete semantic equivalence proof)."""
+    """Conservatively match repository-file code edits, not agent runtime traces.
+
+    Paths under workspace/bash_events and workspace/conversations are local
+    agent trace artifacts shipped in the supplied prediction diff. They are
+    not source-code changes in the target project. All OTHER changed paths
+    remain subject to exact added/removed line matching. Mode-only/rename/
+    binary patches are deliberately not supported by this small pilot.
+    """
     counts: Counter[tuple[str, str, str]] = Counter()
     filename = None
     in_hunk = False
-    seen_diff = False
+    excluded = False
+    had_diff = False
     for line in text.splitlines():
         if line.startswith("diff --git "):
-            seen_diff = True
+            had_diff = True
             in_hunk = False
-            # Quoted paths, renames, modes and binary diffs are not supported by this conservative check.
             m = re.fullmatch(r"diff --git a/(\S+) b/(\S+)", line)
             if not m or m.group(1) != m.group(2):
                 return None
             filename = m.group(2)
-        elif line.startswith(("GIT binary patch", "Binary files ", "rename from ", "rename to ",
-                              "new file mode ", "deleted file mode ", "old mode ", "new mode ")):
+            if filename.startswith("/") or ".." in Path(filename).parts:
+                return None
+            excluded = filename.startswith(("workspace/bash_events/", "workspace/conversations/"))
+        elif line.startswith(("GIT binary patch", "Binary files ", "rename from ", "rename to ")):
             return None
+        elif line.startswith(("new file mode ", "deleted file mode ", "old mode ", "new mode ")):
+            # Require review for source-file mode changes. Ignore modes on
+            # excluded agent-runtime trace files only.
+            if not excluded:
+                return None
         elif line.startswith("@@ "):
             if filename is None:
                 return None
             in_hunk = True
-        elif in_hunk and line.startswith(("+", "-")):
-            # Hunk lines only: +++ and --- file headers occur outside hunks.
+        elif in_hunk and line.startswith(("+", "-")) and not excluded:
             counts[(filename, line[0], line[1:])] += 1
         elif line.startswith("\\ No newline"):
             continue
-    return counts if seen_diff and counts else None
+    return counts if had_diff and counts else None
 
 
 def pretest_diff(log: str) -> str | None:
@@ -141,12 +159,55 @@ def pretest_diff(log: str) -> str | None:
     return log[start + len(start_token):end].strip()
 
 
+def parse_augmented_pytest(output: str, expected_files: list[str]) -> tuple[str | None, dict[str, Any]]:
+    """Conservative parser for one augmented pytest invocation in an eval.sh log.
+
+    This is NOT the standard SWE-bench resolved metric; it reads only the
+    strengthened test block. Any ambiguity stays UNVERIFIED.
+    """
+    text = re.sub(r"\x1b\[[0-9;]*m", "", output)
+    begin, end = ">>>>> Start Test Output", ">>>>> End Test Output"
+    if text.count(begin) != 1 or text.count(end) != 1:
+        return None, {"reason": "augmented_pytest_markers_missing_or_multiple"}
+    segment = text.split(begin, 1)[1].split(end, 1)[0]
+    runs = re.findall(r"(?m)^\+ pytest -rA (.+)$", segment)
+    if len(runs) != 1:
+        return None, {"reason": "expected_one_augmented_pytest_command"}
+    targets = runs[0].strip().split()
+    if not expected_files or not set(expected_files).intersection(targets):
+        return None, {"reason": "augmented_pytest_command_does_not_target_test_patch"}
+    collected = re.findall(r"(?m)^collected (\d+) items?\s*$", segment)
+    summaries = [line.strip() for line in segment.splitlines()
+                 if re.search(r"={3,}.*\b(?:passed|failed|error|skipped)\b.*\bin\s+\d", line)]
+    if len(collected) != 1 or len(summaries) != 1:
+        return None, {"reason": "augmented_pytest_collection_or_summary_ambiguous"}
+    n = int(collected[0])
+    summary = summaries[0]
+    def count(name: str) -> int:
+        m = re.search(r"\b(\d+)\s+" + name + r"\b", summary)
+        return int(m.group(1)) if m else 0
+    passed = count("passed")
+    failed = count("failed")
+    skipped = count("skipped")
+    errors = count("error") + count("errors")
+    extra = any(re.search(r"\b\d+\s+" + cat + r"\b", summary)
+                for cat in ("xfailed", "xpassed", "deselected", "warnings"))
+    details = {"augmented_collected": n, "augmented_passed": passed,
+               "augmented_failed": failed, "augmented_skipped": skipped,
+               "augmented_errors": errors, "augmented_pytest_targets": targets}
+    if n == 0 or skipped or errors or extra or passed + failed != n:
+        details["reason"] = "augmented_pytest_incomplete_or_ambiguous"
+        return None, details
+    return ("FAIL" if failed else "PASS"), details
+
+
 def collect_result(metadata: dict[str, Any], logs_root: Path, run_id: str) -> dict[str, Any]:
     instance_id = metadata["instance_id"]
     result: dict[str, Any] = {
         **metadata, "run_id": run_id, "outcome": "UNVERIFIED",
         "reason": "missing_run_directory", "patch_diff_check": "NOT_CHECKED",
         "harness_report_resolved": None,
+        "label_source": "augmented_pytest_not_original_swebench_report",
     }
     base = logs_root / run_id
     folders = [p for p in base.glob("*/" + instance_id) if p.is_dir()]
@@ -155,7 +216,8 @@ def collect_result(metadata: dict[str, Any], logs_root: Path, run_id: str) -> di
         return result
     folder = folders[0]
     prediction_patch = folder / "patch.diff"
-    log_path, report_path, output_path = folder / "run_instance.log", folder / "report.json", folder / "test_output.txt"
+    log_path, report_path, output_path = (folder / "run_instance.log",
+                                          folder / "report.json", folder / "test_output.txt")
     if not prediction_patch.exists() or sha256(prediction_patch.read_bytes()) != metadata.get("patch_sha256"):
         result["reason"] = "evaluator_patch_sha256_missing_or_mismatch"
         return result
@@ -163,6 +225,11 @@ def collect_result(metadata: dict[str, Any], logs_root: Path, run_id: str) -> di
         result["reason"] = "run_instance_log_missing"
         return result
     log_text = log_path.read_text(encoding="utf-8", errors="replace")
+    marker = re.findall(r"PREPATCH_BASE_COMMIT_VERIFIED: ([a-f0-9]{40})", log_text)
+    if len(marker) != 1 or marker[0] != metadata.get("base_commit"):
+        result["reason"] = "prepatch_base_commit_not_verified"
+        return result
+    result["base_commit_check"] = "VERIFIED"
     parsed_before = pretest_diff(log_text)
     if parsed_before is None:
         result["reason"] = "pretest_diff_not_logged"
@@ -171,13 +238,12 @@ def collect_result(metadata: dict[str, Any], logs_root: Path, run_id: str) -> di
     observed = changed_lines(parsed_before)
     if expected is None or observed is None:
         result["reason"] = "unsupported_patch_format_or_empty_diff"
-        result["patch_diff_check"] = "UNVERIFIED"
         return result
     if expected != observed:
-        result["reason"] = "pretest_diff_change_lines_do_not_match_prediction"
+        result["reason"] = "pretest_repository_change_lines_mismatch"
         result["patch_diff_check"] = "MISMATCH"
         return result
-    result["patch_diff_check"] = "CHANGE_LINES_MATCH"
+    result["patch_diff_check"] = "REPOSITORY_CHANGE_LINES_MATCH"
     if not report_path.exists() or not output_path.exists():
         result["reason"] = "missing_report_or_test_output"
         return result
@@ -186,36 +252,27 @@ def collect_result(metadata: dict[str, Any], logs_root: Path, run_id: str) -> di
     except (ValueError, KeyError, TypeError):
         result["reason"] = "malformed_report_json"
         return result
+    # The official report's resolved field scores original FAIL_TO_PASS/PASS_TO_PASS
+    # names, not the newly added tests in the SWE-ABS test_patch. Preserve it as
+    # provenance but DO NOT use it as the stronger-test success label.
+    result["harness_report_resolved"] = report.get("resolved")
     if report.get("patch_successfully_applied") is not True:
-        result["reason"] = "harness_did_not_confirm_test_log"
+        result["reason"] = "harness_did_not_parse_test_log"
         return result
-    if type(report.get("resolved")) is not bool:
-        result["reason"] = "report_missing_boolean_resolved"
+    output_text = output_path.read_text(encoding="utf-8", errors="replace")
+    setup_segment = output_text.split(">>>>> Start Test Output", 1)[0]
+    result["environment_setup_warning"] = any(marker in setup_segment for marker in (
+        "error: subprocess-exited-with-error", "ModuleNotFoundError:",
+    ))
+    if "would be overwritten by checkout" in output_text or "Aborting" in output_text:
+        result["reason"] = "checkout_failed_during_augmented_evaluation"
         return result
-    result["harness_report_resolved"] = report["resolved"]
-    statuses = report.get("tests_status")
-    if not isinstance(statuses, dict):
-        result["reason"] = "tests_status_missing"
+    status, details = parse_augmented_pytest(output_text, metadata.get("augmented_test_files", []))
+    result.update(details)
+    if status is None:
+        result["reason"] = details["reason"]
         return result
-    # Guard against a false negative from a harness log that didn't parse any tests.
-    counts = sum(len(v) for category in statuses.values() if isinstance(category, dict)
-                 for v in category.values() if isinstance(v, list))
-    result["reported_test_status_items"] = counts
-    if counts == 0:
-        result["reason"] = "no_scored_tests_in_report"
-        return result
-    if report["resolved"]:
-        result.update(outcome="PASS", reason="harness_resolved_with_patch_and_test_evidence")
-        return result
-    # A false 'resolved' can arise from missing/unrecognized tests, so require
-    # explicitly reported failed tests before a provisional negative label.
-    failures = sum(len(v.get("failure", [])) for v in statuses.values()
-                   if isinstance(v, dict) and isinstance(v.get("failure"), list))
-    result["reported_failed_tests"] = failures
-    if failures:
-        result.update(outcome="FAIL", reason="harness_unresolved_with_reported_failed_tests_review_raw_log")
-    else:
-        result["reason"] = "unresolved_without_explicit_failed_test_evidence"
+    result.update(outcome=status, reason="verified_augmented_pytest_with_base_and_repository_patch")
     return result
 
 
@@ -228,8 +285,10 @@ def merge_results(path: Path, output: Path) -> None:
     if len(keys) != len(set(keys)):
         raise RuntimeError("Duplicate sample/instance ID in collected results")
     fields = ["sample", "instance_id", "original_resolved", "patch_sha256", "dataset_revision", "test_dataset_revision", "test_patch_sha256",
-              "sweabs_commit", "run_id", "outcome", "reason", "patch_diff_check",
-              "harness_report_resolved", "reported_test_status_items", "reported_failed_tests"]
+              "sweabs_commit", "run_id", "outcome", "reason", "base_commit", "base_commit_check",
+              "patch_diff_check", "augmented_collected", "augmented_passed", "augmented_failed",
+              "augmented_skipped", "augmented_errors", "environment_setup_warning",
+              "label_source", "harness_report_resolved"]
     output.parent.mkdir(parents=True, exist_ok=True)
     with output.open("w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=fields, extrasaction="ignore")
@@ -237,7 +296,7 @@ def merge_results(path: Path, output: Path) -> None:
         writer.writerows(sorted(results, key=lambda x: (x.get("sample", 0), x.get("instance_id", ""))))
     counts = Counter(x["outcome"] for x in results)
     (output.parent / "pilot_summary.json").write_text(json.dumps({"total": len(results), "outcomes": dict(counts),
-        "warning": "FAIL labels are provisional and must be manually reviewed before publication"}, indent=2) + "\n")
+        "warning": "PASS and FAIL labels are provisional; manually validate setup warnings and source-state evidence before publication"}, indent=2) + "\n")
     print(f"Merged {len(results)} outcomes: {dict(counts)}")
 
 
