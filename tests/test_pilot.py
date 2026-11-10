@@ -8,7 +8,7 @@ import sys
 
 from scripts.pilot import (
     build_prediction, changed_lines, collect_result, generate_plan, pretest_diff,
-    resolved_rows, sha256, build_test_record, merge_results,
+    resolved_rows, sha256, build_test_record, merge_results, parse_augmented_pytest,
 )
 from scripts.patch_harness import patch_source
 
@@ -62,11 +62,14 @@ class PatchTests(unittest.TestCase):
         self.assertEqual(changed_lines(pretest_diff(DIFF_LOG)), changed_lines(PATCH))
 
     def test_preserved_smoke_harness_backport_compiles(self):
-        src = '''GIT_APPLY_CMDS = [
+        src = '''import json
+GIT_APPLY_CMDS = [
     "git apply --verbose",
     "patch --batch -p1 -i",
 ]
 def run():
+    if True:
+        container.start()
     applied_patch = False
     for git_apply_cmd in GIT_APPLY_CMDS:
         pass
@@ -78,16 +81,20 @@ def run():
         patched = patch_source(src)
         self.assertIn("git apply --check --reverse", patched)
         self.assertIn("git checkout -- . ; git clean -fd", patched)
+        self.assertIn("PREPATCH_BASE_COMMIT_VERIFIED", patched)
+        self.assertIn("git checkout --force {base_commit}", patched)
         compile(patched, "patched.py", "exec")
 
     def test_pinned_augmented_test_record(self):
         fake = SimpleNamespace(load_dataset=lambda *a, **k: [
-            {"instance_id": "repo__repo-1", "test_patch": PATCH, "extra": "ok"}])
+            {"instance_id": "repo__repo-1", "test_patch": PATCH,
+             "base_commit": "c" * 40, "extra": "ok"}])
         with patch.dict(sys.modules, {"datasets": fake}):
             record, manifest = build_test_record("d" * 40, "repo__repo-1")
         self.assertEqual(len(record), 1)
         self.assertEqual(manifest["test_patch_sha256"], sha256(PATCH))
         self.assertEqual(manifest["test_dataset_revision"], "d" * 40)
+        self.assertEqual(manifest["base_commit"], "c" * 40)
 
     def test_merge_keeps_sample_run_identity(self):
         with tempfile.TemporaryDirectory() as td:
@@ -109,46 +116,87 @@ class CollectorTests(unittest.TestCase):
         self.addCleanup(self.tmp.cleanup)
         self.root = Path(self.tmp.name)
         self.instance = "repo__repo-1"
+        self.base = "c" * 40
         self.folder = self.root / "pilot_101" / "openhands-gemini3-flash-sample-1" / self.instance
         self.folder.mkdir(parents=True)
         (self.folder / "patch.diff").write_text(PATCH, encoding="utf-8")
-        (self.folder / "run_instance.log").write_text(DIFF_LOG, encoding="utf-8")
-        (self.folder / "test_output.txt").write_text("PASSED test_x\n", encoding="utf-8")
+        (self.folder / "run_instance.log").write_text(
+            "PREPATCH_BASE_COMMIT_VERIFIED: " + self.base + "\n" + DIFF_LOG,
+            encoding="utf-8")
+        self.pass_output = """+ : '>>>>> Start Test Output'
++ pytest -rA foo/tests/test_new.py
+collected 1 item
+==================== 1 passed in 0.02s ====================
++ : '>>>>> End Test Output'
+"""
+        (self.folder / "test_output.txt").write_text(self.pass_output)
         self.meta = {"instance_id": self.instance, "sample": 1, "patch_sha256": sha256(PATCH),
-                     "dataset_revision": "a" * 40}
+                     "dataset_revision": "a" * 40, "base_commit": self.base,
+                     "augmented_test_files": ["foo/tests/test_new.py"]}
 
-    def run_with_report(self, resolved, failures=None):
+    def report(self, standard_resolved=False):
         (self.folder / "report.json").write_text(json.dumps({self.instance: {
-            "patch_successfully_applied": True, "resolved": resolved,
-            "tests_status": {"FAIL_TO_PASS": {"success": ["x"], "failure": failures or []},
-                             "PASS_TO_PASS": {"success": [], "failure": []}},
+            "patch_successfully_applied": True, "resolved": standard_resolved,
+            "tests_status": {"FAIL_TO_PASS": {"success": [], "failure": ["old_test"]}},
         }}), encoding="utf-8")
         return collect_result(self.meta, self.root, "pilot_101")
 
-    def test_pass_requires_validated_patch_and_report(self):
-        r = self.run_with_report(True)
+    def test_pass_uses_augmented_test_and_checked_patch_even_if_standard_unresolved(self):
+        r = self.report(standard_resolved=False)
         self.assertEqual(r["outcome"], "PASS")
-        self.assertEqual(r["patch_diff_check"], "CHANGE_LINES_MATCH")
+        self.assertEqual(r["patch_diff_check"], "REPOSITORY_CHANGE_LINES_MATCH")
+        self.assertFalse(r["harness_report_resolved"])
 
-    def test_fail_requires_explicit_failed_tests(self):
-        self.assertEqual(self.run_with_report(False, ["x"])["outcome"], "FAIL")
-        self.assertEqual(self.run_with_report(False)["outcome"], "UNVERIFIED")
+    def test_fail_requires_augmented_test_failure_even_if_standard_report_is_resolved(self):
+        (self.folder / "test_output.txt").write_text(self.pass_output.replace(
+            "1 passed in 0.02s", "1 failed in 0.02s"))
+        self.assertEqual(self.report(standard_resolved=True)["outcome"], "FAIL")
+
+    def test_checkout_conflict_invalidates_pass(self):
+        (self.folder / "test_output.txt").write_text(self.pass_output +
+             "error: Your local changes would be overwritten by checkout\nAborting\n")
+        r = self.report()
+        self.assertEqual(r["outcome"], "UNVERIFIED")
+        self.assertEqual(r["reason"], "checkout_failed_during_augmented_evaluation")
+
+    def test_missing_base_commit_invalidates_pass(self):
+        (self.folder / "run_instance.log").write_text(DIFF_LOG)
+        self.assertEqual(self.report()["reason"], "prepatch_base_commit_not_verified")
 
     def test_missing_report_is_unverified(self):
-        r = collect_result(self.meta, self.root, "pilot_101")
-        self.assertEqual(r["outcome"], "UNVERIFIED")
+        self.assertEqual(collect_result(self.meta, self.root, "pilot_101")["outcome"], "UNVERIFIED")
 
     def test_mismatched_patch_is_unverified_even_if_report_passed(self):
-        self.run_with_report(True)
-        (self.folder / "run_instance.log").write_text(DIFF_LOG.replace("+new", "+wrong"), encoding="utf-8")
-        r = collect_result(self.meta, self.root, "pilot_101")
+        (self.folder / "run_instance.log").write_text(
+            ("PREPATCH_BASE_COMMIT_VERIFIED: " + self.base + "\n" + DIFF_LOG).replace(
+                "+new", "+wrong"))
+        r = self.report(True)
         self.assertEqual(r["outcome"], "UNVERIFIED")
         self.assertEqual(r["patch_diff_check"], "MISMATCH")
 
-    def test_patched_harness_patch_diff_tamper_detected(self):
-        self.run_with_report(True)
+    def test_patch_hash_tamper_detected(self):
+        self.report()
         (self.folder / "patch.diff").write_text(PATCH + "more", encoding="utf-8")
-        self.assertEqual(collect_result(self.meta, self.root, "pilot_101")["outcome"], "UNVERIFIED")
+        self.assertEqual(self.report()["outcome"], "UNVERIFIED")
+
+    def test_runtime_trace_paths_do_not_affect_repository_code_comparison(self):
+        model = PATCH + '''diff --git a/workspace/bash_events/foo b/workspace/bash_events/foo
+new file mode 100644
+--- /dev/null
++++ b/workspace/bash_events/foo
+@@ -0,0 +1 @@
++log
+'''
+        self.assertEqual(changed_lines(model), changed_lines(PATCH))
+        self.assertIsNone(changed_lines("diff --git a/foo b/foo\nold mode 100644\nnew mode 100755\n"))
+
+    def test_pytest_parser_aborts_on_incomplete_or_wrong_target(self):
+        good, detail = parse_augmented_pytest(self.pass_output, ["foo/tests/test_new.py"])
+        self.assertEqual(good, "PASS")
+        self.assertEqual(detail["augmented_collected"], 1)
+        self.assertIsNone(parse_augmented_pytest(self.pass_output, ["other/test.py"])[0])
+        self.assertIsNone(parse_augmented_pytest(self.pass_output.replace("1 passed", "1 skipped"),
+                                                  ["foo/tests/test_new.py"])[0])
 
 
 if __name__ == "__main__":
