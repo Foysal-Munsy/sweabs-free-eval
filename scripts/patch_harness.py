@@ -71,7 +71,9 @@ def patch_source(source: str) -> str:
         raise RuntimeError("Expected exactly one container.start() call")
     base_restore = """
         base_refs = set(re.findall(
-            r"(?m)^git checkout ([0-9a-f]{40})[ \t]*$",
+            # Django's reset-tests command appends test paths after the SHA.
+            # Match its base commit even when file arguments are present.
+            r"(?m)^git checkout ([0-9a-f]{40})(?=[ \t]|$)",
             test_spec.eval_script,
         ))
         if len(base_refs) != 1:
