@@ -60,6 +60,43 @@ def patch_source(source: str) -> str:
     lines[fail_index:fail_index] = reverse_block
 
     modified = "\n".join(lines) + "\n"
+
+    # SWE-ABS test scripts request a base-commit checkout after applying the
+    # model patch. With a synthetic image HEAD this can fail and silently
+    # leave the wrong source state active. Enforce the task's exact base
+    # commit BEFORE applying the patch, and fail closed when not possible.
+    modified = modified.replace("import json\n", "import json\nimport re\n", 1)
+    start_marker = "        container.start()\n"
+    if modified.count(start_marker) != 1:
+        raise RuntimeError("Expected exactly one container.start() call")
+    base_restore = """
+        base_refs = set(re.findall(
+            r"(?m)^git checkout ([0-9a-f]{40})[ \t]*$",
+            test_spec.eval_script,
+        ))
+        if len(base_refs) != 1:
+            raise EvaluationError(
+                instance_id, "Missing or ambiguous task base commit", logger,
+            )
+        base_commit = next(iter(base_refs))
+        base_reset = container.exec_run(
+            ["/bin/bash", "-c", (
+                f"git checkout --force {base_commit} && git clean -fd "
+                f"&& test $(git rev-parse HEAD) = {base_commit}"
+            )],
+            workdir=DOCKER_WORKDIR,
+            user=DOCKER_USER,
+        )
+        if base_reset.exit_code != 0:
+            raise EvaluationError(
+                instance_id,
+                "Cannot restore task base before patch: "
+                + base_reset.output.decode(UTF8, errors="replace"),
+                logger,
+            )
+        logger.info(f"PREPATCH_BASE_COMMIT_VERIFIED: {base_commit}")
+"""
+    modified = modified.replace(start_marker, start_marker + base_restore, 1)
     old_diff = '"git -c core.fileMode=false diff"'
     new_diff = '"git -c core.fileMode=false diff HEAD"'
     if modified.count(old_diff) != 2:
@@ -74,6 +111,7 @@ def patch_source(source: str) -> str:
         "git checkout -- . ; git clean -fd",
         "git apply --check --reverse",
         "git -c core.fileMode=false diff HEAD",
+        "PREPATCH_BASE_COMMIT_VERIFIED",
     ]
     for marker in required:
         if marker not in modified:
@@ -89,7 +127,7 @@ def main() -> None:
     before = args.file.read_text(encoding="utf-8")
     after = patch_source(before)
     args.file.write_text(after, encoding="utf-8")
-    print("Safe patch backport and Python syntax check: OK")
+    print("Safe patch backport, pre-patch base alignment and syntax check: OK")
 
 
 if __name__ == "__main__":
