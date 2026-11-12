@@ -5,6 +5,28 @@
 
 This log should record **what actually changed**, not hoped-for progress. The newest entry comes first. When a past conclusion needs correction, add a new dated correction entry with sources; do not erase the original record. Every entry should give (a) scope, (b) verified result, (c) files/commit/log evidence, (d) unresolved issues, (e) next handoff.
 
+## 2026-11-12 — Step 5: completed historical 83-run raw-evidence reconciliation
+
+**Milestone:** Step 5 DONE; Step 6 (independent FAIL-test validity review) NEXT. Step 3 labels remain *provisional*.
+
+**Verified actions:**
+- Read [first83 archival input](../results/2026-11-12/sweabs_samples1_2_first83_cumulative.csv) and [198-row v1](../results/2026-11-12/sweabs_full_198_cumulative_audited.csv); **all 83 historical rows matched exactly across all 12 columns**.
+- Retrieved and inspected **83 per-patch ZIPs** for Sample 1 offsets 0–62 and Sample 2 offsets 0–19. Also downloaded the **earlier unsuccessful Sample 1 offset-5 artifact**, but used the corrected [run #42858519379](https://github.com/Foysal-Munsy/sweabs-free-eval/actions/runs/42858519379) as primary evidence; the original failed [run #42853996382](https://github.com/Foysal-Munsy/sweabs-free-eval/actions/runs/42853996382) was retained, not counted twice.
+- Recomputed submitted-patch and augmented-test SHA-256, compared base commits, frozen dataset revisions, model patch application and pre/post repository diffs, examined augmented test runner stdout (Django/SymPy/pytest/Sphinx-tox), detected explicit skipped tests and model-patch/test-file overlap. The [83-row audit evidence CSV](../results/2026-11-12/sweabs_historical_83_reaudit_evidence.csv) retains the per-run checks and sources.
+- **82 labels unchanged; 1 correction:** Sample 1 offset 58, `sympy__sympy-23413`: **FAIL → UNVERIFIED** because an agent-modified test file was removed/reset during augmented test setup/cleanup. Raw tests still reported **7 passed, 1 exception**. Details in the [correction ledger](../results/2026-11-12/sweabs_historical_83_corrections.csv) and [Step 5 report](../results/2026-11-12/STEP5_RECONCILIATION_REPORT.md).
+- Kept Sample 1 offset 36 `psf__requests-1142` UNVERIFIED despite 15 passing tests: the ~884-KB patch includes `build/lib` generated files and full repository diff preservation was not verified.
+- Created [versioned current 198-row CSV v2](../results/2026-11-12/sweabs_full_198_cumulative_v2.csv), retaining the original v1 unchanged. **New totals: 153 PASS, 31 FAIL, 14 UNVERIFIED**, with 73 distinct instance IDs. There are **31 FAIL runs across 15 unique task IDs**.
+- Archived the [reproduction script](../scripts/reaudit_historical_83.py); it completed locally and generated the audited v2, detailed evidence and correction table, without Docker or fresh benchmark runs. All files were committed and read back through GitHub.
+- Privately preserved `sweabs_historical_83_raw_evidence_private.zip` in the owner's ChatGPT Library `/Research/SWE-ABS/2026-11-12`. Verified after materialization: **2,790,331 bytes**, SHA-256 `cc7c5f4280c3dd7e4ccfb34f55ea151f472435e33d1e7465fb73cf9c75c586e4`, ZIP integrity clean (86 members). **Not public on GitHub.**
+
+**Decisions and limitations:** This is a **stronger-test runner evidence reconciliation**, *not* independent confirmation that any strengthened test's asserted behavior is semantically valid. The 31 remaining FAIL and 14 UNVERIFIED must remain provisional. Old v1 is not overwritten; changed label is explicit and reproducible in v2. Raw logs can contain test fixture secrets or user traces, so the backup stays private.
+
+**Source of truth:** [Step 5 reconciliation report](../results/2026-11-12/STEP5_RECONCILIATION_REPORT.md), [evidence manifest](../results/2026-11-12/MANIFEST.md), [current v2 dataset](../results/2026-11-12/sweabs_full_198_cumulative_v2.csv), and linked GitHub Actions run IDs.
+
+**Next exact action:** Step 6 — independently evaluate 31 provisional FAIL cases across 15 tasks against the strengthened test assertions and original task requirements, recording per-case dispositions and evidence links; defer feature extraction until analysis labels are frozen.
+
+**Documentation synchronized:** PROJECT_STATE = yes; WORK_LOG = yes; README = yes; AGENTS = yes; results manifest = yes.
+
 ## 2026-11-12 — Step 4: archived audited results with a private raw-evidence backup
 
 **Milestone / scope:** Step 4 evidence preservation, completed for the repository owner's durable access; **public raw-ZIP release deferred**. Step 5 historical audit consistency remains pending.
