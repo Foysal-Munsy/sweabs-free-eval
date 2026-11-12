@@ -1,0 +1,2 @@
+sample,offset,instance_id,patch_sha256,run_id,original_outcome,revised_outcome,reason,raw_summary,passed,failed,skipped,lost_model_patch_files,evidence_url
+1,58,sympy__sympy-23413,894c7d6aaa65dd46b524cda9507c23c93f42cb2049ee7a47f18492248e28b33b,pilot_43169378297_1_1_58,FAIL,UNVERIFIED,model_repo_diff_changed_after_test,"tests finished: 7 passed, 1 exceptions, in 0.08 seconds ============",7,1,0,sympy/polys/matrices/tests/test_normalforms.py,https://github.com/Foysal-Munsy/sweabs-free-eval/actions/runs/43169378297
