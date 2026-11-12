@@ -143,12 +143,19 @@ def execute(task,sample):
         stdout=str(exc.stdout or "")[-2000:]
         timeout=True
     seconds=round(time.monotonic()-start,2)
-    summary=[s.strip()[:260] for s in stdout.splitlines()
-       if re.search(r"(?i)(?:=+ .*? (?:passed|failed|error|skipped)|^Ran \d+ tests?|^OK$|^FAILED \(|^ERROR:|^FAIL:|^test_.*?\.\.\. (?:ok|skipped|FAIL|ERROR))",s)]
-    observed=bool(summary)
-    status=("NEW_MERGED_TARGET_SUITE_PASSED" if exit_code==0 and observed
-            else "NEW_MERGED_TARGET_SUITE_FAILED_OR_ERRORS" if exit_code!=0 and observed
-            else "INCOMPLETE_OR_INCONCLUSIVE_EXECUTION")
+    summary=[line.strip()[:260] for line in stdout.splitlines()
+       if (re.search(r"(?i)\b\d+\s+(?:passed|failed|error|errors|skipped)\b",line)
+           or re.search(r"(?m)^(?:Ran \d+ tests?|OK$|FAILED \(|ERROR:|FAIL:|test_.*?\.{3} (?:ok|skipped|FAIL|ERROR))",line))]
+    has_unittest_summary=bool(re.search(r"(?m)^Ran \d+ tests? in",stdout))
+    has_pytest_summary=bool(re.search(r"(?m)^\s*(?:\d+ failed|\d+ passed|FAILED sympy/)",stdout))
+    failed=bool(re.search(r"(?m)^FAILED \(",stdout) or re.search(r"(?m)^\s*\d+ failed\b",stdout))
+    passed=bool(re.search(r"(?m)^OK\s*$",stdout) or re.search(r"(?m)^\s*\d+ passed in",stdout))
+    if exit_code==0 and (has_unittest_summary or has_pytest_summary) and passed:
+        status="NEW_MERGED_TARGET_SUITE_PASSED"
+    elif exit_code!=0 and (has_unittest_summary or has_pytest_summary) and failed:
+        status="NEW_MERGED_TARGET_SUITE_FAILED"
+    else:
+        status="INCOMPLETE_OR_INCONCLUSIVE_EXECUTION"
     data.update({
        "new_test_runtime":"direct upstream Python test runner, NOT SWE-ABS Docker",
        "runtime_python":sys.version.split()[0],
@@ -157,7 +164,7 @@ def execute(task,sample):
        "execution_timeout":timeout,
        "wall_seconds":seconds,
        "bounded_result_lines":summary[-32:],
-       "bounded_error_tail":stdout[-1100:] if status=="INCOMPLETE_OR_INCONCLUSIVE_EXECUTION" else "",
+       "bounded_error_tail":stdout[-2000:] if exit_code!=0 or status=="INCOMPLETE_OR_INCONCLUSIVE_EXECUTION" else "",
        "new_merged_execution_status":status,
        "original_v2_relabelled":False,
        "not_historical_sweabs_verdict":True,
