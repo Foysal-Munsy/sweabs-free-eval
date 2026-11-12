@@ -129,7 +129,7 @@ def execute(task,sample):
     env["PYTHONPATH"]=str(root)+os.pathsep+str(root/"tests")
     if data["test_type"]=="django":
         cmd=[sys.executable,"tests/runtests.py",*data["test_modules"],
-            "--settings=test_sqlite","--noinput","--verbosity=2"]
+            "--settings=test_sqlite","--noinput","--verbosity=2","--parallel=1"]
     else:
         cmd=[sys.executable,"-m","pytest","-q",*data["test_modules"]]
     start=time.monotonic()
