@@ -1,0 +1,39 @@
+{
+  "augmented_patch_merge_mode": "three_way",
+  "base_commit": "10de1a18a0efac0b19b611e40c928250dda688bf",
+  "bounded_error_tail": "0\n            # k now points to the column in which we want to put a pivot.\n            # We want zeros in all entries to the left of the pivot column.\n            for j in range(k - 1, -1, -1):\n                if A[i][j] != 0:\n                    # Replace cols j, k by lin combs of these cols such that, in row i,\n                    # col j has 0, while col k has the gcd of their row i entries. Note\n                    # that this ensures a nonzero entry in col k.\n                    u, v, d = _gcdex(A[i][k], A[i][j])\n                    r, s = A[i][k] // d, A[i][j] // d\n                    add_columns(A, k, j, u, v, -s, r)\n>           b = A[i][k]\nE           IndexError: list index out of range\n\nsympy/polys/matrices/normalforms.py:232: IndexError\n                                DO *NOT* COMMIT!                                \n=========================== short test summary info ============================\nFAILED sympy/polys/matrices/tests/test_normalforms_hnf_extra.py::test_hnf_zero_column_and_all_zero_tall_matrix_dm - IndexError: list index out of range\n1 failed, 7 passed in 0.22s\n",
+  "bounded_result_lines": [],
+  "execution_exit_code": 1,
+  "execution_timeout": false,
+  "limitation": "New merged original model/test source on a fresh pinned base, but distinct dependency/runtime versions from original Docker image. Passing/failing tests require issue-scoped semantic review; runner v2 is immutable.",
+  "model_added_line_types_in_collision_paths": 1,
+  "model_added_line_types_preserved_after_merge": 1,
+  "model_changed_file_count": 10,
+  "new_merged_execution_status": "INCOMPLETE_OR_INCONCLUSIVE_EXECUTION",
+  "new_patch_test_integration_verified": true,
+  "new_test_runtime": "direct upstream Python test runner, NOT SWE-ABS Docker",
+  "not_historical_sweabs_verdict": true,
+  "original_outcomes_modified": false,
+  "original_runner_outcome": "UNVERIFIED",
+  "original_v2_relabelled": false,
+  "overlap_paths": [
+    "sympy/polys/matrices/tests/test_normalforms.py"
+  ],
+  "patch_sha256": "894c7d6aaa65dd46b524cda9507c23c93f42cb2049ee7a47f18492248e28b33b",
+  "runtime_python": "3.9.25",
+  "sample": 1,
+  "source_revision": "b5515d1dce40036633293b70477f0633b24593f7",
+  "task": "sympy__sympy-23413",
+  "test_modules": [
+    "sympy/polys/matrices/tests/test_normalforms.py",
+    "sympy/polys/matrices/tests/test_normalforms_hnf_extra.py"
+  ],
+  "test_patch_sha256": "fa6fb0c196945553745f91ea70581ee7c6aaf0adf28f2cd7e5bfa115d8d1cbd9",
+  "test_revision": "79fc07a8f4ce5e3720e069948073f5f910b7577b",
+  "test_type": "pytest",
+  "tested_modules": [
+    "sympy/polys/matrices/tests/test_normalforms.py",
+    "sympy/polys/matrices/tests/test_normalforms_hnf_extra.py"
+  ],
+  "wall_seconds": 1.94
+}
