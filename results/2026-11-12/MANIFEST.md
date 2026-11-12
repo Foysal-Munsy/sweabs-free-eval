@@ -2,6 +2,37 @@
 
 **Status:** Archival of provisional strengthened-test labels and audit provenance. Not a final semantic-correctness dataset. This manifest is a record of verified bytes and storage locations as of 2026-11-12.
 
+## Step 11 bounded completion: verified new controlled runs and limited scientific decision (2026-11-12)
+
+**Final current status:** **Step 11 DONE for a reproducible, task-aware *runner-association* pilot with explicit semantic truth/claim limitations; Step 12 qualitative cases NEXT.** [Full scientific decision](STEP11_SCOPE_LIMITED_CLOSURE_DECISION_v1.md). No rewrite to original 198-row runner v2 **153 PASS/31 FAIL/14 UNVERIFIED**, frozen Step 7 conservative **153/9/36**, Step 8 indicators or corrected Step 10 AUROCs. **Human/maintainer gold semantic labels, exact historical Docker runtime equivalence, external predictor validity and journal readiness remain UNVERIFIED.**
+
+[Independent Step11 controlled evidence reconciliation](STEP11_CONTROLLED_EVIDENCE_FREEZE_v1.json), generated and `--check` verified from archived sample+patch SHA keyed new execution evidence on successful [read-only CI #43276679251](https://github.com/Foysal-Munsy/sweabs-free-eval/actions/runs/43276679251). New checks by task family:
+
+- [Django-12039 PostgreSQL index suite #43273619675](https://github.com/Foysal-Munsy/sweabs-free-eval/actions/runs/43273619675): original three model patches, each **13 passed, zero skipped** in the new augmented module. Initial extra feature-flag probe mistakenly called exit0 "ambiguous" despite the actual unittest summaries; verified consolidated record uses 13 `ok`, `Ran 13`, `OK` per run.
+- [Django-14434 PostgreSQL targeted covering-index #43272808138](https://github.com/Foysal-Munsy/sweabs-free-eval/actions/runs/43272808138): all 3 previously skipped enhanced index method PASS; both required backend features available. [Full 168-test schema module run #43274797864](https://github.com/Foysal-Munsy/sweabs-free-eval/actions/runs/43274797864) still contained other skipped tests; not 168/168 passed.
+- [Django-15503 full JSON module #43274797864](https://github.com/Foysal-Munsy/sweabs-free-eval/actions/runs/43274797864): **all 10 module tests PASS, no skips, for all 3 original model patches**; Oracle method also directly passed [#43273244869](https://github.com/Foysal-Munsy/sweabs-free-eval/actions/runs/43273244869), separately identified in Python unittest loader [#43276011253](https://github.com/Foysal-Munsy/sweabs-free-eval/actions/runs/43276011253).
+- [Four original model/test-file collision merge #43272706376](https://github.com/Foysal-Munsy/sweabs-free-eval/actions/runs/43272706376): 4/4 model patches staged intact, then augmented tests non-destructively merged with `git apply --3way`; [new test executions #43274187213](https://github.com/Foysal-Munsy/sweabs-free-eval/actions/runs/43274187213): SymPy three samples **7+1 IndexError /8/7+1 IndexError**; Django-11206 [corrected serial test #43275841934](https://github.com/Foysal-Munsy/sweabs-free-eval/actions/runs/43275841934): 12 tests,5 negative-zero assertion failures. Failure is reproducible but its issue-related semantic requirement remains unresolved.
+- [Requests full 74-file patch reconstruction #43271576166](https://github.com/Foysal-Munsy/sweabs-free-eval/actions/runs/43271576166): 65 generated `build/` paths, 16,234 source added/removed entries, model file hashes **74/74** unchanged after augmented test patch. **Not evidence original historical Docker tree was identical**.
+- [Step11 final methodological and oracle limitation decision](STEP11_SCOPE_LIMITED_CLOSURE_DECISION_v1.md) formally avoids reclassifying 14 original UNVERIFIED or 31 runner FAILs, and retains 9 documentary-supported/4 invalid-test/2 environment-sensitive/16 unresolved review categories. Unverified human semantic truth is a **scope limitation**, not a silently completed gold-label task. **First unfinished milestone Step 12**.
+
+| Verified file from current GitHub read-back | UTF-8 bytes | GitHub blob SHA-1 (NOT SHA-256) |
+| --- | ---: | --- |
+| [STEP11_SCOPE_LIMITED_CLOSURE_DECISION_v1.md](STEP11_SCOPE_LIMITED_CLOSURE_DECISION_v1.md) | 15158 | `1f71abf96c40b675899de79f634836a7ba2e7dd2` |
+| [STEP11_CONTROLLED_EVIDENCE_FREEZE_v1.json](STEP11_CONTROLLED_EVIDENCE_FREEZE_v1.json) | 7470 | `f5ca3738546fb2a25a1f9802a4f9d5e5f0ab1c8d` |
+| [STEP11_REQUESTS_FULL_PATCH_RECONSTRUCTION_v1.json](STEP11_REQUESTS_FULL_PATCH_RECONSTRUCTION_v1.json) | 10934 | `8f4d9e14cbb951f0f04198a0bc922db34e91a38d` |
+| [STEP11_COLLISION_MERGE_PROBES_v1.json](STEP11_COLLISION_MERGE_PROBES_v1.json) | 5792 | `14448cd82170baffc1ef8691ad528ca49e262ace` |
+| [STEP11_DJANGO15503_ORACLE_COLLECTION_v1.json](STEP11_DJANGO15503_ORACLE_COLLECTION_v1.json) | 1731 | `383762bbb6fdf20020fd340ab66b94d6d2809a17` |
+| [STEP11_DJANGO11206_MERGED_TEST_s3_v3.json](STEP11_DJANGO11206_MERGED_TEST_s3_v3.json) | 5621 | `7b2599a94ef85cf52d9f3ce3721752c4c0b1fe91` |
+| [Controlled evidence aggregate script](../../scripts/step11_freeze_controlled_evidence.py) | 10250 | `a4af9968078ba6cf4291a8f7b0fecd591d15b9e0` |
+| [Requests reconstructor](../../scripts/step11_reconstruct_requests_patch.py) | 8031 | `1c6a28d9412ec0f8b24d1093a88c8de8e6155516` |
+| [Collision merge source script](../../scripts/step11_overlap_merge_probe.py) | 9453 | `55426e21f210b83d0ddb1026ccee8a7f98be44fc` |
+| [Collision test execution script](../../scripts/step11_overlap_execution.py) | 10249 | `9324734b61befb94a0819a1f6ee359386e2154da` |
+| [PostgreSQL exact-patch test script](../../scripts/step11_django_backend_probe.py) | 10986 | `177e0f6f55f0387b3794677d1da64425e9286549` |
+| [Oracle method test loader auditor](../../scripts/step11_django_collection_probe.py) | 3529 | `3192955005b71f686b111f716a2eafa6a35992eb` |
+| [Final read-only CI reconciler](../../.github/workflows/step11-final-evidence.yml) | 1050 | `fd1cdb023f299c9080bb69f156396a98bb0eb4d5` |
+
+**Storage and source limits:** All new YAML/scripts/source metadata and bounded test summaries are public; private original ZIPs/raw full logs were **not** newly published. New test environments use exact source patch hashes and pinned repo bases but **do not reproduce the original SWE-ABS Docker test image**. Previous date-indexed artifact sections below are historical stages; the latest Step11 decision above supersedes earlier "Step11 OPEN" planning notes. Do not misread a passing GitHub job as a semantic oracle or a new historical runner PASS.
+
 ## Step 11 original-base in-place coverage and missing Oracle method (2026-11-12)
 
 **Pinned source & raw test-log validation:** [read-only CI #43267304895 SUCCESS](https://github.com/Foysal-Munsy/sweabs-free-eval/actions/runs/43267304895) independently loaded original Django source at base commit `5e04e84d67da8163f365e9f5fcd169e2630e2873` (SHA-256 `70a046a812c17e7c8dbf0ec8d34cd6a4c5e3cd8bbcd0615c85460469769bfa5a`) and mapped the pinned SWE-ABS `django-14434` 10 insertion hunks to **one added plus nine modified existing tests**. Original test-output logs from **three** runs show the new method `ok`, **8/9 modified methods `ok`**, and **one modified method `skipped`** (`test_func_unique_constraint_covering`, backend lacks `supports_expression_indexes` and `supports_covering_indexes`). This proves incomplete enhanced test-method coverage but **not** semantic failure.
