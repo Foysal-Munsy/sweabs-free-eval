@@ -7,9 +7,10 @@ This repository supports a reproducible academic study of **originally successfu
 1. [docs/PROJECT_STATE.md](docs/PROJECT_STATE.md) — **canonical snapshot, milestone checklist, next action, audit limitations and evidence digests**.
 2. [docs/WORK_LOG.md](docs/WORK_LOG.md) — actual prior work and session chronology (newest first).
 3. [README.md](README.md) — public research overview; do not confuse it with the operational handoff.
-4. [Pilot workflow](.github/workflows/sweabs-pilot.yml), [selection/collection script](scripts/pilot.py), and relevant exact source artifacts when the task involves evaluations.
+4. [Archived evidence and SHA-256 manifest](results/2026-11-12/MANIFEST.md) — verified public files and private raw-evidence boundary.
+5. [Pilot workflow](.github/workflows/sweabs-pilot.yml), [selection/collection script](scripts/pilot.py), and relevant exact source artifacts when the task involves evaluations.
 
-**Last documented checkpoint:** 2026-11-12. All **198** strengthened-test evaluation attempts completed, with provisional **153 PASS, 32 FAIL, 13 UNVERIFIED** labels. The recent audit checked 115 raw per-patch artifacts and preserved the earlier 83 rows. **The next unfinished milestone is evidence preservation**, not feature extraction. Cross-check current repository/evidence rather than assuming this snapshot is still current.
+**Last documented checkpoint:** 2026-11-12. All **198** strengthened-test evaluation attempts completed, with provisional **153 PASS, 32 FAIL, 13 UNVERIFIED** labels. The recent audit checked 115 raw per-patch artifacts and preserved the earlier 83 rows. **Evidence preservation is now completed with byte-verified GitHub CSV/report/script files and a private raw-ZIP backup. The next unfinished milestone is historical 83-row audit reconciliation (Step 5)**, not feature extraction. Cross-check current repository/evidence rather than assuming this snapshot is still current.
 
 ## Research safety and evidence rules
 
