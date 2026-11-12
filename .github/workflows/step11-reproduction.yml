@@ -12,9 +12,11 @@ on:
       - "tests/test_step9_indicators.py"
       - "scripts/step11_trace_spotcheck.py"
       - "scripts/step11_semantic_structural_audit.py"
+      - "scripts/step11_raw_artifact_reaudit14.py"
 
 permissions:
   contents: read
+  actions: read
 
 concurrency:
   group: step11-reproduction-${{ github.ref }}
@@ -69,6 +71,14 @@ jobs:
           PY
             echo 'STEP11_STRUCTURAL_CROSSWALK_END'
           fi
+      - name: Fresh per-patch ZIP inspection for all 14 UNVERIFIED
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python scripts/step11_raw_artifact_reaudit14.py
+          echo 'STEP11_RAW_ZIP_AUDIT_BEGIN'
+          cat results/2026-11-12/STEP11_RAW_ARTIFACT_REAUDIT14_v1.json
+          echo 'STEP11_RAW_ZIP_AUDIT_END'
       - name: Assert the verification workflow did not modify source evidence
         run: |
           git diff --exit-code -- results/2026-11-12/STEP7_ANALYSIS_LABELS_v1.csv \
