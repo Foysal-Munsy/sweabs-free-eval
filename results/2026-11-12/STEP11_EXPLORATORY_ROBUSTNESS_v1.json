@@ -1,0 +1,398 @@
+{
+  "leave_one_positive_task_out_policy": "remove all runs of one positive task, recompute raw run-level AUROC; not predictive cross-validation",
+  "source_features": "results/2026-11-12/STEP9_TRAJECTORY_FEATURES_v1.csv",
+  "source_labels": "results/2026-11-12/STEP7_ANALYSIS_LABELS_v1.csv",
+  "status": "post-hoc exploratory robustness only; no preregistration, model fitting or externally held-out prediction",
+  "targets": {
+    "noninvalid_sensitivity_y": {
+      "exploratory_length_baseline": {
+        "duplicate_rate_vs_steps_spearman": -0.079593,
+        "n_steps_auroc": 0.607601
+      },
+      "fail_runs": 27,
+      "indicator_results": {
+        "any_verification": {
+          "leave_one_positive_task_out": {
+            "max_auroc": 0.501225,
+            "min_auroc": 0.480263,
+            "positive_task_omissions": 13,
+            "valid_auroc_values": 13
+          },
+          "n_runs": 180,
+          "raw_run_auroc": 0.498911,
+          "task_macro": {
+            "discordant_tasks_excluded": 3,
+            "included_tasks": 64,
+            "positive_tasks": 10,
+            "task_macro_auc": 0.462963
+          },
+          "within_project": {
+            "auroc": 0.49747,
+            "comparable_pairs": 1581,
+            "projects_with_both_classes": 3
+          }
+        },
+        "duplicate_terminal_rate": {
+          "leave_one_positive_task_out": {
+            "max_auroc": 0.781999,
+            "min_auroc": 0.69281,
+            "positive_task_omissions": 13,
+            "valid_auroc_values": 13
+          },
+          "n_runs": 180,
+          "raw_run_auroc": 0.720528,
+          "task_macro": {
+            "discordant_tasks_excluded": 3,
+            "included_tasks": 64,
+            "positive_tasks": 10,
+            "task_macro_auc": 0.798148
+          },
+          "within_project": {
+            "auroc": 0.739089,
+            "comparable_pairs": 1581,
+            "projects_with_both_classes": 3
+          }
+        },
+        "editor_after_last_verification": {
+          "leave_one_positive_task_out": {
+            "max_auroc": 0.434635,
+            "min_auroc": 0.346347,
+            "positive_task_omissions": 13,
+            "valid_auroc_values": 13
+          },
+          "n_runs": 173,
+          "raw_run_auroc": 0.405285,
+          "task_macro": {
+            "discordant_tasks_excluded": 3,
+            "included_tasks": 64,
+            "positive_tasks": 10,
+            "task_macro_auc": 0.302778
+          },
+          "within_project": {
+            "auroc": 0.340065,
+            "comparable_pairs": 1535,
+            "projects_with_both_classes": 3
+          }
+        },
+        "terminal_error_rate": {
+          "leave_one_positive_task_out": {
+            "max_auroc": 0.52165,
+            "min_auroc": 0.465142,
+            "positive_task_omissions": 13,
+            "valid_auroc_values": 13
+          },
+          "n_runs": 180,
+          "raw_run_auroc": 0.497942,
+          "task_macro": {
+            "discordant_tasks_excluded": 3,
+            "included_tasks": 64,
+            "positive_tasks": 10,
+            "task_macro_auc": 0.527778
+          },
+          "within_project": {
+            "auroc": 0.489247,
+            "comparable_pairs": 1581,
+            "projects_with_both_classes": 3
+          }
+        }
+      },
+      "n": 180,
+      "n_fail_tasks": 13,
+      "n_projects": 10,
+      "n_unique_tasks": 67
+    },
+    "primary_y": {
+      "exploratory_length_baseline": {
+        "duplicate_rate_vs_steps_spearman": -0.111592,
+        "n_steps_auroc": 0.660131
+      },
+      "fail_runs": 9,
+      "indicator_results": {
+        "any_verification": {
+          "leave_one_positive_task_out": {
+            "max_auroc": 0.480392,
+            "min_auroc": 0.480132,
+            "positive_task_omissions": 5,
+            "valid_auroc_values": 5
+          },
+          "n_runs": 162,
+          "raw_run_auroc": 0.480392,
+          "task_macro": {
+            "discordant_tasks_excluded": 1,
+            "included_tasks": 60,
+            "positive_tasks": 4,
+            "task_macro_auc": 0.464286
+          },
+          "within_project": {
+            "auroc": 0.47852,
+            "comparable_pairs": 419,
+            "projects_with_both_classes": 3
+          }
+        },
+        "duplicate_terminal_rate": {
+          "leave_one_positive_task_out": {
+            "max_auroc": 0.619826,
+            "min_auroc": 0.382353,
+            "positive_task_omissions": 5,
+            "valid_auroc_values": 5
+          },
+          "n_runs": 162,
+          "raw_run_auroc": 0.48947,
+          "task_macro": {
+            "discordant_tasks_excluded": 1,
+            "included_tasks": 60,
+            "positive_tasks": 4,
+            "task_macro_auc": 0.522321
+          },
+          "within_project": {
+            "auroc": 0.390215,
+            "comparable_pairs": 419,
+            "projects_with_both_classes": 3
+          }
+        },
+        "editor_after_last_verification": {
+          "leave_one_positive_task_out": {
+            "max_auroc": 0.518707,
+            "min_auroc": 0.223923,
+            "positive_task_omissions": 5,
+            "valid_auroc_values": 5
+          },
+          "n_runs": 156,
+          "raw_run_auroc": 0.434996,
+          "task_macro": {
+            "discordant_tasks_excluded": 1,
+            "included_tasks": 60,
+            "positive_tasks": 4,
+            "task_macro_auc": 0.299107
+          },
+          "within_project": {
+            "auroc": 0.286783,
+            "comparable_pairs": 401,
+            "projects_with_both_classes": 3
+          }
+        },
+        "terminal_error_rate": {
+          "leave_one_positive_task_out": {
+            "max_auroc": 0.643791,
+            "min_auroc": 0.563181,
+            "positive_task_omissions": 5,
+            "valid_auroc_values": 5
+          },
+          "n_runs": 162,
+          "raw_run_auroc": 0.598765,
+          "task_macro": {
+            "discordant_tasks_excluded": 1,
+            "included_tasks": 60,
+            "positive_tasks": 4,
+            "task_macro_auc": 0.71875
+          },
+          "within_project": {
+            "auroc": 0.616945,
+            "comparable_pairs": 419,
+            "projects_with_both_classes": 3
+          }
+        }
+      },
+      "n": 162,
+      "n_fail_tasks": 5,
+      "n_projects": 10,
+      "n_unique_tasks": 61
+    },
+    "runner_only_sensitivity_y": {
+      "exploratory_length_baseline": {
+        "duplicate_rate_vs_steps_spearman": -0.10039,
+        "n_steps_auroc": 0.58444
+      },
+      "fail_runs": 31,
+      "indicator_results": {
+        "any_verification": {
+          "leave_one_positive_task_out": {
+            "max_auroc": 0.498249,
+            "min_auroc": 0.480263,
+            "positive_task_omissions": 15,
+            "valid_auroc_values": 15
+          },
+          "n_runs": 184,
+          "raw_run_auroc": 0.496521,
+          "task_macro": {
+            "discordant_tasks_excluded": 3,
+            "included_tasks": 66,
+            "positive_tasks": 12,
+            "task_macro_auc": 0.462963
+          },
+          "within_project": {
+            "auroc": 0.496141,
+            "comparable_pairs": 1814,
+            "projects_with_both_classes": 3
+          }
+        },
+        "duplicate_terminal_rate": {
+          "leave_one_positive_task_out": {
+            "max_auroc": 0.759454,
+            "min_auroc": 0.683007,
+            "positive_task_omissions": 15,
+            "valid_auroc_values": 15
+          },
+          "n_runs": 184,
+          "raw_run_auroc": 0.708096,
+          "task_macro": {
+            "discordant_tasks_excluded": 3,
+            "included_tasks": 66,
+            "positive_tasks": 12,
+            "task_macro_auc": 0.740741
+          },
+          "within_project": {
+            "auroc": 0.738423,
+            "comparable_pairs": 1814,
+            "projects_with_both_classes": 3
+          }
+        },
+        "editor_after_last_verification": {
+          "leave_one_positive_task_out": {
+            "max_auroc": 0.421643,
+            "min_auroc": 0.346435,
+            "positive_task_omissions": 15,
+            "valid_auroc_values": 15
+          },
+          "n_runs": 177,
+          "raw_run_auroc": 0.397506,
+          "task_macro": {
+            "discordant_tasks_excluded": 3,
+            "included_tasks": 66,
+            "positive_tasks": 12,
+            "task_macro_auc": 0.332562
+          },
+          "within_project": {
+            "auroc": 0.32378,
+            "comparable_pairs": 1762,
+            "projects_with_both_classes": 3
+          }
+        },
+        "terminal_error_rate": {
+          "leave_one_positive_task_out": {
+            "max_auroc": 0.507703,
+            "min_auroc": 0.446779,
+            "positive_task_omissions": 15,
+            "valid_auroc_values": 15
+          },
+          "n_runs": 184,
+          "raw_run_auroc": 0.477124,
+          "task_macro": {
+            "discordant_tasks_excluded": 3,
+            "included_tasks": 66,
+            "positive_tasks": 12,
+            "task_macro_auc": 0.518519
+          },
+          "within_project": {
+            "auroc": 0.459206,
+            "comparable_pairs": 1814,
+            "projects_with_both_classes": 3
+          }
+        }
+      },
+      "n": 184,
+      "n_fail_tasks": 15,
+      "n_projects": 10,
+      "n_unique_tasks": 69
+    },
+    "skipped_as_pass_scenario_y": {
+      "exploratory_length_baseline": {
+        "duplicate_rate_vs_steps_spearman": -0.051841,
+        "n_steps_auroc": 0.654321
+      },
+      "fail_runs": 9,
+      "indicator_results": {
+        "any_verification": {
+          "leave_one_positive_task_out": {
+            "max_auroc": 0.481481,
+            "min_auroc": 0.48125,
+            "positive_task_omissions": 5,
+            "valid_auroc_values": 5
+          },
+          "n_runs": 171,
+          "raw_run_auroc": 0.481481,
+          "task_macro": {
+            "discordant_tasks_excluded": 1,
+            "included_tasks": 63,
+            "positive_tasks": 4,
+            "task_macro_auc": 0.466102
+          },
+          "within_project": {
+            "auroc": 0.480603,
+            "comparable_pairs": 464,
+            "projects_with_both_classes": 3
+          }
+        },
+        "duplicate_terminal_rate": {
+          "leave_one_positive_task_out": {
+            "max_auroc": 0.604938,
+            "min_auroc": 0.372428,
+            "positive_task_omissions": 5,
+            "valid_auroc_values": 5
+          },
+          "n_runs": 171,
+          "raw_run_auroc": 0.478052,
+          "task_macro": {
+            "discordant_tasks_excluded": 1,
+            "included_tasks": 63,
+            "positive_tasks": 4,
+            "task_macro_auc": 0.508475
+          },
+          "within_project": {
+            "auroc": 0.369612,
+            "comparable_pairs": 464,
+            "projects_with_both_classes": 3
+          }
+        },
+        "editor_after_last_verification": {
+          "leave_one_positive_task_out": {
+            "max_auroc": 0.528846,
+            "min_auroc": 0.240919,
+            "positive_task_omissions": 5,
+            "valid_auroc_values": 5
+          },
+          "n_runs": 165,
+          "raw_run_auroc": 0.448006,
+          "task_macro": {
+            "discordant_tasks_excluded": 1,
+            "included_tasks": 63,
+            "positive_tasks": 4,
+            "task_macro_auc": 0.313559
+          },
+          "within_project": {
+            "auroc": 0.311659,
+            "comparable_pairs": 446,
+            "projects_with_both_classes": 3
+          }
+        },
+        "terminal_error_rate": {
+          "leave_one_positive_task_out": {
+            "max_auroc": 0.633745,
+            "min_auroc": 0.549897,
+            "positive_task_omissions": 5,
+            "valid_auroc_values": 5
+          },
+          "n_runs": 171,
+          "raw_run_auroc": 0.587791,
+          "task_macro": {
+            "discordant_tasks_excluded": 1,
+            "included_tasks": 63,
+            "positive_tasks": 4,
+            "task_macro_auc": 0.707627
+          },
+          "within_project": {
+            "auroc": 0.600216,
+            "comparable_pairs": 464,
+            "projects_with_both_classes": 3
+          }
+        }
+      },
+      "n": 171,
+      "n_fail_tasks": 5,
+      "n_projects": 10,
+      "n_unique_tasks": 64
+    }
+  },
+  "task_macro_policy": "one per task, mean score across samples, drop discordant-label tasks; complete-case feature rows",
+  "within_project_policy": "pairwise within project prefix before '__', exclude comparisons of same task ID"
+}
