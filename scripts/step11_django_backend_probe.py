@@ -139,10 +139,10 @@ def execute(task,sample):
     detail=[x.strip()[:300] for x in lines if
        re.search(r"(^test_.*\.\.\. (?:ok|skipped|FAIL|ERROR)|^Ran \d+ tests?|^FAILED \(|^OK$|^System check|^Creating test database|^Destroying test database|^ERROR:|^FAIL:)",x)]
     status="INCOMPLETE_SETUP_OR_ENVIRONMENT"
-    ran=[int(n) for n in re.findall(r"(?m)^Ran (\\d+) tests? in",output)]
-    clean_ok=bool(re.search(r"(?m)^OK\\s*$",output))
-    reported_skips=bool(re.search(r"(?m)^OK \\(skipped=\\d+\\)",output))
-    failed_summary=bool(re.search(r"(?m)^FAILED \\(",output))
+    ran=[int(n) for n in re.findall(r"(?m)^Ran (\d+) tests? in",output)]
+    clean_ok=bool(re.search(r"(?m)^OK\s*$",output))
+    reported_skips=bool(re.search(r"(?m)^OK \(skipped=\d+\)",output))
+    failed_summary=bool(re.search(r"(?m)^FAILED \(",output))
     if supported and exit_code==0 and len(ran)==1 and ran[0]>0 and clean_ok and not reported_skips:
         status="TARGETED_TEST_PASSED_ON_POSTGRES"
     elif supported and exit_code!=0 and len(ran)==1 and failed_summary:
