@@ -14,7 +14,7 @@ This README is the **public summary**. For a precise human/AI continuation point
 
 ## Research status — 2026-11-12
 
-**Milestone: all 198 stronger-test attempts and audits complete; Step 8 indicators frozen before extraction, Step 9 features exactly matched, and Step 10 exploratory AUROCs computed.** Step 6 reviewed the 31 FAILs and Step 7 retained 14 UNVERIFIED with explicit provisional analysis screens. None is an independent human/maintainer semantic oracle. **Step 11 technical reproducibility and 45-source/14-ZIP audits PASS. A new original-Django-base method mapping confirmed one *augmented assertion-bearing existing test* SKIPPED for each django-14434 sample, and independently verified a Django-15503 Oracle-named test declared in source but absent from all three archived verbose logs. Controlled supported-backend reruns and independent semantic oracles remain the unfinished gate.**
+**Milestone: all 198 stronger-test attempts and audits complete; Step 8 indicators frozen before extraction, Step 9 features exactly matched, and Step 10 exploratory AUROCs computed.** Step 6 reviewed the 31 FAILs and Step 7 retained 14 UNVERIFIED with explicit provisional analysis screens. None is an independent human/maintainer semantic oracle. **Step 11 DONE for the reproducible, scope-limited runner-association pilot, after new controlled tests and an explicit validity/limitations decision. Step 12 qualitative case studies NEXT.** Human/maintainer semantic gold labels and external predictive validation remain **unverified**; neither Step 11 closure nor a green CI proves journal readiness. [Formal evidence/claim boundary](results/2026-11-12/STEP11_SCOPE_LIMITED_CLOSURE_DECISION_v1.md).
 
 | Subset | Originally passing agent runs | Evaluation attempts | PASS | FAIL | UNVERIFIED |
 | --- | ---: | ---: | ---: | ---: | ---: |
@@ -119,6 +119,24 @@ The Step 7 UNVERIFIED labels remain unchanged. [9-run method attribution](result
 
 **Still not independently established:** original issue's complete semantic correctness for the disputed enhanced assertions; full coverage of unsupported PostgreSQL/JSON tests; exact preserved model patch for file overlaps; full built-file integrity for Requests; human/maintainer adjudication; held-out prediction. **No original runner labels, frozen Step 7 outcome policy or Step 8 indicator definitions changed.**
 
+## Step 11 final bounded completion — exact-patch controlled checks
+
+**Reproducibility, task-aware robustness, issue/test provenance and full-patch/coverage checks reached a defensible exploratory closure.** The [Step 11 formal limitation decision](results/2026-11-12/STEP11_SCOPE_LIMITED_CLOSURE_DECISION_v1.md) and [read-only reconciled case-level evidence](results/2026-11-12/STEP11_CONTROLLED_EVIDENCE_FREEZE_v1.json) are checked in and [independently verified by CI #43276679251](https://github.com/Foysal-Munsy/sweabs-free-eval/actions/runs/43276679251).
+
+| Previously problematic source | Newly executed / independently reconstructed evidence | Research boundary |
+| --- | --- | --- |
+| Three `django-12039` originally successful patches | PostgreSQL: **13 new index tests passed, zero skipped per patch** ([CI](https://github.com/Foysal-Munsy/sweabs-free-eval/actions/runs/43273619675)) | New direct test environment, not original Docker outcome |
+| Three `django-14434` patches | Formerly skipped enhanced covering-index method **passed for all 3** on supported PostgreSQL; full `schema.tests` module ran 168 tests per patch with some other backend-specific skips ([targeted CI](https://github.com/Foysal-Munsy/sweabs-free-eval/actions/runs/43272808138), [full CI](https://github.com/Foysal-Munsy/sweabs-free-eval/actions/runs/43274797864)) | Do not claim 168/168 passed or all backend branches covered |
+| Three `django-15503` patches | PostgreSQL: **10/10 patched JSON tests passed, zero skipped per patch**; Oracle-named method separately passed and is found in independent unittest discovery ([full CI](https://github.com/Foysal-Munsy/sweabs-free-eval/actions/runs/43274797864), [collection](results/2026-11-12/STEP11_DJANGO15503_ORACLE_COLLECTION_v1.json)) | New source/collection validation does not retroactively change old SQLite logs |
+| Four model/test-file overlap records | All four original model patches preserved during non-destructive 3-way augmented test merge. In new tests, SymPy samples 1/2/3: **7 passed/1 IndexError; 8 passed; 7 passed/1 IndexError**; Django-11206 sample3: **12 tests, 5 signed-zero assertion failures** ([merge CI](https://github.com/Foysal-Munsy/sweabs-free-eval/actions/runs/43272706376), [tests CI](https://github.com/Foysal-Munsy/sweabs-free-eval/actions/runs/43274187213), [Django serial CI](https://github.com/Foysal-Munsy/sweabs-free-eval/actions/runs/43275841934)) | Repeated failure is not independent proof disputed assertion is issue-required |
+| One `requests-1142` large patch | **74/74 original changed files**, including 65 generated `build/` files, reconstructed; hashes preserved after test patch ([CI](https://github.com/Foysal-Munsy/sweabs-free-eval/actions/runs/43271576166)) | Historical Docker-tested tree not independently recovered |
+
+**What is actually complete:** frozen identity/feature/label checks, independent Python and raw-trace spot-checks, task-cluster AUROCs and sensitivity, all 14 prior UNVERIFIED run families have new separately versioned controlled/provenance checks, and a formal **negative/inconclusive primary finding with label-policy sensitivity**. The initial **153 PASS / 31 runner FAIL / 14 UNVERIFIED** and conservative primary **153/9/36** are **unchanged**. New direct tests **must not be retroactively substituted into original frozen Step 7 labels**.
+
+**What remains UNVERIFIED:** independent semantic gold correctness of the 31 runner failures (9 documentary-supported, 4 invalid-test, 2 environment-sensitive, 16 unresolved), exact original SWE-ABS Docker equivalence, external predictive validation and journal publication readiness. Our bounded Step 11 milestone is closed **by formally limiting the scientific claim**, *not* by inventing human oracle agreement. A semantic-defect prediction paper must reopen this validity work.
+
+**Next milestone:** **Step 12 qualitative case studies** with prespecified exact-run selection, contradictory examples and opposing interpretations; Step 13 manuscript, Step 14 submission audit follow.
+
 ## Dataset and reproducibility
 
 | Component | Frozen source |
@@ -186,8 +204,10 @@ A 5.1-MB raw-evidence ZIP for the original recent audits and a separate **2.8-MB
 - [x] **Step 11 technical gates:** Independently reproduced pinned Python feature extraction, Step 10 AUROCs, task-aware exploratory robustness, and 12 selected raw-message spot checks (168 checks, 0 discrepancies) in [successful CI](https://github.com/Foysal-Munsy/sweabs-free-eval/actions/runs/43260088649).
 - [x] **Step 11 documentary/source evidence:** Verify 45 pinned source models/tests, fresh 14/14 original ZIPs and nine skipped-coverage method-to-log mappings (no runner relabel).
 - [x] **Step 11 in-place coverage provenance:** Map nine Django-14434 modified existing methods and prove one method skipped in all three samples; confirm Django-15503's unobserved Oracle method against SHA-identified source/log evidence.
-- [ ] **Step 11 semantic gate (NEXT):** Collect Django-15503 Oracle method under the pinned test runner, execute Django-14434 covering/expression-index assertions on a supported backend, adjudicate unresolved augmented assertions and four overlap/Requests patch-integrity gaps; only versioned controlled reruns or defensible limitations before substantive predictive claims.
-- [ ] Perform task-aware predictive analysis (including repeated-instance dependence), uncertainty checks, and robustness/sensitivity analyses; only then write up the paper.
+- [x] **Step 11 — DONE for bounded runner-association research scope:** Exact-patch controlled PostgreSQL/overlap/Requests checks completed, reproducibility reconciled, and an explicit **unverified semantic-gold limitation decision** archived. [Formal closure](results/2026-11-12/STEP11_SCOPE_LIMITED_CLOSURE_DECISION_v1.md).
+- [ ] **Step 12 (NEXT):** Versioned qualitative case selection and source-backed opposing/counterexample analysis under original frozen labels.
+- [ ] Step 13: Draft the paper, accurately reporting the already-computed task-cluster AUROCs, sensitivity tests, scope limitations and external validity gaps.
+- [ ] Step 14: Final manuscript, reproducibility, citations, mentor feedback and venue-specific submission audit.
 
 **Only preliminary in-sample descriptive AUROCs are reported; no validated predictive performance, reliable semantic ground truth, or causal relationship is claimed.** The research question remains open.
 
