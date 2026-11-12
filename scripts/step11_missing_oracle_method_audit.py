@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Step 11: identify unobserved Django-15503 newly added test method in original logs.
 
-Read-only pinned SWE-ABS source and original private Actions ZIPs; only derived
+Read-only pinned SWE-ABS source and previously independently verified original ZIP evidence; only derived
 metadata is saved publicly. Never infer PASS from absence or retune labels.
 
 Usage: python scripts/step11_missing_oracle_method_audit.py [--check]
@@ -78,7 +78,43 @@ def source_logs(entries,temp):
              "reported_failed":int(row["runner_failed"]),
              "reported_skipped":int(row["runner_skipped"])})
     return result
-def produce():
+def archived_logs(entries):
+    # Logs were already independently downloaded and checked in the successful
+    # CI #43263048387 (raw ZIP hashes) and #43264326911 (method-to-verbose logs).
+    # Re-use immutable published metadata rather than causing repeated
+    # short-retention egress; explicitly record this evidence boundary.
+    zip_evidence=json.loads((D/"STEP11_RAW_ARTIFACT_REAUDIT14_v1.json").read_text(encoding="utf8"))
+    methods=json.loads((D/"STEP11_SKIP_ATTRIBUTION_9_v1.json").read_text(encoding="utf8"))
+    zmap={(int(x["sample"]),int(x["offset"])):x for x in zip_evidence["rows"]}
+    mmap={(int(x["sample"]),int(x["offset"])):x for x in methods["rows"]}
+    result=[]
+    for row in entries:
+        sam=int(row["sample"]);off=int(row["offset"]);key=(sam,off)
+        z=zmap.get(key);m=mmap.get(key)
+        if z is None or m is None:raise ValueError("Missing archived original log evidence")
+        if z["patch_sha256"]!=row["patch_sha256"] or m["model_patch_sha256"]!=row["patch_sha256"]:
+            raise ValueError("Archived patch identity mismatch")
+        if len(z["raw_test_outputs"])!=1:
+            raise ValueError("Expected one archived test-output digest per case")
+        method=[x for x in m["augmented_added_test_function_names"] if x["name"]==MISSING]
+        if len(method)!=1:raise ValueError("Oracle method not found in archived method audit")
+        observed=method[0]["observed_result_types"]
+        if observed or method[0]["observed_verbose_matches"]:
+            raise ValueError("Archived method was observed; contradicts evidence")
+        tallies=m["observed_verbose_test_status_tallies"]
+        result.append({"sample":sam,"offset":off,
+             "original_runner_artifact":row["run_id"],
+             "test_output_sha256":z["raw_test_outputs"][0]["sha256"],
+             "verbose_methods_observed":sum(tallies.values()),
+             "target_method_observed":False,"target_method_statuses":[],
+             "observed_test_class_paths":[],
+             "reported_passed":int(row["runner_passed"]),
+             "reported_failed":int(row["runner_failed"]),
+             "reported_skipped":int(row["runner_skipped"]),
+             "verification_mode":"reused SHA-identified archived original test logs from prior passing CI, not newly downloaded"})
+    return result
+
+def produce(fresh_zips=False):
     source=load_dataset_row()
     patch=source["test_patch"]
     digest=sha(patch.encode("utf8"))
@@ -93,11 +129,15 @@ def produce():
     methods,oracle=source_location(patch)
     if len(oracle)!=1:raise ValueError("Expected one newly-added Oracle method definition; got "+str(len(oracle)))
     if len(methods)<10:raise ValueError("Missing source added test methods")
-    with tempfile.TemporaryDirectory(prefix="step11-oracle-") as tmp:
-        logs=source_logs(rows,tmp)
+    if fresh_zips:
+        with tempfile.TemporaryDirectory(prefix="step11-oracle-") as tmp:
+            logs=source_logs(rows,tmp)
+    else:
+        logs=archived_logs(rows)
     if any(l["target_method_observed"] for l in logs):
         raise ValueError("Oracle target is observed; contradicts original Step 11 attribution")
-    return {"status":"Pinned test definition and original unittest verbose-collection check; no execution of unobserved test",
+    return {"status":"Pinned test definition and independently archived unittest verbose-collection evidence; no execution of unobserved test",
+        "log_evidence_mode":"fresh-original-zip" if fresh_zips else "reused-confirmed-zip-and-method-audits",
         "task":TASK,"test_revision":REV,"test_patch_sha256":digest,
         "new_method_definitions_count":len(methods),
         "target_test_method_name":MISSING,
@@ -110,8 +150,9 @@ def produce():
 def main():
     parser=argparse.ArgumentParser()
     parser.add_argument("--check",action="store_true")
+    parser.add_argument("--fresh-zips",action="store_true",help="Optional fresh downloads; default uses verified archived raw-log metadata")
     args=parser.parse_args()
-    out=produce()
+    out=produce(fresh_zips=args.fresh_zips)
     if args.check:
         if json.loads(OUTPUT.read_text(encoding="utf8"))!=out:raise ValueError("Oracle method audit mismatch")
     else:OUTPUT.write_text(json.dumps(out,indent=2,sort_keys=True)+"\n",encoding="utf8")
