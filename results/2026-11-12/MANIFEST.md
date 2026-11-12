@@ -2,6 +2,24 @@
 
 **Status:** Archival of provisional strengthened-test labels and audit provenance. Not a final semantic-correctness dataset. This manifest is a record of verified bytes and storage locations as of 2026-11-12.
 
+## Current provisional dataset — Step 5 historical reconciliation (v2)
+
+**Current research labels (after the 83-run raw-log re-audit): 153 PASS, 31 FAIL, 14 UNVERIFIED among 198 attempts.** The files in the table immediately below were created on 2026-11-12 and GitHub content was read back after commit. The original v1 CSV and its historical counts (153/32/13) remain unchanged below for reproducibility; **use v2 for subsequent reviewed-label work**.
+
+| Step 5 artifact | Bytes | SHA-256 |
+| --- | ---: | --- |
+| [sweabs_full_198_cumulative_v2.csv](sweabs_full_198_cumulative_v2.csv) — current versioned provisional labels | 93933 | `e8cca12033e7666dcb14133d619ddac00297bd2a6fbc8c03e1801944da78c214` |
+| [sweabs_historical_83_reaudit_evidence.csv](sweabs_historical_83_reaudit_evidence.csv) — 83 raw runner / identity audit records | 35131 | `3fe8b9f4de0df30d96c44825d361a51f85f9df6315ecb97b9602bca2137f33be` |
+| [sweabs_historical_83_corrections.csv](sweabs_historical_83_corrections.csv) — 1 append-only correction | 521 | `1c66f4e0c819a67e7f727154e110a3f3cfc05a4996077325b60c12a7060d01c1` |
+| [STEP5_RECONCILIATION_REPORT.md](STEP5_RECONCILIATION_REPORT.md) — method, justification, unresolved cases | 8071 | `93759c073a4cff4387b816702c3da7b84d3cac1e77f904752da00c37946bfc55` |
+| [scripts/reaudit_historical_83.py](../../scripts/reaudit_historical_83.py) — offline audit reproduction | 13024 | `f1b8f7bc4b50b65a49ddeaa94a9410c3fbd34c314c721c0ee47e81321939a7f1` |
+
+**Single correction:** Sample 1 offset 58, `sympy__sympy-23413`, **FAIL → UNVERIFIED**. Model patch's modified test file disappeared from post-test repository diff, so exact-patch persistence was not established. The raw 7-pass/1-exception observation remains recorded. `psf__requests-1142` remains UNVERIFIED despite 15 passing tests because its large generated/build patch was not fully repository-diff-verified. See [Step 5 report](STEP5_RECONCILIATION_REPORT.md).
+
+**Private historical raw evidence:** `sweabs_historical_83_raw_evidence_private.zip` (2,790,331 bytes; 86 ZIP entries; SHA-256 `cc7c5f4280c3dd7e4ccfb34f55ea151f472435e33d1e7465fb73cf9c75c586e4`). It contains 83 original selected per-patch ZIPs and the earlier failed Sample 1 offset-5 attempt. Stored only in the owner's private ChatGPT Library at `/Research/SWE-ABS/2026-11-12/sweabs_historical_83_raw_evidence_private.zip`; materialized back and ZIP+checksum verified. **Not publicly available on GitHub.** The earlier 5.1 MB raw ZIP for Samples 2–3 is preserved separately below.
+
+**Step 5 completion:** Historical 83-row v1-to-v2 identity and all 83 artifact audits reviewed, one correction versioned. Semantic validity of the remaining 31 FAIL cases is **not** established; this is Step 6. No new evaluation runs or trajectory features were created in Step 5.
+
 ## GitHub-archived, byte-verified files
 
 | File | Records / role | Bytes | SHA-256 |
@@ -46,4 +64,4 @@ To retrieve the private ZIP in a future authorized chat, inspect the **Library**
 
 [All GitHub Actions evaluation runs](https://github.com/Foysal-Munsy/sweabs-free-eval/actions) · [Full audit and known issues](sweabs_full_198_audit_report.md) · [Current milestone state](../../docs/PROJECT_STATE.md)
 
-**Next research milestone:** reconcile the historical 83-row audit evidence with the current label policy, then independently check provisional FAIL/test validity and triage UNVERIFIED.
+**Next research milestone:** Step 6 — independently review the 31 provisional FAIL outcomes, then Step 7 triage the 14 UNVERIFIED cases and freeze an analysis-ready label manifest.
