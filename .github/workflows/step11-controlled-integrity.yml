@@ -1,0 +1,33 @@
+name: Step 11 - Exact patch reconstruction (no label rewrite)
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/step11-controlled-integrity.yml"
+      - "scripts/step11_reconstruct_requests_patch.py"
+permissions:
+  contents: read
+jobs:
+  reconstruct-requests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install pinned dataset readers
+        run: |
+          python --version
+          python -m pip install 'datasets==4.8.5' 'huggingface_hub==1.33.0'
+      - name: Reconstruct exact full 74-file Requests patch from its pinned base
+        run: |
+          python scripts/step11_reconstruct_requests_patch.py
+          echo 'STEP11_REQUESTS_RECONSTRUCTION_BEGIN'
+          cat results/2026-11-12/STEP11_REQUESTS_FULL_PATCH_RECONSTRUCTION_v1.json
+          echo 'STEP11_REQUESTS_RECONSTRUCTION_END'
+      - name: Ensure frozen source outcomes unchanged
+        run: |
+          git diff --exit-code -- results/2026-11-12/sweabs_full_198_cumulative_v2.csv \
+            results/2026-11-12/STEP7_ANALYSIS_LABELS_v1.csv
