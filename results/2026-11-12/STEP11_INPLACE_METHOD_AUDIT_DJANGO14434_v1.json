@@ -1,0 +1,367 @@
+{
+  "abs_test_patch_sha256": "4d4f1a7c34dd451b755f4124af0efc3a16ccb98c058fbdc123da5a435e585acf",
+  "abs_test_revision": "79fc07a8f4ce5e3720e069948073f5f910b7577b",
+  "added_code_hunks_to_existing_methods": [
+    {
+      "added_assertion_lines": 3,
+      "added_test_patch_lines": 7,
+      "method_name": "test_func_unique_constraint",
+      "old_source_anchor_line": 2215
+    },
+    {
+      "added_assertion_lines": 3,
+      "added_test_patch_lines": 7,
+      "method_name": "test_unique_constraint_field_and_expression",
+      "old_source_anchor_line": 2275
+    },
+    {
+      "added_assertion_lines": 3,
+      "added_test_patch_lines": 7,
+      "method_name": "test_func_unique_constraint_partial",
+      "old_source_anchor_line": 2300
+    },
+    {
+      "added_assertion_lines": 3,
+      "added_test_patch_lines": 7,
+      "method_name": "test_func_unique_constraint_covering",
+      "old_source_anchor_line": 2332
+    },
+    {
+      "added_assertion_lines": 3,
+      "added_test_patch_lines": 7,
+      "method_name": "test_func_unique_constraint_lookups",
+      "old_source_anchor_line": 2367
+    },
+    {
+      "added_assertion_lines": 3,
+      "added_test_patch_lines": 7,
+      "method_name": "test_func_index",
+      "old_source_anchor_line": 2780
+    },
+    {
+      "added_assertion_lines": 3,
+      "added_test_patch_lines": 7,
+      "method_name": "test_func_index_lookups",
+      "old_source_anchor_line": 2825
+    },
+    {
+      "added_assertion_lines": 3,
+      "added_test_patch_lines": 7,
+      "method_name": "test_composite_func_index",
+      "old_source_anchor_line": 2844
+    },
+    {
+      "added_assertion_lines": 3,
+      "added_test_patch_lines": 7,
+      "method_name": "test_func_index_collate_f_ordered",
+      "old_source_anchor_line": 2983
+    }
+  ],
+  "base_source_file": "tests/schema/tests.py",
+  "base_source_sha256": "70a046a812c17e7c8dbf0ec8d34cd6a4c5e3cd8bbcd0615c85460469769bfa5a",
+  "existing_test_methods_modified": [
+    "test_composite_func_index",
+    "test_func_index",
+    "test_func_index_collate_f_ordered",
+    "test_func_index_lookups",
+    "test_func_unique_constraint",
+    "test_func_unique_constraint_covering",
+    "test_func_unique_constraint_lookups",
+    "test_func_unique_constraint_partial",
+    "test_unique_constraint_field_and_expression"
+  ],
+  "limitations": "Original individual test methods may branch or skip internally; method status OK means method completed but not proof every added assertion branch executed. Only source hunks and exact named test methods in archived verbose logs are mapped. Rerun/semantic oracle not performed.",
+  "new_methods": [
+    "test_unique_constraint_field"
+  ],
+  "original_runner_labels_modified": false,
+  "samples": [
+    {
+      "methods": [
+        {
+          "name": "test_composite_func_index",
+          "observed_status_count": 1,
+          "status_values": [
+            "ok"
+          ],
+          "type": "modified_existing_method"
+        },
+        {
+          "name": "test_func_index",
+          "observed_status_count": 1,
+          "status_values": [
+            "ok"
+          ],
+          "type": "modified_existing_method"
+        },
+        {
+          "name": "test_func_index_collate_f_ordered",
+          "observed_status_count": 1,
+          "status_values": [
+            "ok"
+          ],
+          "type": "modified_existing_method"
+        },
+        {
+          "name": "test_func_index_lookups",
+          "observed_status_count": 1,
+          "status_values": [
+            "ok"
+          ],
+          "type": "modified_existing_method"
+        },
+        {
+          "name": "test_func_unique_constraint",
+          "observed_status_count": 1,
+          "status_values": [
+            "ok"
+          ],
+          "type": "modified_existing_method"
+        },
+        {
+          "name": "test_func_unique_constraint_covering",
+          "observed_status_count": 1,
+          "status_values": [
+            "skipped"
+          ],
+          "type": "modified_existing_method"
+        },
+        {
+          "name": "test_func_unique_constraint_lookups",
+          "observed_status_count": 1,
+          "status_values": [
+            "ok"
+          ],
+          "type": "modified_existing_method"
+        },
+        {
+          "name": "test_func_unique_constraint_partial",
+          "observed_status_count": 1,
+          "status_values": [
+            "ok"
+          ],
+          "type": "modified_existing_method"
+        },
+        {
+          "name": "test_unique_constraint_field_and_expression",
+          "observed_status_count": 1,
+          "status_values": [
+            "ok"
+          ],
+          "type": "modified_existing_method"
+        },
+        {
+          "name": "test_unique_constraint_field",
+          "observed_status_count": 1,
+          "status_values": [
+            "ok"
+          ],
+          "type": "added_method"
+        }
+      ],
+      "modified_existing_not_observed": 0,
+      "modified_existing_seen_ok": 8,
+      "modified_existing_skipped": 1,
+      "offset": 28,
+      "original_artifact_id": "pilot_42864097323_1_1_28",
+      "original_test_log_sha256": "cb951a776c7fc0fa1413cc77945bd2641c93ef3b86578faac23b2e18660a1b35",
+      "patch_sha256": "6f7fefd14ffc1579c9f58f362521ba473257443a6fac9f18127844e75ff20f7a",
+      "prior_suite_passed": 140,
+      "prior_suite_skipped": 28,
+      "sample": 1
+    },
+    {
+      "methods": [
+        {
+          "name": "test_composite_func_index",
+          "observed_status_count": 1,
+          "status_values": [
+            "ok"
+          ],
+          "type": "modified_existing_method"
+        },
+        {
+          "name": "test_func_index",
+          "observed_status_count": 1,
+          "status_values": [
+            "ok"
+          ],
+          "type": "modified_existing_method"
+        },
+        {
+          "name": "test_func_index_collate_f_ordered",
+          "observed_status_count": 1,
+          "status_values": [
+            "ok"
+          ],
+          "type": "modified_existing_method"
+        },
+        {
+          "name": "test_func_index_lookups",
+          "observed_status_count": 1,
+          "status_values": [
+            "ok"
+          ],
+          "type": "modified_existing_method"
+        },
+        {
+          "name": "test_func_unique_constraint",
+          "observed_status_count": 1,
+          "status_values": [
+            "ok"
+          ],
+          "type": "modified_existing_method"
+        },
+        {
+          "name": "test_func_unique_constraint_covering",
+          "observed_status_count": 1,
+          "status_values": [
+            "skipped"
+          ],
+          "type": "modified_existing_method"
+        },
+        {
+          "name": "test_func_unique_constraint_lookups",
+          "observed_status_count": 1,
+          "status_values": [
+            "ok"
+          ],
+          "type": "modified_existing_method"
+        },
+        {
+          "name": "test_func_unique_constraint_partial",
+          "observed_status_count": 1,
+          "status_values": [
+            "ok"
+          ],
+          "type": "modified_existing_method"
+        },
+        {
+          "name": "test_unique_constraint_field_and_expression",
+          "observed_status_count": 1,
+          "status_values": [
+            "ok"
+          ],
+          "type": "modified_existing_method"
+        },
+        {
+          "name": "test_unique_constraint_field",
+          "observed_status_count": 1,
+          "status_values": [
+            "ok"
+          ],
+          "type": "added_method"
+        }
+      ],
+      "modified_existing_not_observed": 0,
+      "modified_existing_seen_ok": 8,
+      "modified_existing_skipped": 1,
+      "offset": 30,
+      "original_artifact_id": "pilot_43181332699_1_2_30",
+      "original_test_log_sha256": "ff30ed743c00ec09b9ce67e7630b1548f5d270bce6deebfbfce2ca3ff86c0667",
+      "patch_sha256": "90412c763f14b060260efdcf65d725bf632fbae15284dac1cf8efc4e36a6ade2",
+      "prior_suite_passed": 140,
+      "prior_suite_skipped": 28,
+      "sample": 2
+    },
+    {
+      "methods": [
+        {
+          "name": "test_composite_func_index",
+          "observed_status_count": 1,
+          "status_values": [
+            "ok"
+          ],
+          "type": "modified_existing_method"
+        },
+        {
+          "name": "test_func_index",
+          "observed_status_count": 1,
+          "status_values": [
+            "ok"
+          ],
+          "type": "modified_existing_method"
+        },
+        {
+          "name": "test_func_index_collate_f_ordered",
+          "observed_status_count": 1,
+          "status_values": [
+            "ok"
+          ],
+          "type": "modified_existing_method"
+        },
+        {
+          "name": "test_func_index_lookups",
+          "observed_status_count": 1,
+          "status_values": [
+            "ok"
+          ],
+          "type": "modified_existing_method"
+        },
+        {
+          "name": "test_func_unique_constraint",
+          "observed_status_count": 1,
+          "status_values": [
+            "ok"
+          ],
+          "type": "modified_existing_method"
+        },
+        {
+          "name": "test_func_unique_constraint_covering",
+          "observed_status_count": 1,
+          "status_values": [
+            "skipped"
+          ],
+          "type": "modified_existing_method"
+        },
+        {
+          "name": "test_func_unique_constraint_lookups",
+          "observed_status_count": 1,
+          "status_values": [
+            "ok"
+          ],
+          "type": "modified_existing_method"
+        },
+        {
+          "name": "test_func_unique_constraint_partial",
+          "observed_status_count": 1,
+          "status_values": [
+            "ok"
+          ],
+          "type": "modified_existing_method"
+        },
+        {
+          "name": "test_unique_constraint_field_and_expression",
+          "observed_status_count": 1,
+          "status_values": [
+            "ok"
+          ],
+          "type": "modified_existing_method"
+        },
+        {
+          "name": "test_unique_constraint_field",
+          "observed_status_count": 1,
+          "status_values": [
+            "ok"
+          ],
+          "type": "added_method"
+        }
+      ],
+      "modified_existing_not_observed": 0,
+      "modified_existing_seen_ok": 8,
+      "modified_existing_skipped": 1,
+      "offset": 30,
+      "original_artifact_id": "pilot_43182706543_1_3_30",
+      "original_test_log_sha256": "58b3e684b9a48ac7d49535b29255aa5987bbd0bd5a17095a4d0743c45af3bd9a",
+      "patch_sha256": "e46ffbef6e5d87531dec12cde13ed70ac7fdc4784c255074e62a1538af68417c",
+      "prior_suite_passed": 140,
+      "prior_suite_skipped": 28,
+      "sample": 3
+    }
+  ],
+  "status": "read-only code-to-test-log method presence audit; never a complete semantic/case-path oracle",
+  "task": "django__django-14434",
+  "test_patch_hunks": 10,
+  "test_patch_removed_lines": 0,
+  "upstream_base_commit": "5e04e84d67da8163f365e9f5fcd169e2630e2873"
+}
