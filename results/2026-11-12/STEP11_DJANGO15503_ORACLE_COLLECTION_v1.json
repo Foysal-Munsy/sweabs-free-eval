@@ -1,0 +1,32 @@
+{
+  "all_class_test_method_names": [
+    "test_array_vs_object_behavior_with_numeric_like_keys",
+    "test_contains_and_contained_by_with_numeric_string_keys",
+    "test_has_any_keys_with_numeric_strings",
+    "test_has_key_numeric_strings",
+    "test_has_key_with_special_character_final_segments",
+    "test_has_keys_and_any_keys_with_special_char_final_segments",
+    "test_has_keys_multiple_numeric_strings",
+    "test_isnull_with_numeric_string_keys_and_arrays_sqlite",
+    "test_negative_and_leading_zero_numeric_string_keys",
+    "test_oracle_json_path_final_key_is_quoted_for_numeric_strings"
+  ],
+  "class": "JSONFieldNumericKeyLookupsTests",
+  "expected_method": "test_oracle_json_path_final_key_is_quoted_for_numeric_strings",
+  "limitation": "Python unittest.TestLoader collection from pinned patched module is not identical proof of SWE-ABS/Django DiscoverRunner execution. Compare with controlled full-module run and original verbose logs.",
+  "method_function_definitions_in_ast": 1,
+  "method_in_unittest_testloader_get_test_case_names": true,
+  "method_present_in_pinned_patched_ast": true,
+  "method_present_in_runtime_class": true,
+  "original_runner_relabelled": false,
+  "patched_file": "tests/model_fields/test_jsonfield_numeric_keys.py",
+  "patched_source_sha256": "7a5ccbd563e6f40d99aae4cdd117180c93c715faf766f7b9ceb25f9d82adb5cc",
+  "sample": 1,
+  "task": "django__django-15503",
+  "test_methods_actually_executed": false,
+  "unittest_test_loader_class_method_count": 10,
+  "unittest_test_loader_module_cases": 10,
+  "unittest_test_loader_target_case_ids": [
+    "model_fields.test_jsonfield_numeric_keys.JSONFieldNumericKeyLookupsTests.test_oracle_json_path_final_key_is_quoted_for_numeric_strings"
+  ]
+}
