@@ -26,7 +26,7 @@ jobs:
           python-version: "3.9"
       - name: Install source of pinned Django task
         run: python -m pip install -e ./scratch/step11-django-15503-sample1/django
-      - name: Enumerate AST method and runtime unittest module/class collection
+      - name: Enumerate AST and module unittest discovery with registered Django test apps
         run: python scripts/step11_django_collection_probe.py --sample 1
       - name: Preserve historical v2 and frozen analysis
         run: |
