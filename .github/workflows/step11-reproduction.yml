@@ -11,6 +11,7 @@ on:
       - "scripts/step11_robustness.py"
       - "tests/test_step9_indicators.py"
       - "scripts/step11_trace_spotcheck.py"
+      - "scripts/step11_semantic_structural_audit.py"
 
 permissions:
   contents: read
@@ -54,6 +55,20 @@ jobs:
           echo 'STEP11_TRACE_JSON_BEGIN'
           cat results/2026-11-12/STEP11_TRACE_SPOTCHECK_12_v1.json
           echo 'STEP11_TRACE_JSON_END'
+      - name: Independently match 31 FAIL + 14 UNVERIFIED to pinned original/test diffs
+        run: |
+          python scripts/step11_semantic_structural_audit.py
+          if [ -f results/2026-11-12/STEP11_SEMANTIC_STRUCTURAL_CROSSWALK_v1.json ]; then
+            echo 'STEP11_STRUCTURAL_CROSSWALK_BEGIN'
+            python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path("results/2026-11-12/STEP11_SEMANTIC_STRUCTURAL_CROSSWALK_v1.json")
+          d=json.loads(p.read_text(encoding="utf8"))
+          print(json.dumps(d,sort_keys=True,separators=(",",":")))
+          PY
+            echo 'STEP11_STRUCTURAL_CROSSWALK_END'
+          fi
       - name: Assert the verification workflow did not modify source evidence
         run: |
           git diff --exit-code -- results/2026-11-12/STEP7_ANALYSIS_LABELS_v1.csv \
