@@ -2,6 +2,25 @@
 
 **Status:** Archival of provisional strengthened-test labels and audit provenance. Not a final semantic-correctness dataset. This manifest is a record of verified bytes and storage locations as of 2026-11-12.
 
+## Step 11 — independent pinned reproduction, task-aware robustness and 12-trace recount (2026-11-12)
+
+**Source integrity and execution:** [read-only CI workflow](../../.github/workflows/step11-reproduction.yml) triggered via GitHub and [successful job #43260088649](https://github.com/Foysal-Munsy/sweabs-free-eval/actions/runs/43260088649) confirmed from job status and raw logs. Python 3.11.18, pinned `datasets==4.8.5` and `huggingface_hub==1.33.0`. Five synthetic tests PASS; frozen Step 9 198/198 exact-HF `--check` PASS; corrected Step 10 AUROC `--check` PASS; exploratory Step 11 task-robustness `--check` PASS; 12 pinned raw trajectories independently recounted against 14 archived fields each (**168 comparisons, zero mismatches**); no original source evidence edited. The 12-case JSON below was obtained from the passing CI job's text logs, not inferred from workflow success alone. User data was not added; no raw full trajectory was committed to GitHub.
+
+| Step 11 public artifact | UTF-8 bytes verified by GitHub read-back | GitHub blob SHA-1 (NOT SHA-256) |
+| --- | ---: | --- |
+| [Read-only CI workflow](../../.github/workflows/step11-reproduction.yml) | 2470 | `0b1ed0bda8b9ca2865c9944c365f2a1d2862299a` |
+| [Python post-hoc task robustness script](../../scripts/step11_robustness.py) | 7126 | `4d455fbb2237393601f88f2d072ecb247727c83f` |
+| [Independent 12-trace raw-event recount script](../../scripts/step11_trace_spotcheck.py) | 7424 | `1fd07d922d97d5e69f686d51559405f2623d613a` |
+| [Frozen indicator synthetic unit tests](../../tests/test_step9_indicators.py) | 2990 | `7ac5765cee52486055fe1ccee0cd5fd211f225c4` |
+| [STEP11_EXPLORATORY_ROBUSTNESS_v1.json](STEP11_EXPLORATORY_ROBUSTNESS_v1.json) | 12492 | `b3af76ab18ec89aa0ef36b2c00678485e46e0c77` |
+| [STEP11_TRACE_SPOTCHECK_12_v1.json](STEP11_TRACE_SPOTCHECK_12_v1.json) | 3948 | `a343315cba47faf5be6817ba45e3643e1497cd45` |
+| [STEP11_REPRO_AND_ROBUSTNESS_v1.md](STEP11_REPRO_AND_ROBUSTNESS_v1.md) | 9643 | `067ddf83707f9ff179fe5208ed3cf0ef384db28c` |
+| [Step 9 Python extractor after versioned Django regex implementation fix](../../scripts/step9_extract_trajectory_features.py) | 8360 | `3a45bc0d935427b2137835a7dce88d7ddf6d90e5` |
+
+**Unchanged immutable data:** 198-run original provisional runner v2 (153 PASS / 31 FAIL / 14 UNVERIFIED); Step 7 198-run label/eligibility manifest (conservative 153/9/36); frozen Step 8 formulas; archived Step 9 feature CSV (198 rows); corrected Step 10 v2 AUROCs. The Django `runtests.py` parser fix is an implementation correction that enabled exact Python reproduction of the *same* original feature rows.
+
+**Critical scope limit:** Step 11 technical reproduction/robustness is verified, but independent *semantic correctness* of all augmented test assertions and 16 unresolved, 2 environment-sensitive FAIL reviews plus 14 UNVERIFIED outcomes is not. This is not final gold-label proof or journal readiness. Step 11's human/maintainer semantic validity and coverage gate remains open; task-aware Step 11 analysis is post-hoc exploratory, not a trained task-disjoint predictor.
+
 ## Steps 8–10 — frozen trajectory features and provisional quantitative analysis (2026-11-12)
 
 **Source:** [Step 8 frozen specification](../../docs/STEP8_FROZEN_INDICATORS_v1.md), [Step 9 exact-match features](STEP9_TRAJECTORY_FEATURES_v1.csv), [Step 9 coverage](STEP9_COVERAGE_v1.json), [Step 10 corrected AUROC v2](STEP10_AUROC_TASK_CLUSTER_v2.json) and [quantitative report](STEP10_QUANTITATIVE_REPORT_v1.md). The dataset's current HF revision was confirmed equal to the previously pinned `b5515d1dce40036633293b70477f0633b24593f7`; viewer returned 296 trajectories (198 original successful). Derived features matched 198/198 identities on sample/instance/SHA-256, 73 tasks and no matched-task patch hashes differed. The original 198-row v2 outcomes and Step 7 label manifest are unchanged.
