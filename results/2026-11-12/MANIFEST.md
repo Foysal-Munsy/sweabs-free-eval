@@ -2,6 +2,27 @@
 
 **Status:** Archival of provisional strengthened-test labels and audit provenance. Not a final semantic-correctness dataset. This manifest is a record of verified bytes and storage locations as of 2026-11-12.
 
+## Steps 8–10 — frozen trajectory features and provisional quantitative analysis (2026-11-12)
+
+**Source:** [Step 8 frozen specification](../../docs/STEP8_FROZEN_INDICATORS_v1.md), [Step 9 exact-match features](STEP9_TRAJECTORY_FEATURES_v1.csv), [Step 9 coverage](STEP9_COVERAGE_v1.json), [Step 10 corrected AUROC v2](STEP10_AUROC_TASK_CLUSTER_v2.json) and [quantitative report](STEP10_QUANTITATIVE_REPORT_v1.md). The dataset's current HF revision was confirmed equal to the previously pinned `b5515d1dce40036633293b70477f0633b24593f7`; viewer returned 296 trajectories (198 original successful). Derived features matched 198/198 identities on sample/instance/SHA-256, 73 tasks and no matched-task patch hashes differed. The original 198-row v2 outcomes and Step 7 label manifest are unchanged.
+
+| New public artifact | UTF-8 bytes from GitHub read-back | Current GitHub blob SHA-1 (NOT SHA-256) |
+| --- | ---: | --- |
+| [docs/STEP8_FROZEN_INDICATORS_v1.md](../../docs/STEP8_FROZEN_INDICATORS_v1.md) | 8102 | `7a825e1da9b172ca15c43e5267f5ebc0dd1e9fdd` |
+| [scripts/step9_extract_trajectory_features.py](../../scripts/step9_extract_trajectory_features.py) | 8200 | `1e2eacc7bd5cb03afc2801163f03ea19153ec30f` |
+| [STEP9_TRAJECTORY_FEATURES_v1.csv](STEP9_TRAJECTORY_FEATURES_v1.csv) | 37976 | `fac9cca283a4e0ae2f5a8f6f9684402354cac42b` |
+| [STEP9_COVERAGE_v1.json](STEP9_COVERAGE_v1.json) | 462 | `18e745dff47e63e3c24d35c553afccf01d7af31d` |
+| [scripts/step10_analyze_frozen_features.py](../../scripts/step10_analyze_frozen_features.py) | 5579 | `0d608dc5775600b86863b065edeebe9da6aa7ee4` |
+| [STEP10_AUROC_TASK_CLUSTER_v1.json](STEP10_AUROC_TASK_CLUSTER_v1.json) — **INVALID bootstrap intervals, historical only** | 6724 | `f5dc1d575e8545e069e6cd8aa999f335829e504c` |
+| [STEP10_AUROC_TASK_CLUSTER_v2.json](STEP10_AUROC_TASK_CLUSTER_v2.json) — **corrected task bootstrap** | 6916 | `c8dd764396f2bba06140a5e7340c9062ea747351` |
+| [STEP10_QUANTITATIVE_REPORT_v1.md](STEP10_QUANTITATIVE_REPORT_v1.md) | 8750 | `1fee077212702052cb1d3f2a0d8976dba07415c9` |
+
+**Status caution:** These are checked-in, connector-read-back files and calculated byte counts; no independent `sha256sum` was generated for this Step 8–10 group. The step 9–10 data pipeline was evaluated using browser-resident JavaScript transformations over the live dataset and GitHub-fetched CSVs. The checked-in Python scripts are intended reproducibility implementations, **but end-to-end Python execution and `--check` verification remain unverified**. Do not claim CI-tested reproduction, independent source-event spot check or semantic-oracle validation.
+
+**Statistical caveat:** Conservative primary: 153 PASS, 9 documentary-supported FAIL (only five distinct FAIL task IDs), 36 excluded. Duplicate-terminal AUROC **0.489** (95% corrected task-cluster interval **0.270–0.706**). Runner-only sensitivity uses 31 provisional FAILs and yields **0.708** (0.562–0.834), a label-policy-dependent association. 500 task-ID-cluster bootstrap replicates with fixed seed; see [report](STEP10_QUANTITATIVE_REPORT_v1.md). The archived v1 bootstrap has a **low-bit LCG modulo bug** causing degenerate confidence intervals in a 64-task scenario; do NOT use those intervals. Corrected v2 uses high-bit scaled task sampling; point estimates and frozen indicators unchanged.
+
+**Next stage:** Step 11 independent reproduction, feature spot-checks, task/project confounding, validation sensitivity and unresolved test semantic integrity. No external predictive performance is claimed.
+
 ## Step 7 — provisional analysis eligibility and UNVERIFIED triage (2026-11-12)
 
 **Status:** The documentary review/eligibility gate is complete; not a rerun, independent oracle adjudication, or final semantic correctness dataset. Source inputs remain the archived [198-row v2](sweabs_full_198_cumulative_v2.csv), [historical 83 evidence](sweabs_historical_83_reaudit_evidence.csv), [recent 115 evidence](sweabs_samples2_3_full_audit_evidence_115.csv), and [Step 6 FAIL ledger](STEP6_FAIL_REVIEW_31.csv). All 198 exact identities were checked against their audit rows and the 31 FAIL reviews were joined. Raw runner v2 unchanged: **153 PASS / 31 FAIL / 14 UNVERIFIED**.
