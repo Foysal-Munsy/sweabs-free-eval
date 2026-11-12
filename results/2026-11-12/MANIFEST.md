@@ -2,13 +2,32 @@
 
 **Status:** Archival of provisional strengthened-test labels and audit provenance. Not a final semantic-correctness dataset. This manifest is a record of verified bytes and storage locations as of 2026-11-12.
 
+## Step 11 semantic/source, original ZIP and augmented-method evidence (2026-11-12)
+
+**Evidence chain:** [CI #43262365929](https://github.com/Foysal-Munsy/sweabs-free-eval/actions/runs/43262365929) independently matched original model/test SHA for **31 FAIL + 14 UNVERIFIED = 45 exact runs**, 20 distinct tasks. [CI #43263048387](https://github.com/Foysal-Munsy/sweabs-free-eval/actions/runs/43263048387) freshly downloaded all **14** short-retention original Actions `sweabs-result-*` ZIPs from 11 evaluation runs, checked original model hash metadata, read **14 test output files**, and recorded SHA-256 digests. 14/14 original test patch hashes also match the independently pinned SWE-ABS structural crosswalk (verified from the two archived JSON records). [CI #43264326911](https://github.com/Foysal-Munsy/sweabs-free-eval/actions/runs/43264326911) independently matched added Django test methods to original verbose test results in all nine skipped-coverage runs.
+
+**Important audit distinction:** 9 skipped-coverage runs have **4 / 28 / 1** suite-level skipped counts in their Django task families, but newly added method coverage differs: Django-12039 **13 added: 9 passed + 4 skipped**, Django-14434 **1 added: 1 passed** (28 suite-level skipped), Django-15503 **10 added: 8 passed + 1 skipped + 1 not found in verbose log**. Modified pre-existing test methods and backend-dependent behavior are NOT exhaustively covered by this name-based check; no original UNVERIFIED outcome was promoted to PASS.
+
+| Artifact | Verified UTF-8 bytes | Current GitHub blob SHA-1 (NOT SHA-256) |
+| --- | ---: | --- |
+| [scripts/step11_semantic_structural_audit.py](../../scripts/step11_semantic_structural_audit.py) | 8176 | `7e2739184b365062fc4fcacc8e42605ded2ad3e9` |
+| [scripts/step11_raw_artifact_reaudit14.py](../../scripts/step11_raw_artifact_reaudit14.py) | 6260 | `374d02bf345147daf249fccdc3b84eb2ede773e4` |
+| [scripts/step11_skip_attribution.py](../../scripts/step11_skip_attribution.py) | 5615 | `c72bb5b68b5fbe8fecc996c7d967a25f5092a2fb` |
+| [STEP11_SEMANTIC_STRUCTURAL_CROSSWALK_v1.json](STEP11_SEMANTIC_STRUCTURAL_CROSSWALK_v1.json) | 75970 | `c88ba18ee0c12ddb41313b2e1e3f821bff20af92` |
+| [STEP11_RAW_ARTIFACT_REAUDIT14_v1.json](STEP11_RAW_ARTIFACT_REAUDIT14_v1.json) | 36574 | `b3a5ea755bd12ecfd0a1bcd5516c2360b1e91ac5` |
+| [STEP11_SKIP_ATTRIBUTION_9_v1.json](STEP11_SKIP_ATTRIBUTION_9_v1.json) | 21965 | `1421b2b7e4b5a93b8cb2593868468d71815f0683` |
+| [STEP11_SEMANTIC_VALIDITY_GATE_v1.md](STEP11_SEMANTIC_VALIDITY_GATE_v1.md) | 15495 | `deb675711fcc2f59c007dc9a5a20b87e82c81932` |
+| [Read-only updated Step 11 reproduction workflow](../../.github/workflows/step11-reproduction.yml) | 4023 | `11bf436af68bd23d080378bd2f70daa35c25c8ff` |
+
+**Limitations:** GitHub artifact ZIPs have short retention; future `--check` reproduction depends on still-unexpired original artifacts and a token with Actions read permission. No private raw ZIP or full raw test log is published here. Source-level file collision is NOT a semantic failure verdict; skipped/backend and in-place modified existing test methods need controlled reruns or an independently defensible oracle. Four test-file overlaps, one huge generated Requests patch and 16 unresolved/2 environment-sensitive FAIL reviews remain open. Original runner v2 (153/31/14), Step 7 labels (153/9/36) and Step 8 feature formulas are **unchanged**.
+
 ## Step 11 — independent pinned reproduction, task-aware robustness and 12-trace recount (2026-11-12)
 
 **Source integrity and execution:** [read-only CI workflow](../../.github/workflows/step11-reproduction.yml) triggered via GitHub and [successful job #43260088649](https://github.com/Foysal-Munsy/sweabs-free-eval/actions/runs/43260088649) confirmed from job status and raw logs. Python 3.11.18, pinned `datasets==4.8.5` and `huggingface_hub==1.33.0`. Five synthetic tests PASS; frozen Step 9 198/198 exact-HF `--check` PASS; corrected Step 10 AUROC `--check` PASS; exploratory Step 11 task-robustness `--check` PASS; 12 pinned raw trajectories independently recounted against 14 archived fields each (**168 comparisons, zero mismatches**); no original source evidence edited. The 12-case JSON below was obtained from the passing CI job's text logs, not inferred from workflow success alone. User data was not added; no raw full trajectory was committed to GitHub.
 
 | Step 11 public artifact | UTF-8 bytes verified by GitHub read-back | GitHub blob SHA-1 (NOT SHA-256) |
 | --- | ---: | --- |
-| [Read-only CI workflow](../../.github/workflows/step11-reproduction.yml) | 2470 | `0b1ed0bda8b9ca2865c9944c365f2a1d2862299a` |
+| [Read-only CI workflow](../../.github/workflows/step11-reproduction.yml) | 4023 | `11bf436af68bd23d080378bd2f70daa35c25c8ff` |
 | [Python post-hoc task robustness script](../../scripts/step11_robustness.py) | 7126 | `4d455fbb2237393601f88f2d072ecb247727c83f` |
 | [Independent 12-trace raw-event recount script](../../scripts/step11_trace_spotcheck.py) | 7424 | `1fd07d922d97d5e69f686d51559405f2623d613a` |
 | [Frozen indicator synthetic unit tests](../../tests/test_step9_indicators.py) | 2990 | `7ac5765cee52486055fe1ccee0cd5fd211f225c4` |
