@@ -14,7 +14,7 @@ This README is the **public summary**. For a precise human/AI continuation point
 
 ## Research status — 2026-11-12
 
-**Milestone: all 198 stronger-test attempts and audits complete; Step 8 indicators frozen before extraction, Step 9 features exactly matched, and Step 10 exploratory AUROCs computed.** Step 6 reviewed the 31 FAILs and Step 7 retained 14 UNVERIFIED with explicit provisional analysis screens. None is an independent human/maintainer semantic oracle. **Step 11 (independent pipeline reproduction and robustness) is next.**
+**Milestone: all 198 stronger-test attempts and audits complete; Step 8 indicators frozen before extraction, Step 9 features exactly matched, and Step 10 exploratory AUROCs computed.** Step 6 reviewed the 31 FAILs and Step 7 retained 14 UNVERIFIED with explicit provisional analysis screens. None is an independent human/maintainer semantic oracle. **Step 11 technical reproduction and task-aware robustness now PASS; independent semantic validity/coverage review remains the current unfinished gate.**
 
 | Subset | Originally passing agent runs | Evaluation attempts | PASS | FAIL | UNVERIFIED |
 | --- | ---: | ---: | ---: | ---: | ---: |
@@ -70,7 +70,7 @@ The **primary screen has 162 runs representing 61 distinct tasks, but just 9 FAI
 
 **Step 8:** [Versioned indicator/analysis specification](docs/STEP8_FROZEN_INDICATORS_v1.md) was committed before all-run feature extraction. Four prespecified messiness proxies: exact duplicate terminal command rate, explicitly observed terminal errors, absence of a recognized verification command, and file-editor calls after the last recognized verification. These are *proxies*, not proof of blind retries or substantive verification.
 
-**Step 9:** [198-run exact-match features](results/2026-11-12/STEP9_TRAJECTORY_FEATURES_v1.csv) and [coverage](results/2026-11-12/STEP9_COVERAGE_v1.json) were computed from the pinned [trajectory dataset](https://huggingface.co/datasets/tarsur385/swe-verified-gemini3-flash-trajectories). The queried dataset revision matched pinned `b5515d1dce40036633293b70477f0633b24593f7`; all 198 originally successful runs matched their sample, instance and **patch SHA-256** among 296 dataset rows. There are 73 distinct tasks; 191 runs contain at least one recognized verification command. No raw private trajectory text was published. [Extractor](scripts/step9_extract_trajectory_features.py) and an independent Python `--check` execution remain a reproducibility gate.
+**Step 9:** [198-run exact-match features](results/2026-11-12/STEP9_TRAJECTORY_FEATURES_v1.csv) and [coverage](results/2026-11-12/STEP9_COVERAGE_v1.json) were computed from the pinned [trajectory dataset](https://huggingface.co/datasets/tarsur385/swe-verified-gemini3-flash-trajectories). The queried dataset revision matched pinned `b5515d1dce40036633293b70477f0633b24593f7`; all 198 originally successful runs matched their sample, instance and **patch SHA-256** among 296 dataset rows. There are 73 distinct tasks; 191 runs contain at least one recognized verification command. No raw private trajectory text was published. [Extractor](scripts/step9_extract_trajectory_features.py) and pinned independent Python `--check` [GitHub Actions run #43260088649](https://github.com/Foysal-Munsy/sweabs-free-eval/actions/runs/43260088649) are now independently verified, including 198/198 exact-match patches.
 
 **Step 10:** Frozen individual features were evaluated against four Step 7 outcome screens using in-sample AUROCs and 500 **task-ID-cluster** bootstrap resamples. The conservative primary has **153 runner PASS, 9 review-supported provisional FAIL, 36 excluded**: 162 runs, 61 distinct tasks, only five distinct FAIL task IDs.
 
@@ -85,7 +85,15 @@ The **same duplicate-command feature** has AUROC **0.721** against noninvalid-te
 
 [Full Step 10 report and competing interpretations](results/2026-11-12/STEP10_QUANTITATIVE_REPORT_v1.md) · [Corrected task-cluster AUROC results v2](results/2026-11-12/STEP10_AUROC_TASK_CLUSTER_v2.json) · [Analysis script](scripts/step10_analyze_frozen_features.py).
 
-**Reproducibility correction:** The originally archived [Step 10 JSON v1](results/2026-11-12/STEP10_AUROC_TASK_CLUSTER_v1.json) contains **invalid degenerate bootstrap confidence intervals** caused by a low-bit PRNG sampling defect; it is preserved for provenance, **not** for use in claims. Corrected v2 retains the original indicators, labels and point estimates. Independent Python `--check` commands have not yet been executed and verified.
+**Reproducibility correction:** The originally archived [Step 10 JSON v1](results/2026-11-12/STEP10_AUROC_TASK_CLUSTER_v1.json) contains **invalid degenerate bootstrap confidence intervals** caused by a low-bit PRNG sampling defect; it is preserved for provenance, **not** for use in claims. Corrected v2 retains the original indicators, labels and point estimates. The archived Step 9–11 Python code now passes independent [GitHub Actions verification](https://github.com/Foysal-Munsy/sweabs-free-eval/actions/runs/43260088649); no semantic test-validity oracle has been established.
+
+## Step 11 — independently reproduced, semantic validity still open
+
+The read-only [GitHub Actions Step 11 workflow](.github/workflows/step11-reproduction.yml) **passed** on [run #43260088649](https://github.com/Foysal-Munsy/sweabs-free-eval/actions/runs/43260088649), from a clean checkout with Python 3.11.18, pinned `datasets==4.8.5` and `huggingface_hub==1.33.0`. It successfully reproduced all 198 exact-match features (296 source trajectories), the corrected Step 10 analysis, task-aware Step 11 robustness, five synthetic unit tests and **12 raw-trajectory event recounts (168 feature checks, zero mismatches)**. The Step 9 Django regex escaping was repaired as a versioned implementation fix without changing frozen Step 8 semantics or any archived feature row.
+
+**Exploratory robustness:** The primary duplicate-command AUROC **0.489** becomes **0.522** when collapsing unanimous-label runs by task and **0.390** for within-project cross-task comparisons; removing any single primary positive task yields **0.382–0.620**, reflecting the **five positive task IDs**. Broader all-runner-FAIL sensitivity has run-level **0.708**, task-level **0.741**, within-project **0.738**, and positive-task omission range **0.683–0.759**. These checks were added after seeing Step 10 results, so they are **post-hoc stress tests, not confirmatory or held-out predictive evidence**. [Full Step 11 report](results/2026-11-12/STEP11_REPRO_AND_ROBUSTNESS_v1.md) · [task-aware data](results/2026-11-12/STEP11_EXPLORATORY_ROBUSTNESS_v1.json) · [12-trace audit](results/2026-11-12/STEP11_TRACE_SPOTCHECK_12_v1.json).
+
+**Unfinished Step 11 semantic validity gate:** 16 unresolved and 2 environment-sensitive FAIL reviews, invalid enhanced tests and 14 UNVERIFIED runner outcomes still need independent adjudication/controlled evidence or explicit limitation decisions. Their old v2/Step 7 labels were NOT modified. **No final semantic validity, reliable classifier, external generalization, or journal submission readiness is claimed.**
 
 ## Dataset and reproducibility
 
@@ -151,7 +159,8 @@ A 5.1-MB raw-evidence ZIP for the original recent audits and a separate **2.8-MB
 - [x] **Step 8:** Commit [frozen indicator specification](docs/STEP8_FROZEN_INDICATORS_v1.md) before extracting trajectory features.
 - [x] **Step 9:** Extract and exact-match all 198 run features with pinned patch hashes; [coverage table](results/2026-11-12/STEP9_COVERAGE_v1.json); independent Python reproduction pending.
 - [x] **Step 10:** Compute four prespecified individual-indicator AUROCs under four label screens, task-cluster intervals and [limitations](results/2026-11-12/STEP10_QUANTITATIVE_REPORT_v1.md) — **exploratory, not a validated predictor**.
-- [ ] **Step 11 (next):** Reproduce pinned Python pipeline, validate a subset of raw trajectory parsing, conduct task-aware robustness and resolve semantic/coverage uncertainties before substantive predictive claims.
+- [x] **Step 11 technical gates:** Independently reproduced pinned Python feature extraction, Step 10 AUROCs, task-aware exploratory robustness, and 12 selected raw-message spot checks (168 checks, 0 discrepancies) in [successful CI](https://github.com/Foysal-Munsy/sweabs-free-eval/actions/runs/43260088649).
+- [ ] **Step 11 semantic gate (NEXT):** Resolve/document unresolved strengthened-test validity and backend coverage issues before claiming substantive reliability prediction.
 - [ ] Perform task-aware predictive analysis (including repeated-instance dependence), uncertainty checks, and robustness/sensitivity analyses; only then write up the paper.
 
 **Only preliminary in-sample descriptive AUROCs are reported; no validated predictive performance, reliable semantic ground truth, or causal relationship is claimed.** The research question remains open.
