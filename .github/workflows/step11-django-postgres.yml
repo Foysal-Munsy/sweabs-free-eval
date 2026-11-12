@@ -1,0 +1,61 @@
+name: Step 11 - Targeted Django PostgreSQL recheck (new evidence)
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/step11-django-postgres.yml"
+      - "scripts/step11_django_backend_probe.py"
+permissions:
+  contents: read
+
+jobs:
+  target-django-14434:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix:
+        sample: [1, 2, 3]
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_USER: postgres
+          POSTGRES_DB: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install pinned dataset dependencies
+        run: python -m pip install 'datasets==4.8.5' 'huggingface_hub==1.33.0'
+      - name: Construct the exact original agent patch and enhanced tests on the pinned base
+        run: |
+          python scripts/step11_django_backend_probe.py prepare \
+            --task django__django-14434 --sample ${{ matrix.sample }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.9"
+      - name: Install historically compatible Django and PostgreSQL driver
+        run: |
+          python --version
+          python -m pip install -e "./scratch/step11-django-14434-sample${{ matrix.sample }}/django"
+          python -m pip install 'psycopg2-binary==2.9.9'
+      - name: Probe supported backend and execute exactly the formerly skipped enhanced method
+        run: |
+          python scripts/step11_django_backend_probe.py execute \
+            --task django__django-14434 --sample ${{ matrix.sample }}
+      - name: Verify historical labels remain unchanged
+        run: |
+          git diff --exit-code -- results/2026-11-12/sweabs_full_198_cumulative_v2.csv \
+            results/2026-11-12/STEP7_ANALYSIS_LABELS_v1.csv
