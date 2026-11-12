@@ -2,6 +2,23 @@
 
 **Status:** Archival of provisional strengthened-test labels and audit provenance. Not a final semantic-correctness dataset. This manifest is a record of verified bytes and storage locations as of 2026-11-12.
 
+## Step 7 — provisional analysis eligibility and UNVERIFIED triage (2026-11-12)
+
+**Status:** The documentary review/eligibility gate is complete; not a rerun, independent oracle adjudication, or final semantic correctness dataset. Source inputs remain the archived [198-row v2](sweabs_full_198_cumulative_v2.csv), [historical 83 evidence](sweabs_historical_83_reaudit_evidence.csv), [recent 115 evidence](sweabs_samples2_3_full_audit_evidence_115.csv), and [Step 6 FAIL ledger](STEP6_FAIL_REVIEW_31.csv). All 198 exact identities were checked against their audit rows and the 31 FAIL reviews were joined. Raw runner v2 unchanged: **153 PASS / 31 FAIL / 14 UNVERIFIED**.
+
+| New publicly archived Step 7 artifact | UTF-8 bytes | GitHub-fetched SHA-256 |
+| --- | ---: | --- |
+| [STEP7_ANALYSIS_LABELS_v1.csv](STEP7_ANALYSIS_LABELS_v1.csv) — 198 exact-run records, primary and sensitivity label screens | 51518 | `9f074e9a4a5d4caf8424bfa41bda18460c29d1c2ba72178587fc802c509cd8ec` |
+| [STEP7_UNVERIFIED_TRIAGE_14.csv](STEP7_UNVERIFIED_TRIAGE_14.csv) — all 14 old UNVERIFIED, reasons and followups | 7965 | `e43e4abd92731386b23bd2d8ca7dcca0e6b5d49a89f40451b3b3abb7f1a49378` |
+| [STEP7_TRIAGE_AND_LABEL_POLICY.md](STEP7_TRIAGE_AND_LABEL_POLICY.md) — documentary review, alternative interpretations, label rules | 9983 | `bf31e0087528187b20af3be266655ddd6a9f9b4bb17aa9a677e4d3f9a8320e55` |
+| [scripts/build_step7_analysis_labels.py](../../scripts/build_step7_analysis_labels.py) — deterministic regeneration/check tool | 8354 | `defa44c2223551f438221180d4c2049c6315bf65ce2f25261694abc0a31bdaf7` |
+
+The hashes and byte lengths above were recomputed from connector-fetched GitHub UTF-8 file contents, after the new files were committed. The SHA-256 routine passed a known `abc` digest self-check. **The Python rebuild/check command was not independently executed in a cloned checkout in this session** because the isolated local terminal could not resolve github.com; do not claim end-to-end reproduction was executed. A future environment with checkout access should run `python scripts/build_step7_analysis_labels.py --check` and log its result.
+
+The 14 triaged cases are **9 partial coverage, 4 patch-overlap, and 1 whole-patch integrity gap**; all remained UNVERIFIED. GitHub Actions artifact metadata listed all 14 per-run artifacts as unexpired at the time of review, but individual ZIPs were not freshly re-audited. Conservative primary v1 screen: **153 audited PASS / 9 documentary-supported FAIL / 36 excluded** (162 rows, 61 tasks, only 5 distinct FAIL tasks). See report for alternative sensitivity definitions and unresolved human/oracle checks. Original archived audit CSV versions and private raw ZIPs have not been changed.
+
+**Next stage:** Step 8 indicator specification freeze. Do not extract indicators or fit a predictive model before defining indicators and checking sources independent of observed outcome associations.
+
 ## Step 6 — semantic review of 31 provisional FAIL records
 
 **Status:** Completed an **AI-assisted documentary review** against verified upstream merged PR descriptions, source issue text in the SWE-ABS record, augmented test assertions, and original per-run raw test outputs. **This was not a fresh benchmark rerun, independent human adjudication, or final correctness-label freeze.** The current **v2 runner dataset is unchanged**: 198 total, 153 PASS, 31 provisional FAIL, 14 UNVERIFIED.
@@ -17,7 +34,7 @@ Each file was uploaded from the exact local source text/CSV and fetched back fro
 
 Key external sources checked directly: [RFC 7231 §7.1.1.1](https://www.rfc-editor.org/rfc/rfc7231.html#section-7.1.1.1), [RFC 3986 §3.2.1](https://www.rfc-editor.org/rfc/rfc3986.html#section-3.2.1), [Python staticmethod documentation](https://docs.python.org/3/library/functions.html#staticmethod), and the 15 verified upstream merged PR links in the per-run CSV.
 
-**Next stage:** Step 7 — triage 14 UNVERIFIED, choose and document exclusion/sensitivity policies that distinguish raw runner outcomes from semantic review, and freeze a versioned analysis label manifest. Any additional human/maintainer validation of unresolved FAILs remains a research limitation or separate check; do not silently promote them.
+**Subsequent stage completed at documentary scope:** Step 7 now has a versioned, conservative provisional eligibility manifest (see section above). Independent semantic adjudication of unresolved FAILs remains open; do not silently promote them.
 
 ## Current provisional dataset — Step 5 historical reconciliation (v2)
 
