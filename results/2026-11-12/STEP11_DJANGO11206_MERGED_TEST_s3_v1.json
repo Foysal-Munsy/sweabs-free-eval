@@ -1,0 +1,46 @@
+{
+  "augmented_patch_merge_mode": "three_way",
+  "base_commit": "571ab44e8a8936014c22e7eebe4948d9611fd7ce",
+  "bounded_error_tail": "",
+  "bounded_result_lines": [
+    "test_decimal_numbers (utils_tests.test_numberformat.TestNumberFormat) ... ok",
+    "test_decimal_subclass (utils_tests.test_numberformat.TestNumberFormat) ... ok",
+    "test_float_numbers (utils_tests.test_numberformat.TestNumberFormat) ... ok",
+    "test_format_number (utils_tests.test_numberformat.TestNumberFormat) ... ok",
+    "test_format_string (utils_tests.test_numberformat.TestNumberFormat) ... ok",
+    "test_large_number (utils_tests.test_numberformat.TestNumberFormat) ... ok"
+  ],
+  "execution_exit_code": 1,
+  "execution_timeout": false,
+  "limitation": "New merged original model/test source on a fresh pinned base, but distinct dependency/runtime versions from original Docker image. Passing/failing tests require issue-scoped semantic review; runner v2 is immutable.",
+  "model_added_line_types_in_collision_paths": 1,
+  "model_added_line_types_preserved_after_merge": 1,
+  "model_changed_file_count": 9,
+  "new_merged_execution_status": "NEW_MERGED_TARGET_SUITE_FAILED_OR_ERRORS",
+  "new_patch_test_integration_verified": true,
+  "new_test_runtime": "direct upstream Python test runner, NOT SWE-ABS Docker",
+  "not_historical_sweabs_verdict": true,
+  "original_outcomes_modified": false,
+  "original_runner_outcome": "UNVERIFIED",
+  "original_v2_relabelled": false,
+  "overlap_paths": [
+    "tests/utils_tests/test_numberformat.py"
+  ],
+  "patch_sha256": "2b74b39168d3927e80ecce18cc14f3a5b869c56bfc2ffb5643af427693cc65a7",
+  "runtime_python": "3.9.25",
+  "sample": 3,
+  "source_revision": "b5515d1dce40036633293b70477f0633b24593f7",
+  "task": "django__django-11206",
+  "test_modules": [
+    "utils_tests.test_numberformat",
+    "utils_tests.test_numberformat_small_decimals"
+  ],
+  "test_patch_sha256": "21ceb4e64f124c2986c748f8c5b10586f1206354dd53bd8507df4d07e61a61e2",
+  "test_revision": "79fc07a8f4ce5e3720e069948073f5f910b7577b",
+  "test_type": "django",
+  "tested_modules": [
+    "utils_tests.test_numberformat",
+    "utils_tests.test_numberformat_small_decimals"
+  ],
+  "wall_seconds": 0.95
+}
