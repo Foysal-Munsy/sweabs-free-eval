@@ -1,0 +1,13 @@
+{
+  "dataset": "tarsur385/swe-verified-gemini3-flash-trajectories",
+  "dataset_rows_seen": 296,
+  "error_coverage_complete": 198,
+  "expected_exact_runs": 198,
+  "feature_spec": "docs/STEP8_FROZEN_INDICATORS_v1.md",
+  "label_manifest": "results/2026-11-12/STEP7_ANALYSIS_LABELS_v1.csv",
+  "matched_exact_runs": 198,
+  "mismatched_same_task_rows": 0,
+  "revision": "b5515d1dce40036633293b70477f0633b24593f7",
+  "unique_task_ids": 73,
+  "with_verification": 191
+}
