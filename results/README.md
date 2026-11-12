@@ -1,6 +1,6 @@
 # Research results and audit artifacts
 
-**Current stage (2026-11-12):** 198 strengthened-test attempts completed, raw-log audits completed for earlier 83 and later 115 records. **Current provisional v2 runner labels: 153 PASS, 31 FAIL, 14 UNVERIFIED**. Step 6 completed the *AI-assisted documentary* review for all 31 FAILs; Step 7 documented all 14 UNVERIFIED and froze **provisional v1 analysis-eligibility/sensitivity screens**. No original runner labels changed, no human/oracle adjudication, no new evaluation. These labels are not final semantic-correctness ground truth.
+**Current stage (2026-11-12):** 198 stronger-test attempts and 83+115 raw audits complete; original v2 **153 PASS / 31 FAIL / 14 UNVERIFIED** unchanged. Step 8 versioned frozen indicators, Step 9 exact-match features (198/198) and Step 10 provisional task-aware univariate AUROCs are archived. These are not independently adjudicated semantic labels, a trained classifier or a generalization claim. **Step 11 reproduction and robustness NEXT.**
 
 ## Current version: Step 5, 83-run reconciliation
 
@@ -30,6 +30,15 @@
 
 Alternative target scenarios (0/1/excluded): noninvalid FAIL **153/27/18**, all runner FAIL **153/31/14**, hypothetical skipped-as-PASS **162/9/27**. These are sensitivity assumptions, **not new observed runner labels or semantic truth**. Actions artifact metadata was cross-checked but raw per-patch ZIPs were not newly re-audited in Step 7.
 
+## Steps 8–10: frozen signals, exact-match extraction, preliminary AUROCs
+
+- [Step 8 preregistered feature specifications](../docs/STEP8_FROZEN_INDICATORS_v1.md) and [reproduction extractor](../scripts/step9_extract_trajectory_features.py) — committed before inspecting feature-label associations.
+- [Step 9 198-run feature CSV](2026-11-12/STEP9_TRAJECTORY_FEATURES_v1.csv) and [exact-match/parse coverage](2026-11-12/STEP9_COVERAGE_v1.json) — 296 original source rows, 198 originally successful runs, 198/198 exact identities, 73 tasks, 191 recognized verification-command runs.
+- [Step 10 full report](2026-11-12/STEP10_QUANTITATIVE_REPORT_v1.md), [corrected v2 task-cluster AUROC JSON](2026-11-12/STEP10_AUROC_TASK_CLUSTER_v2.json), [analysis script](../scripts/step10_analyze_frozen_features.py). Conservative primary (153/9/36): duplicate-command AUROC **0.489** (95% task-cluster interval 0.270–0.706), explicit error rate **0.599** (0.420–0.790). All runner FAIL sensitivity (153/31/14): duplicate-command AUROC **0.708** (0.562–0.834). **No validated predictive conclusion.**
+- [Historical Step 10 v1 JSON](2026-11-12/STEP10_AUROC_TASK_CLUSTER_v1.json) — **do not use its confidence intervals**; a low-bit cluster-bootstrap sampling bug produced degenerate results at 64 clusters. v2 fixes the draw only and retains point estimates and original data.
+
+**Open verification:** The pinned Python extractor/analysis `--check` commands have not been independently executed end-to-end. Semantic oracles, original strengthened-test test-validity disputes, repeated-task confounding, and only five primary FAIL tasks remain major limitations. Step 11 addresses reproducibility and robustness.
+
 ## Other archived evidence
 
 - [Detailed 115-run raw-audit evidence](2026-11-12/sweabs_samples2_3_full_audit_evidence_115.csv) and [original audit report](2026-11-12/sweabs_full_198_audit_report.md).
@@ -38,6 +47,6 @@ Alternative target scenarios (0/1/excluded): noninvalid FAIL **153/27/18**, all 
 
 **Private raw data:** Two checksum-verified ZIP archives are backed up in the owner's ChatGPT Library (historical 83 and Sample 2/3 combined). They contain raw logs/test fixtures and **are not publicly hosted here**. The public GitHub files are audit tables, scripts, and reports only.
 
-**Next milestone: Step 8** — freeze precise, theory-driven trajectory messiness indicators, extraction/parsing rules, missingness, and leakage/grouping guards **before outcome association is inspected**. Final semantic validation and controlled targeted reruns remain separately open. Statistical/trajectory feature work has **not** started.
+**Next milestone: Step 11** — independently reproduce pinned extraction and task-bootstrap results; audit a trace subset, task/project confounding and label-policy sensitivity; pursue outstanding human/oracle and controlled rerun validity work before claiming reliability prediction.
 
 For current research state: [PROJECT_STATE.md](../docs/PROJECT_STATE.md) · [WORK_LOG.md](../docs/WORK_LOG.md).
