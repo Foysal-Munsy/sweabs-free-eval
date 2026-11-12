@@ -2,7 +2,7 @@
 
 > **Canonical human/AI handoff document.** Read this before continuing work.  
 > **Last state verification:** 2026-11-12 (Asia/Dhaka)  
-> **Current phase:** All 198 strengthened-test attempts and 83+115 raw audits completed; Step 6 documentary FAIL review completed; **Step 7 14-case UNVERIFIED triage and versioned provisional eligibility/sensitivity-label freeze completed (no new runner verdicts, no oracle validation). Step 8 trajectory-indicator specification is NEXT.**  
+> **Current phase:** Steps 8–10 completed at their **frozen-method, exact-feature-extraction and provisional exploratory AUROC analysis scopes**; 198/198 pinned trajectory patches matched, no original runner label changed. **Step 11 sensitivity/robustness and independent reproduction is NEXT.** No final semantic oracle or generalizable prediction claim.  
 > **Project repository:** https://github.com/Foysal-Munsy/sweabs-free-eval  
 > **This is a public repository:** this document is not private. Never add passwords, access tokens, personal information, or unreleased sensitive material.
 
@@ -78,15 +78,15 @@ Legend: **DONE** = completed to stated scope, **PROVISIONAL** = complete as a pr
 | 5 | Reconcile earlier audit records | **DONE** | All 83 per-patch ZIPs checked; [report](../results/2026-11-12/STEP5_RECONCILIATION_REPORT.md), [83-row evidence](../results/2026-11-12/sweabs_historical_83_reaudit_evidence.csv), [one correction](../results/2026-11-12/sweabs_historical_83_corrections.csv), [current v2 CSV](../results/2026-11-12/sweabs_full_198_cumulative_v2.csv) |
 | 6 | Review strengthened-test FAIL assertions | **DONE — DOCUMENTARY, PROVISIONAL** | [31-row review ledger](../results/2026-11-12/STEP6_FAIL_REVIEW_31.csv), [15-task summary](../results/2026-11-12/STEP6_TASK_SUMMARY_15.csv), [reasoned report with opposing views](../results/2026-11-12/STEP6_FAIL_VALIDITY_REVIEW.md); 9 supported / 4 invalid-test / 2 environment-sensitive / 16 unresolved, no outcome relabel |
 | 7 | **Triage UNVERIFIED and freeze analysis labels** | **DONE — DOCUMENTARY / PROVISIONAL** | [14-case triage](../results/2026-11-12/STEP7_UNVERIFIED_TRIAGE_14.csv), [versioned 198-row provisional label manifest](../results/2026-11-12/STEP7_ANALYSIS_LABELS_v1.csv), [methodological report](../results/2026-11-12/STEP7_TRIAGE_AND_LABEL_POLICY.md), [rebuild/check script](../scripts/build_step7_analysis_labels.py). No runner v2 relabel or new test run; final semantic validation pending. |
-| 8 | **Freeze trajectory messiness indicator specification** | **NEXT** | Precisely predefine indicators, trajectory parser and data availability checks, missingness, aggregation, leakage controls and grouping without viewing association with current labels |
-| 9 | Extract trajectory features and exact-match | TODO | Reproducible extraction pipeline; match sample + instance + patch hash; coverage/dedup audit |
-| 10 | Quantitative analysis | TODO | Appropriate baselines, association metrics (e.g. AUROC), uncertainty and task-aware treatment of repeated instances |
-| 11 | Sensitivity and robustness | TODO | Label/coverage assumptions, task grouping, class imbalance, alternate defensible thresholds |
+| 8 | Freeze trajectory messiness indicator specification | **DONE — FROZEN v1** | [Precommitted exact feature/analysis specification](STEP8_FROZEN_INDICATORS_v1.md), [extractor](../scripts/step9_extract_trajectory_features.py); committed before any full extraction/association. |
+| 9 | Extract trajectory features and exact-match | **DONE — DERIVED, REPRO CHECK OPEN** | [198-run feature table](../results/2026-11-12/STEP9_TRAJECTORY_FEATURES_v1.csv), [coverage](../results/2026-11-12/STEP9_COVERAGE_v1.json); all 198 matched exact SHA identity across 296 source rows (73 tasks); pinned dataset revision confirmed; independent Python --check unverified. |
+| 10 | Quantitative analysis | **DONE — EXPLORATORY/PROVISIONAL** | [Quantitative report](../results/2026-11-12/STEP10_QUANTITATIVE_REPORT_v1.md), [corrected task-bootstrap JSON v2](../results/2026-11-12/STEP10_AUROC_TASK_CLUSTER_v2.json), [Python analysis script](../scripts/step10_analyze_frozen_features.py). Prespecified four univariate AUROCs × four label policies with 500 task-cluster resamples; preliminary v1 bootstrap defects documented. |
+| 11 | **Independent reproduction and robustness** | **NEXT** | Execute pinned Python pipeline --check end-to-end; validate a trace subset against raw events; task-aware robustness/confounders/validation under frozen label policies; revisit semantic test validity and small FAIL task count. |
 | 12 | Qualitative case studies and interpretation | TODO | Trace-backed illustrative successes, failures, exceptions, opposing explanations |
 | 13 | Draft research paper | TODO | Introduction, related work, methods, experiments, results, discussion, limitations, conclusion |
 | 14 | Reproducibility and submission readiness | TODO | Code/data provenance, final figures/tables, checked citations, mentor feedback, venue-specific requirements |
 
-**Current checkpoint:** Steps 1–2 DONE; Step 3 runner labels PROVISIONAL; Steps 4–5 DONE; Step 6 documentary review DONE for its limited scope; **Step 7 documentary triage and provisional analysis-policy freeze DONE**. Original v2 runner counts remain **153 PASS / 31 FAIL / 14 UNVERIFIED**. Primary v1 analysis screen is **153 runner PASS / 9 review-supported FAIL / 36 excluded** (162 rows, 61 unique tasks; only 5 distinct FAIL task IDs). Alternative sensitivity labels are 153/27/18 (noninvalid), 153/31/14 (runner-only), and 162/9/27 (hypothetical skipped-as-PASS). **Step 8 is NEXT**, Steps 9–14 TODO. Semantic oracles, targeted reruns, trajectory features and predictive findings remain unverified/not performed.
+**Current checkpoint:** Steps 1–2 and 4–10 reached their documented scopes, some provisional; Step 3 runner outcomes remain provisional. **Step 8 indicator freeze, Step 9 198-run exact-match feature extraction and Step 10 in-sample task-cluster AUROC analysis are completed**, not independently reproduced by a separate Python run. Current runner v2 remains **153 PASS / 31 FAIL / 14 UNVERIFIED**. Conservative primary = **153/9/36** (162 runs; 61 distinct tasks; only 5 FAIL task IDs), primary duplicate-command AUROC **0.489** (task-cluster bootstrap interval 0.270–0.706); broader runner-only duplicate-command AUROC **0.708** (0.562–0.834), highly label-policy-sensitive. See [Step 10 report](../results/2026-11-12/STEP10_QUANTITATIVE_REPORT_v1.md). **Step 11 NEXT**, Steps 12–14 TODO. Human oracle correctness, controlled targeted reruns, external validation and publication-ready prediction remain unverified.
 
 ## 4. Completed archival checkpoint — Step 4 (evidence preservation)
 
@@ -151,12 +151,31 @@ The machine-readable v1 manifest freezes the following analysis **screens** befo
 
 **Caution:** Selection on review-supported semantic test validity reduces positive failure cases and may bias analysis; report all prespecified sensitivity targets and group repeated tasks, not independent 198-run statistics. The remaining unverified semantic/coverage/identity issues require additional evidence before a gold-standard reliability claim. Controlled reruns must preserve old outcomes and be logged as new versioned evidence. Private archived raw ZIPs remain private.
 
-### Next exact action — Step 8: indicator specification freeze
+## 4D. Completed Steps 8–10 — frozen indicators, exact-match features, provisional AUROC
 
-1. Read the Step 7 [policy and manifest](../results/2026-11-12/STEP7_TRIAGE_AND_LABEL_POLICY.md) and the original [trajectory selection logic](../scripts/pilot.py) alongside the pinned agent dataset revision; preserve `(sample,instance_id,patch_sha256)` identities.
-2. Define the trajectory schema and **lightweight messiness indicators** using theory/process criteria *before* reading indicator–label associations. Specify exact formulas/regex/event rules, time-order rules, parsing edge cases, missingness, denominators and run-level aggregation; forbid outcome-driven threshold tuning.
-3. Write a frozen versioned feature specification and tests. Confirm availability and reproducibility of the trajectory records and commit a data-lineage plan. **Do not run feature-based predictive analysis before the freeze.**
-4. Separately track open Step 7 validation: non-destructive patch-overlap reruns (4), whole patch integrity (`requests-1142`), database/backend coverage reruns (9), and Step 6 human/oracle adjudication. These are *not* resolved by an unchanged runner label.
+**Step 8 (DONE):** [Frozen v1 feature specification and prespecified analysis plan](STEP8_FROZEN_INDICATORS_v1.md) was committed before feature extraction and label association; [exact-match extractor](../scripts/step9_extract_trajectory_features.py) was also committed first. Indicators: duplicate-terminal rate, explicit terminal error rate, verification presence, editor calls after last verification. No post-result changes to indicator rules.
+
+**Step 9 (DONE, independently reproducible Python execution remains unverified):** The current Hugging Face dataset revision matched pinned `b5515d1dce40036633293b70477f0633b24593f7`. Across 296 trajectory rows, 198 were originally resolved and **all 198 exactly matched `(sample,instance_id,sha256(patch))`** against the Step 7 ledger, with 73 tasks. [Feature CSV](../results/2026-11-12/STEP9_TRAJECTORY_FEATURES_v1.csv) contains derived data only; [coverage](../results/2026-11-12/STEP9_COVERAGE_v1.json) documents 198/198 error parse coverage and 191/198 with a recognized test command. Seven `editor_after_last_verification` values are missing by design. No raw trace text or secrets were committed.
+
+**Step 10 (DONE for exploratory, task-group-aware in-sample AUROCs):** [Corrected 500-replicate task-cluster bootstrap v2 JSON](../results/2026-11-12/STEP10_AUROC_TASK_CLUSTER_v2.json) · [full quantified interpretation and alternatives](../results/2026-11-12/STEP10_QUANTITATIVE_REPORT_v1.md) · [analysis script](../scripts/step10_analyze_frozen_features.py).
+
+| Frozen duplicate-terminal rate versus target | AUROC | 95% task-cluster interval | Task IDs / FAIL task IDs |
+| --- | ---: | ---: | --- |
+| Conservative primary (153 PASS, 9 review-supported FAIL) | **0.489** | **0.270–0.706** | 61 / 5 |
+| Noninvalid FAIL sensitivity (153/27) | **0.721** | **0.565–0.857** | 67 / 13 |
+| All raw-runner FAIL sensitivity (153/31) | **0.708** | **0.562–0.834** | 69 / 15 |
+| Hypothetical skipped-as-PASS (162/9) | **0.478** | **0.255–0.686** | 64 / 5 |
+
+Other prespecified primary AUROCs: terminal error rate **0.599**, absence of recognized verification **0.480**, post-last-verification editor count **0.435**. Bootstrap resampled task IDs, not iid runs. **Critical interpretation:** broader provisional FAIL labels suggest a potential repeated-command signal, but the conservative primary does not; positive-label semantic uncertainty, only five positive task IDs and task difficulty confounding prevent an affirmative reliability claim.
+
+**Bug caught and retained transparently:** [Step 10 v1 JSON](../results/2026-11-12/STEP10_AUROC_TASK_CLUSTER_v1.json) had invalid degenerate 64-cluster bootstrap intervals caused by low-bit PRNG modulo. v1 is preserved as **INVALID for confidence intervals**; corrected v2 uses high-bit scaling for task draws, same frozen predictors, outcomes, seed and 500 resamples. No original outcome was rewritten.
+
+### Next exact action — Step 11: reproduction, robustness, and validity
+
+1. Check out repository on a Docker/Python-capable machine, install a pinned compatible `datasets` revision and run `python scripts/step9_extract_trajectory_features.py --check` then `python scripts/step10_analyze_frozen_features.py --check`; log true command results. **These independent Python checks are still unverified.**
+2. Perform task-aware robustness and empirical feature validation; probe length/project/task confounding, label-policy sensitivity, and small positive-class uncertainty **without redefining frozen Step 8 signals**.
+3. Pursue Step 7 unresolved backend/patch-overlap reruns and Step 6 semantic oracle adjudication in separately versioned records. Do not claim causal, generalizable or publication-ready prediction until completed.
+4. Update this file, WORK_LOG, README, results index, artifact hashes and AGENTS after evidence-backed work.
 
 ## 5. Where to find workflow evidence
 
