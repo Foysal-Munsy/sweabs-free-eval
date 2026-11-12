@@ -1,0 +1,54 @@
+name: Step 11 - Independent reproduction (read-only)
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/step11-reproduction.yml"
+      - "scripts/step9_extract_trajectory_features.py"
+      - "scripts/step10_analyze_frozen_features.py"
+      - "scripts/step11_robustness.py"
+      - "tests/test_step9_indicators.py"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: step11-reproduction-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  reproduce:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Print environment and dataset package versions
+        run: |
+          python --version
+          python -m pip install 'datasets>=3,<5' 'huggingface_hub>=0.25,<2'
+          python - <<'PY'
+          import datasets, huggingface_hub
+          print("datasets", datasets.__version__)
+          print("huggingface_hub", huggingface_hub.__version__)
+          PY
+      - name: Verify frozen indicator parser on synthetic trace fixtures
+        run: python -m unittest discover -s tests -p test_step9_indicators.py -v
+      - name: Independently reproduce archived Step 10 AUROC output
+        run: python scripts/step10_analyze_frozen_features.py --check
+      - name: Independently reproduce archived Step 11 task-aware robustness output
+        run: python scripts/step11_robustness.py --check
+      - name: Independently reproduce exact-match Step 9 output using pinned Hugging Face revision
+        env:
+          HF_HUB_DISABLE_TELEMETRY: "1"
+        run: python scripts/step9_extract_trajectory_features.py --check
+      - name: Assert the verification workflow did not modify source evidence
+        run: |
+          git diff --exit-code -- results/2026-11-12/STEP7_ANALYSIS_LABELS_v1.csv \
+            results/2026-11-12/STEP9_TRAJECTORY_FEATURES_v1.csv \
+            results/2026-11-12/STEP10_AUROC_TASK_CLUSTER_v2.json \
+            results/2026-11-12/STEP11_EXPLORATORY_ROBUSTNESS_v1.json
