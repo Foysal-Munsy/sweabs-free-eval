@@ -84,21 +84,22 @@ Batch run index (2026-11-12, new audits):
 
 For automation convenience, the pilot also supports narrowly scoped push-trigger manifests `.github/sweabs-sample2-batch.json` and `.github/sweabs-sample3-batch.json` from the completed batch campaign. **Do not edit these to rerun tasks unintentionally.** Manual `workflow_dispatch` remains available for deliberate reruns.
 
-**Evidence retention warning:** GitHub Actions artifacts are retained for **14 days** by this workflow. Full audited outputs currently exist as separately prepared research files but **have not yet been checked into this repository**:
+**Evidence retention:** The GitHub Actions workflow retains temporary artifacts for **14 days**. The principal audited evidence has therefore been archived with verified original bytes in [**results/2026-11-12/**](results/2026-11-12/MANIFEST.md):
 
-- `sweabs_full_198_cumulative_audited.csv` — 198 provisional labels.
-- `sweabs_samples2_3_full_audit_evidence_115.csv` — source-level audit evidence for 115 newly reviewed attempts.
-- `sweabs_full_198_audit_report.md` — detailed findings and unresolved cases.
-- `sweabs_full_audit_evidence_bundle.zip` — offline snapshot of Sample 2/3 per-patch evidence, audit report, and script.
+- [198-run provisional cumulative CSV](results/2026-11-12/sweabs_full_198_cumulative_audited.csv)
+- [115-run raw-audit provenance CSV](results/2026-11-12/sweabs_samples2_3_full_audit_evidence_115.csv)
+- [Full audit report](results/2026-11-12/sweabs_full_198_audit_report.md)
+- [Earlier 83-row snapshot](results/2026-11-12/sweabs_samples1_2_first83_cumulative.csv) and [historical audit script](results/2026-11-12/sweabs_full_audit.py)
 
-Archiving these deliverables in version-controlled storage or a release is an immediate reproducibility priority; until then, this README is a **status record**, not a substitute for the underlying files.
+A 5.1-MB raw-evidence ZIP (135 Sample 2/3 per-patch ZIPs and the audit files) was independently checksum-verified after retrieval from the owner's **private ChatGPT Library**. **It is not publicly downloadable from this GitHub repository.** Nested test fixtures/logs include email-like and password-like strings; public release requires additional screening. See the [artifact manifest](results/2026-11-12/MANIFEST.md) for checksums, exact scope, and access limitations.
 
 ## Next research steps
 
 - [x] Collect 198 originally passing agent runs across three samples.
 - [x] Complete 198 strengthened-test evaluation attempts.
 - [x] Produce a cumulative **provisional** audit CSV and detailed raw-evidence report.
-- [ ] **Archive and version the cumulative CSV, audit provenance, report, and evidence bundle** before artifacts expire. Verify their checksums and reconcile any earlier audit caveats.
+- [x] **Archive the provisional cumulative CSV, provenance, report, historical input and audit script**, preserving original bytes; keep the raw ZIP in a checksum-verified private Library archive (not a public release).
+- [ ] **Reconcile the 83 previously preserved outcome rows** against currently available raw evidence and the conservative 115-run audit protocol; document any correction as a new version.
 - [ ] **Validate the 32 provisional FAIL cases** against the intended behavior and strength/relevance of each added test; distinguish genuine counterexamples from invalid or environment-sensitive assertions.
 - [ ] **Triage 13 UNVERIFIED cases**: prioritize exact-patch preservation for the three overlap cases and skipped-test/backend limitations; rerun only with controlled, documented fixes, keeping original results.
 - [ ] Freeze a reviewed label manifest with explicit exclusions/uncertainty, then match each exact run/patch with **predefined, frozen trajectory messiness indicators**.
