@@ -7,10 +7,10 @@ This repository supports a reproducible academic study of **originally successfu
 1. [docs/PROJECT_STATE.md](docs/PROJECT_STATE.md) — **canonical snapshot, milestone checklist, next action, audit limitations and evidence digests**.
 2. [docs/WORK_LOG.md](docs/WORK_LOG.md) — actual prior work and session chronology (newest first).
 3. [README.md](README.md) — public research overview; do not confuse it with the operational handoff.
-4. [Archived evidence and SHA-256 manifest](results/2026-11-12/MANIFEST.md) — verified public files and private raw-evidence boundary.
+4. [Current v2 results and Step 5 reconciliation](results/2026-11-12/STEP5_RECONCILIATION_REPORT.md), then [archived evidence and SHA-256 manifest](results/2026-11-12/MANIFEST.md) — verified public files and private raw-evidence boundary.
 5. [Pilot workflow](.github/workflows/sweabs-pilot.yml), [selection/collection script](scripts/pilot.py), and relevant exact source artifacts when the task involves evaluations.
 
-**Last documented checkpoint:** 2026-11-12. All **198** strengthened-test evaluation attempts completed, with provisional **153 PASS, 32 FAIL, 13 UNVERIFIED** labels. The recent audit checked 115 raw per-patch artifacts and preserved the earlier 83 rows. **Evidence preservation is now completed with byte-verified GitHub CSV/report/script files and a private raw-ZIP backup. The next unfinished milestone is historical 83-row audit reconciliation (Step 5)**, not feature extraction. Cross-check current repository/evidence rather than assuming this snapshot is still current.
+**Last documented checkpoint:** 2026-11-12. All **198** strengthened-test attempts completed. Raw per-patch logs have been audited in two stages (115 recent and 83 historical); [current v2](results/2026-11-12/sweabs_full_198_cumulative_v2.csv) reports **153 provisional PASS, 31 provisional FAIL, 14 UNVERIFIED** (73 distinct task IDs). Step 5 corrected one old FAIL to UNVERIFIED due to an agent-modified test file reset; original v1 was preserved. GitHub contains audit tables, reports, manifests, scripts; raw evidence is privately preserved in two ZIP archives. **Step 6 independent augmented FAIL-test validity review is NEXT**, not trajectory feature extraction. Cross-check the latest repository evidence before treating this snapshot as live. Cross-check current repository/evidence rather than assuming this snapshot is still current.
 
 ## Research safety and evidence rules
 
