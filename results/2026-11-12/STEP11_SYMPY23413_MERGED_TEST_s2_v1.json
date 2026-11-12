@@ -1,0 +1,39 @@
+{
+  "augmented_patch_merge_mode": "three_way",
+  "base_commit": "10de1a18a0efac0b19b611e40c928250dda688bf",
+  "bounded_error_tail": "........                                                                 [100%]\n8 passed in 0.09s\n",
+  "bounded_result_lines": [],
+  "execution_exit_code": 0,
+  "execution_timeout": false,
+  "limitation": "New merged original model/test source on a fresh pinned base, but distinct dependency/runtime versions from original Docker image. Passing/failing tests require issue-scoped semantic review; runner v2 is immutable.",
+  "model_added_line_types_in_collision_paths": 1,
+  "model_added_line_types_preserved_after_merge": 1,
+  "model_changed_file_count": 10,
+  "new_merged_execution_status": "INCOMPLETE_OR_INCONCLUSIVE_EXECUTION",
+  "new_patch_test_integration_verified": true,
+  "new_test_runtime": "direct upstream Python test runner, NOT SWE-ABS Docker",
+  "not_historical_sweabs_verdict": true,
+  "original_outcomes_modified": false,
+  "original_runner_outcome": "UNVERIFIED",
+  "original_v2_relabelled": false,
+  "overlap_paths": [
+    "sympy/polys/matrices/tests/test_normalforms.py"
+  ],
+  "patch_sha256": "a713d1b83690e0adb4dff3f199a0691b9dfa581cc63483c1dc21d65bfca59656",
+  "runtime_python": "3.9.25",
+  "sample": 2,
+  "source_revision": "b5515d1dce40036633293b70477f0633b24593f7",
+  "task": "sympy__sympy-23413",
+  "test_modules": [
+    "sympy/polys/matrices/tests/test_normalforms.py",
+    "sympy/polys/matrices/tests/test_normalforms_hnf_extra.py"
+  ],
+  "test_patch_sha256": "fa6fb0c196945553745f91ea70581ee7c6aaf0adf28f2cd7e5bfa115d8d1cbd9",
+  "test_revision": "79fc07a8f4ce5e3720e069948073f5f910b7577b",
+  "test_type": "pytest",
+  "tested_modules": [
+    "sympy/polys/matrices/tests/test_normalforms.py",
+    "sympy/polys/matrices/tests/test_normalforms_hnf_extra.py"
+  ],
+  "wall_seconds": 1.15
+}
