@@ -1,0 +1,264 @@
+{
+  "source_features": "results/2026-11-12/STEP9_TRAJECTORY_FEATURES_v1.csv",
+  "source_labels": "results/2026-11-12/STEP7_ANALYSIS_LABELS_v1.csv",
+  "spec": "docs/STEP8_FROZEN_INDICATORS_v1.md",
+  "seed": 20261112,
+  "bootstrap_replicates": 500,
+  "resampling_unit": "instance_id (all sample/patch runs kept in same task cluster)",
+  "score_orientation": "Higher score means presumed messier; any_verification is negated.",
+  "bootstrap_correction": "v2: task-cluster draws use high-bit scaling floor(state * n_clusters / 2^32), not low-order LCG modulo, which caused degenerate CIs at n_clusters=64 in archived v1.",
+  "targets": {
+    "primary_y": {
+      "eligible_runs": 162,
+      "fail_runs": 9,
+      "pass_runs": 153,
+      "excluded_runs": 36,
+      "unique_tasks": 61,
+      "fail_tasks": 5,
+      "discordant_tasks": 1,
+      "features": {
+        "duplicate_terminal_rate": {
+          "n": 162,
+          "missing": 0,
+          "pass": 153,
+          "fail": 9,
+          "oriented_auroc": 0.48947,
+          "ci95_task_cluster": [
+            0.269582,
+            0.705747
+          ],
+          "valid_bootstraps": 496,
+          "direction": "positive"
+        },
+        "terminal_error_rate": {
+          "n": 162,
+          "missing": 0,
+          "pass": 153,
+          "fail": 9,
+          "oriented_auroc": 0.598765,
+          "ci95_task_cluster": [
+            0.420266,
+            0.78994
+          ],
+          "valid_bootstraps": 496,
+          "direction": "positive"
+        },
+        "any_verification": {
+          "n": 162,
+          "missing": 0,
+          "pass": 153,
+          "fail": 9,
+          "oriented_auroc": 0.480392,
+          "ci95_task_cluster": [
+            0.459215,
+            0.496795
+          ],
+          "valid_bootstraps": 496,
+          "direction": "negative"
+        },
+        "editor_after_last_verification": {
+          "n": 156,
+          "missing": 6,
+          "pass": 147,
+          "fail": 9,
+          "oriented_auroc": 0.434996,
+          "ci95_task_cluster": [
+            0.165657,
+            0.75697
+          ],
+          "valid_bootstraps": 496,
+          "direction": "positive"
+        }
+      }
+    },
+    "noninvalid_sensitivity_y": {
+      "eligible_runs": 180,
+      "fail_runs": 27,
+      "pass_runs": 153,
+      "excluded_runs": 18,
+      "unique_tasks": 67,
+      "fail_tasks": 13,
+      "discordant_tasks": 3,
+      "features": {
+        "duplicate_terminal_rate": {
+          "n": 180,
+          "missing": 0,
+          "pass": 153,
+          "fail": 27,
+          "oriented_auroc": 0.720528,
+          "ci95_task_cluster": [
+            0.565309,
+            0.856875
+          ],
+          "valid_bootstraps": 500,
+          "direction": "positive"
+        },
+        "terminal_error_rate": {
+          "n": 180,
+          "missing": 0,
+          "pass": 153,
+          "fail": 27,
+          "oriented_auroc": 0.497942,
+          "ci95_task_cluster": [
+            0.36111,
+            0.628523
+          ],
+          "valid_bootstraps": 500,
+          "direction": "positive"
+        },
+        "any_verification": {
+          "n": 180,
+          "missing": 0,
+          "pass": 153,
+          "fail": 27,
+          "oriented_auroc": 0.498911,
+          "ci95_task_cluster": [
+            0.465264,
+            0.539859
+          ],
+          "valid_bootstraps": 500,
+          "direction": "negative"
+        },
+        "editor_after_last_verification": {
+          "n": 173,
+          "missing": 7,
+          "pass": 147,
+          "fail": 26,
+          "oriented_auroc": 0.405285,
+          "ci95_task_cluster": [
+            0.245887,
+            0.569525
+          ],
+          "valid_bootstraps": 500,
+          "direction": "positive"
+        }
+      }
+    },
+    "runner_only_sensitivity_y": {
+      "eligible_runs": 184,
+      "fail_runs": 31,
+      "pass_runs": 153,
+      "excluded_runs": 14,
+      "unique_tasks": 69,
+      "fail_tasks": 15,
+      "discordant_tasks": 3,
+      "features": {
+        "duplicate_terminal_rate": {
+          "n": 184,
+          "missing": 0,
+          "pass": 153,
+          "fail": 31,
+          "oriented_auroc": 0.708096,
+          "ci95_task_cluster": [
+            0.562218,
+            0.834433
+          ],
+          "valid_bootstraps": 500,
+          "direction": "positive"
+        },
+        "terminal_error_rate": {
+          "n": 184,
+          "missing": 0,
+          "pass": 153,
+          "fail": 31,
+          "oriented_auroc": 0.477124,
+          "ci95_task_cluster": [
+            0.354073,
+            0.590209
+          ],
+          "valid_bootstraps": 500,
+          "direction": "positive"
+        },
+        "any_verification": {
+          "n": 184,
+          "missing": 0,
+          "pass": 153,
+          "fail": 31,
+          "oriented_auroc": 0.496521,
+          "ci95_task_cluster": [
+            0.4636,
+            0.539675
+          ],
+          "valid_bootstraps": 500,
+          "direction": "negative"
+        },
+        "editor_after_last_verification": {
+          "n": 177,
+          "missing": 7,
+          "pass": 147,
+          "fail": 30,
+          "oriented_auroc": 0.397506,
+          "ci95_task_cluster": [
+            0.258247,
+            0.581331
+          ],
+          "valid_bootstraps": 500,
+          "direction": "positive"
+        }
+      }
+    },
+    "skipped_as_pass_scenario_y": {
+      "eligible_runs": 171,
+      "fail_runs": 9,
+      "pass_runs": 162,
+      "excluded_runs": 27,
+      "unique_tasks": 64,
+      "fail_tasks": 5,
+      "discordant_tasks": 1,
+      "features": {
+        "duplicate_terminal_rate": {
+          "n": 171,
+          "missing": 0,
+          "pass": 162,
+          "fail": 9,
+          "oriented_auroc": 0.478052,
+          "ci95_task_cluster": [
+            0.254538,
+            0.685949
+          ],
+          "valid_bootstraps": 500,
+          "direction": "positive"
+        },
+        "terminal_error_rate": {
+          "n": 171,
+          "missing": 0,
+          "pass": 162,
+          "fail": 9,
+          "oriented_auroc": 0.587791,
+          "ci95_task_cluster": [
+            0.388613,
+            0.773314
+          ],
+          "valid_bootstraps": 500,
+          "direction": "positive"
+        },
+        "any_verification": {
+          "n": 171,
+          "missing": 0,
+          "pass": 162,
+          "fail": 9,
+          "oriented_auroc": 0.481481,
+          "ci95_task_cluster": [
+            0.46129,
+            0.496914
+          ],
+          "valid_bootstraps": 500,
+          "direction": "negative"
+        },
+        "editor_after_last_verification": {
+          "n": 165,
+          "missing": 6,
+          "pass": 156,
+          "fail": 9,
+          "oriented_auroc": 0.448006,
+          "ci95_task_cluster": [
+            0.172739,
+            0.760893
+          ],
+          "valid_bootstraps": 500,
+          "direction": "positive"
+        }
+      }
+    }
+  }
+}
