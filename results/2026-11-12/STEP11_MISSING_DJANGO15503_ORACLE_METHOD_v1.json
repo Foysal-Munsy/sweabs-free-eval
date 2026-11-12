@@ -1,0 +1,65 @@
+{
+  "all_three_unobserved": true,
+  "labels_modified": false,
+  "log_evidence_mode": "reused-confirmed-zip-and-method-audits",
+  "new_method_definitions_count": 10,
+  "not_in_verbose_log_does_not_mean_failed_or_skipped": true,
+  "notes": "Source class and method declaration verified, but no claim whether collection omitted test due vendor restrictions, runner selection, class inheritance or another cause without a separate controlled collection experiment.",
+  "raw_log_checks": [
+    {
+      "observed_test_class_paths": [],
+      "offset": 34,
+      "original_runner_artifact": "pilot_43161212626_1_1_34",
+      "reported_failed": 0,
+      "reported_passed": 9,
+      "reported_skipped": 1,
+      "sample": 1,
+      "target_method_observed": false,
+      "target_method_statuses": [],
+      "test_output_sha256": "4331aa12270672726b0a9cc2dd25a12681e0ad7efdaa810a0c52068f9c5ccea9",
+      "verbose_methods_observed": 9,
+      "verification_mode": "reused SHA-identified archived original test logs from prior passing CI, not newly downloaded"
+    },
+    {
+      "observed_test_class_paths": [],
+      "offset": 37,
+      "original_runner_artifact": "pilot_43181332699_1_2_37",
+      "reported_failed": 0,
+      "reported_passed": 9,
+      "reported_skipped": 1,
+      "sample": 2,
+      "target_method_observed": false,
+      "target_method_statuses": [],
+      "test_output_sha256": "bc9112427729630b34bdbb07f91609a98bda121447ffa32d7a185b7ab1357b01",
+      "verbose_methods_observed": 9,
+      "verification_mode": "reused SHA-identified archived original test logs from prior passing CI, not newly downloaded"
+    },
+    {
+      "observed_test_class_paths": [],
+      "offset": 36,
+      "original_runner_artifact": "pilot_43182706543_1_3_36",
+      "reported_failed": 0,
+      "reported_passed": 9,
+      "reported_skipped": 1,
+      "sample": 3,
+      "target_method_observed": false,
+      "target_method_statuses": [],
+      "test_output_sha256": "18930e204a2ac640847e5920fc70fb94ca14f84d58b68d2ee8468f083db35014",
+      "verbose_methods_observed": 9,
+      "verification_mode": "reused SHA-identified archived original test logs from prior passing CI, not newly downloaded"
+    }
+  ],
+  "status": "Pinned test definition and independently archived unittest verbose-collection evidence; no execution of unobserved test",
+  "target_source_structure": {
+    "added_def_indentation": 4,
+    "class_from_patch_context": "JSONFieldNumericKeyLookupsTests",
+    "file": "tests/model_fields/test_jsonfield_numeric_keys.py",
+    "name": "test_oracle_json_path_final_key_is_quoted_for_numeric_strings",
+    "nearby_decorator_names": [],
+    "preceding_context_class": "JSONFieldNumericKeyLookupsTests"
+  },
+  "target_test_method_name": "test_oracle_json_path_final_key_is_quoted_for_numeric_strings",
+  "task": "django__django-15503",
+  "test_patch_sha256": "94397c81c4cf6d2118dc77bcc748e8a42b6da8d7e78b8653b61290845ed6165c",
+  "test_revision": "79fc07a8f4ce5e3720e069948073f5f910b7577b"
+}
