@@ -10,6 +10,7 @@ on:
       - "scripts/step10_analyze_frozen_features.py"
       - "scripts/step11_robustness.py"
       - "tests/test_step9_indicators.py"
+      - "scripts/step11_trace_spotcheck.py"
 
 permissions:
   contents: read
@@ -46,6 +47,13 @@ jobs:
         env:
           HF_HUB_DISABLE_TELEMETRY: "1"
         run: python scripts/step9_extract_trajectory_features.py --check
+      - name: Independently recount 12 pinned raw trajectories
+        run: |
+          python scripts/step11_trace_spotcheck.py
+          python scripts/step11_trace_spotcheck.py --check
+          echo 'STEP11_TRACE_JSON_BEGIN'
+          cat results/2026-11-12/STEP11_TRACE_SPOTCHECK_12_v1.json
+          echo 'STEP11_TRACE_JSON_END'
       - name: Assert the verification workflow did not modify source evidence
         run: |
           git diff --exit-code -- results/2026-11-12/STEP7_ANALYSIS_LABELS_v1.csv \
