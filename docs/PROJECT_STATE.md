@@ -2,7 +2,7 @@
 
 > **Canonical human/AI handoff document.** Read this before continuing work.  
 > **Last state verification:** 2026-11-12 (Asia/Dhaka)  
-> **Current phase:** Stronger-test execution finished; provisional outcome audit finished; **Step 6 AI-assisted FAIL test-validity documentary review is complete (all 31 dispositions documented, final semantic correctness still unverified); Step 7 UNVERIFIED triage and analysis label freezing is next**.  
+> **Current phase:** All 198 strengthened-test attempts and 83+115 raw audits completed; Step 6 documentary FAIL review completed; **Step 7 14-case UNVERIFIED triage and versioned provisional eligibility/sensitivity-label freeze completed (no new runner verdicts, no oracle validation). Step 8 trajectory-indicator specification is NEXT.**  
 > **Project repository:** https://github.com/Foysal-Munsy/sweabs-free-eval  
 > **This is a public repository:** this document is not private. Never add passwords, access tokens, personal information, or unreleased sensitive material.
 
@@ -59,7 +59,7 @@ If resuming in a new chat, give the assistant the repository URL and ask it to r
 
 **Outstanding validity concerns:**
 - **31 provisional FAIL across 15 distinct instance IDs:** [Step 6 AI-assisted documentary validity review](../results/2026-11-12/STEP6_FAIL_VALIDITY_REVIEW.md) completed with **9 review-supported valid_failure, 4 invalid_test, 2 environment_sensitive, 16 unresolved** dispositions. These are review statuses, not revised v2 outcomes, not independent human oracle proof, and not grounds to silently relabel raw FAIL.
-- **14 UNVERIFIED across 6 distinct instance IDs:** skipped/incomplete strengthened-test coverage and patch-identity issues; keep excluded or separately analyzed until reviewed.
+- **14 UNVERIFIED across 6 distinct instance IDs:** [Step 7 triage](../results/2026-11-12/STEP7_TRIAGE_AND_LABEL_POLICY.md) documented **9 partial-coverage skips, 4 patch/test-file overlaps, 1 whole-patch-integrity gap**; all remain UNVERIFIED in runner v2, excluded from primary labels, and require distinct follow-up evidence.
 - **4 exact-patch overlap cases:** Sample 1 offset 58 (`sympy__sympy-23413`, newly corrected FAIL → UNVERIFIED), Sample 2 offset 63 (`sympy__sympy-23413`), Sample 3 offset 7 (`django__django-11206`), Sample 3 offset 62 (`sympy__sympy-23413`). Augmented-test setup/cleanup reset a test file also modified by the agent; complete patch preservation was not established. Do not treat their observed raw runner outcomes as exact-patch PASS/FAIL.
 - Skipped database/backend tests include some Django cases. A PASS for the executed subset is **not** full-coverage verification if required augmented tests were skipped.
 
@@ -77,8 +77,8 @@ Legend: **DONE** = completed to stated scope, **PROVISIONAL** = complete as a pr
 | 4 | Preserve evidence and provenance | **DONE — PRIVATE RAW ZIP** | [Versioned GitHub audit files and checksums](../results/2026-11-12/MANIFEST.md); original raw ZIP re-downloaded from private Library and SHA-256/ZIP-integrity verified; not public |
 | 5 | Reconcile earlier audit records | **DONE** | All 83 per-patch ZIPs checked; [report](../results/2026-11-12/STEP5_RECONCILIATION_REPORT.md), [83-row evidence](../results/2026-11-12/sweabs_historical_83_reaudit_evidence.csv), [one correction](../results/2026-11-12/sweabs_historical_83_corrections.csv), [current v2 CSV](../results/2026-11-12/sweabs_full_198_cumulative_v2.csv) |
 | 6 | Review strengthened-test FAIL assertions | **DONE — DOCUMENTARY, PROVISIONAL** | [31-row review ledger](../results/2026-11-12/STEP6_FAIL_REVIEW_31.csv), [15-task summary](../results/2026-11-12/STEP6_TASK_SUMMARY_15.csv), [reasoned report with opposing views](../results/2026-11-12/STEP6_FAIL_VALIDITY_REVIEW.md); 9 supported / 4 invalid-test / 2 environment-sensitive / 16 unresolved, no outcome relabel |
-| 7 | **Triage UNVERIFIED and freeze analysis labels** | **NEXT** | Investigate 14 UNVERIFIED; explicit eligibility/exclusion and sensitivity policies for all 31 reviewed FAILs, controlled reruns only where justified, versioned master label manifest |
-| 8 | Freeze trajectory messiness indicator specification | TODO | Precise indicators, parsing rules, missingness, exclusions fixed without outcome-driven tuning |
+| 7 | **Triage UNVERIFIED and freeze analysis labels** | **DONE — DOCUMENTARY / PROVISIONAL** | [14-case triage](../results/2026-11-12/STEP7_UNVERIFIED_TRIAGE_14.csv), [versioned 198-row provisional label manifest](../results/2026-11-12/STEP7_ANALYSIS_LABELS_v1.csv), [methodological report](../results/2026-11-12/STEP7_TRIAGE_AND_LABEL_POLICY.md), [rebuild/check script](../scripts/build_step7_analysis_labels.py). No runner v2 relabel or new test run; final semantic validation pending. |
+| 8 | **Freeze trajectory messiness indicator specification** | **NEXT** | Precisely predefine indicators, trajectory parser and data availability checks, missingness, aggregation, leakage controls and grouping without viewing association with current labels |
 | 9 | Extract trajectory features and exact-match | TODO | Reproducible extraction pipeline; match sample + instance + patch hash; coverage/dedup audit |
 | 10 | Quantitative analysis | TODO | Appropriate baselines, association metrics (e.g. AUROC), uncertainty and task-aware treatment of repeated instances |
 | 11 | Sensitivity and robustness | TODO | Label/coverage assumptions, task grouping, class imbalance, alternate defensible thresholds |
@@ -86,7 +86,7 @@ Legend: **DONE** = completed to stated scope, **PROVISIONAL** = complete as a pr
 | 13 | Draft research paper | TODO | Introduction, related work, methods, experiments, results, discussion, limitations, conclusion |
 | 14 | Reproducibility and submission readiness | TODO | Code/data provenance, final figures/tables, checked citations, mentor feedback, venue-specific requirements |
 
-**Current checkpoint:** Steps 1–2 DONE; Step 3 runner labels PROVISIONAL; Steps 4–5 DONE; Step 6 DONE for *AI-assisted documentary test-validity triage*, with 18 unresolved/environment-sensitive and all semantic conclusions still provisional. **Step 7 is NEXT**. Steps 8–14 remain pending. No human/maintainer oracle adjudication or new benchmark run is claimed.
+**Current checkpoint:** Steps 1–2 DONE; Step 3 runner labels PROVISIONAL; Steps 4–5 DONE; Step 6 documentary review DONE for its limited scope; **Step 7 documentary triage and provisional analysis-policy freeze DONE**. Original v2 runner counts remain **153 PASS / 31 FAIL / 14 UNVERIFIED**. Primary v1 analysis screen is **153 runner PASS / 9 review-supported FAIL / 36 excluded** (162 rows, 61 unique tasks; only 5 distinct FAIL task IDs). Alternative sensitivity labels are 153/27/18 (noninvalid), 153/31/14 (runner-only), and 162/9/27 (hypothetical skipped-as-PASS). **Step 8 is NEXT**, Steps 9–14 TODO. Semantic oracles, targeted reruns, trajectory features and predictive findings remain unverified/not performed.
 
 ## 4. Completed archival checkpoint — Step 4 (evidence preservation)
 
@@ -134,13 +134,29 @@ Legend: **DONE** = completed to stated scope, **PROVISIONAL** = complete as a pr
 
 **Artifacts:** [31-row review ledger](../results/2026-11-12/STEP6_FAIL_REVIEW_31.csv) · [15-task summary](../results/2026-11-12/STEP6_TASK_SUMMARY_15.csv) · [review report](../results/2026-11-12/STEP6_FAIL_VALIDITY_REVIEW.md) · [review extraction script](../scripts/review_step6_fail_cases.py). All committed and fetched back from GitHub; SHA-256 manifest in [results](../results/2026-11-12/MANIFEST.md). Versioned v2 outcomes remain 153 PASS / 31 raw FAIL / 14 UNVERIFIED.
 
-### Next exact action — Step 7: UNVERIFIED triage and label freeze
+## 4C. Completed Step 7 — versioned provisional analysis-label gate
 
-1. Read [current 198-row v2](../results/2026-11-12/sweabs_full_198_cumulative_v2.csv), [31-row Step 6 review](../results/2026-11-12/STEP6_FAIL_REVIEW_31.csv), and [83+115 raw-log audits](../results/2026-11-12/MANIFEST.md). Keep raw runner outcome and semantic review in **separate columns**.
-2. Investigate **all 14 UNVERIFIED** records, especially four agent-modified test-file overlap cases and skipped/backend-dependent coverage; identify what can be safely rerun and what is intrinsically unresolved.
-3. Explicitly define **primary label eligibility** and **sensitivity datasets**. A sound default is not to treat invalid-test or unresolved evidence as a confirmed semantic FAIL. Do not turn them into PASS without an appropriate oracle.
-4. Maintain immutable v1 and v2 outputs; write a separately versioned analysis label manifest with evidence, missingness/exclusions, task IDs, and protocol precommit. Review ambiguous test semantics before final inclusion or document remaining uncertainty.
-5. Commit the manifest and decisions; update this state, WORK_LOG, README, and results index. Only after label freeze move to Step 8 (predefine trajectory messiness indicators, before looking at their association with outcomes).
+**Status:** DONE for documented eligibility/sensitivity rules and 14-case triage, *not* for final test semantic correctness. See [the full Step 7 report and counterarguments](../results/2026-11-12/STEP7_TRIAGE_AND_LABEL_POLICY.md), [all 14 UNVERIFIED details](../results/2026-11-12/STEP7_UNVERIFIED_TRIAGE_14.csv), [198-row analysis manifest v1](../results/2026-11-12/STEP7_ANALYSIS_LABELS_v1.csv), and [deterministic generation/check script](../scripts/build_step7_analysis_labels.py).
+
+The previously archived original v1 and audited v2 are unchanged. All 198 v2 identities match the 83+115 raw-evidence tables; all 31 v2 FAIL rows match Step 6 review rows. The 14 UNVERIFIED cases fall into **9 skips / 4 patch overlaps / 1 full large-patch integrity gap**. All 14 expected Actions per-patch artifact names were present and none marked expired when checked on 2026-11-12. This session re-reviewed archived audit tables and artifact metadata, **not** each new raw ZIP, did no Docker reruns, and sought no new independent human/maintainer oracle.
+
+The machine-readable v1 manifest freezes the following analysis **screens** before extraction of any trajectory indicators. Here 0=audited runner PASS, 1=provisional stronger-test FAIL, blank=excluded.
+
+| Analysis definition | 0 (PASS) | 1 (FAIL) | Excluded | Research status |
+| --- | ---: | ---: | ---: | --- |
+| Conservative primary (`primary_y`) | 153 | 9 | 36 | 9 review-supported Step 6 failures, **not** semantic oracles; 162 rows/61 tasks, only 5 FAIL tasks |
+| Sensitivity: noninvalid FAIL (`noninvalid_sensitivity_y`) | 153 | 27 | 18 | Includes unresolved + environment-sensitive as FAIL provisionally |
+| Sensitivity: all runner FAIL (`runner_only_sensitivity_y`) | 153 | 31 | 14 | Retains disputed invalid-test outcomes only as runner-measured scenario |
+| Sensitivity: skipped-as-PASS hypothesis (`skipped_as_pass_scenario_y`) | 162 | 9 | 27 | Hypothetical assumption for nine incomplete-coverage cases; **not actual PASS** |
+
+**Caution:** Selection on review-supported semantic test validity reduces positive failure cases and may bias analysis; report all prespecified sensitivity targets and group repeated tasks, not independent 198-run statistics. The remaining unverified semantic/coverage/identity issues require additional evidence before a gold-standard reliability claim. Controlled reruns must preserve old outcomes and be logged as new versioned evidence. Private archived raw ZIPs remain private.
+
+### Next exact action — Step 8: indicator specification freeze
+
+1. Read the Step 7 [policy and manifest](../results/2026-11-12/STEP7_TRIAGE_AND_LABEL_POLICY.md) and the original [trajectory selection logic](../scripts/pilot.py) alongside the pinned agent dataset revision; preserve `(sample,instance_id,patch_sha256)` identities.
+2. Define the trajectory schema and **lightweight messiness indicators** using theory/process criteria *before* reading indicator–label associations. Specify exact formulas/regex/event rules, time-order rules, parsing edge cases, missingness, denominators and run-level aggregation; forbid outcome-driven threshold tuning.
+3. Write a frozen versioned feature specification and tests. Confirm availability and reproducibility of the trajectory records and commit a data-lineage plan. **Do not run feature-based predictive analysis before the freeze.**
+4. Separately track open Step 7 validation: non-destructive patch-overlap reruns (4), whole patch integrity (`requests-1142`), database/backend coverage reruns (9), and Step 6 human/oracle adjudication. These are *not* resolved by an unchanged runner label.
 
 ## 5. Where to find workflow evidence
 
