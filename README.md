@@ -14,7 +14,7 @@ This README is the **public summary**. For a precise human/AI continuation point
 
 ## Research status — 2026-11-12
 
-**Milestone: all 198 evaluation attempts complete; all per-patch raw logs reconciled to a current provisional v2 dataset.** An AI-assisted documentary review of all 31 raw FAILs is complete; **human/maintainer semantic adjudication and final label freezing are not complete**.
+**Milestone: all 198 evaluation attempts complete; all per-patch raw logs reconciled to a current provisional v2 dataset.** Step 6 documented all 31 FAIL test-validity reviews; **Step 7 triaged all 14 UNVERIFIED cases and froze a versioned *provisional analysis-eligibility policy***. This is **not** independent human/maintainer adjudication or final semantic ground truth. **Step 8 (trajectory-indicator specification) is next**.
 
 | Subset | Originally passing agent runs | Evaluation attempts | PASS | FAIL | UNVERIFIED |
 | --- | ---: | ---: | ---: | ---: | ---: |
@@ -50,6 +50,21 @@ All **31 provisional FAILs across 15 unique task IDs** were compared against [th
 Significant caveats: the Django RFC850 2099→2100 test expectation conflicts with [RFC 7231's 50-year rule](https://www.rfc-editor.org/rfc/rfc7231.html#section-7.1.1.1), an enhanced SymPy determinant test requires an auxiliary tolerance API not established by [the reported pivot bug](https://github.com/sympy/sympy/pull/13877), and two Django ModelForm tests use [Python-version-sensitive `staticmethod` behavior](https://docs.python.org/3/library/functions.html#staticmethod).
 
 Full sources and counterarguments: [31-row review ledger](results/2026-11-12/STEP6_FAIL_REVIEW_31.csv) · [15-task summary](results/2026-11-12/STEP6_TASK_SUMMARY_15.csv) · [detailed review report](results/2026-11-12/STEP6_FAIL_VALIDITY_REVIEW.md). These are **documentary review judgments**, not publication-ready semantic correctness labels.
+
+## Step 7 — UNVERIFIED triage and analysis eligibility (documentary/provisional)
+
+The [Step 7 report](results/2026-11-12/STEP7_TRIAGE_AND_LABEL_POLICY.md) and [14-case ledger](results/2026-11-12/STEP7_UNVERIFIED_TRIAGE_14.csv) classify the **14 existing UNVERIFIED runs** as **9 skipped-test/partial-backend-coverage, 4 agent-patch/strengthened-test-file overlap, and 1 unverified entire large patch**. All 14 expected GitHub Actions artifacts were listed as present and unexpired when checked on 2026-11-12. **No runner v2 label was revised, no task was rerun, and individual ZIPs were not freshly re-audited in Step 7.**
+
+A [versioned 198-row analysis-label manifest](results/2026-11-12/STEP7_ANALYSIS_LABELS_v1.csv) retains every exact run identity, raw outcome, review status, triage, exclusion rule, GitHub evidence link and four prespecified target scenarios; the [rebuild/check script](scripts/build_step7_analysis_labels.py) asserts the expected joins and row counts. The screening policies were documented before any trajectory indicators were extracted.
+
+| Analysis target (0=audited PASS, 1=provisional FAIL) | 0 | 1 | Excluded |
+| --- | ---: | ---: | ---: |
+| **Conservative primary** (PASS vs review-supported FAIL) | **153** | **9** | **36** |
+| Noninvalid-test sensitivity (includes unresolved/environment-sensitive FAIL) | 153 | 27 | 18 |
+| All-raw-runner sensitivity (includes disputed failing assertions) | 153 | 31 | 14 |
+| Hypothetical skipped-as-PASS sensitivity (not a genuine runner PASS) | 162 | 9 | 27 |
+
+The **primary screen has 162 runs representing 61 distinct tasks, but just 9 FAIL runs across 5 tasks**. Its review-supported FAILs remain provisional, and the excluded cases are **not** relabeled PASS. Any later analysis must group by task, report uncertainty and compare sensitivity definitions. This work does not establish a trajectory-messiness predictor.
 
 ## Dataset and reproducibility
 
@@ -111,8 +126,9 @@ A 5.1-MB raw-evidence ZIP for the original recent audits and a separate **2.8-MB
 - [x] **Reconcile the 83 historical rows** against raw GitHub Actions evidence, retain original v1, and document the one patch-identity correction in a reviewed v2.
 - [x] **Document an AI-assisted semantic validity review for all 31 FAILs across 15 tasks**, with evidence-backed dispositions, opposing interpretations, and open questions; no raw label changes.
 - [ ] Seek independent/human issue-specific confirmation for unresolved or environment-sensitive FAIL tests before claiming final semantic correctness.
-- [ ] **Step 7 (next): Triage 14 UNVERIFIED cases and freeze analysis labels**, with explicit exclusion/sensitivity policies for the Step 6 review; prioritize four patch-overlap cases and skipped/backend-limited tests. Any rerun must preserve original evidence.
-- [ ] Freeze a reviewed label manifest with explicit exclusions/uncertainty, then match each exact run/patch with **predefined, frozen trajectory messiness indicators**.
+- [x] **Step 7: Triage all 14 UNVERIFIED and freeze provisional analysis eligibility/sensitivity rules**, preserving raw labels; publish the [Step 7 report](results/2026-11-12/STEP7_TRIAGE_AND_LABEL_POLICY.md), [14-case ledger](results/2026-11-12/STEP7_UNVERIFIED_TRIAGE_14.csv), and [198-row label manifest v1](results/2026-11-12/STEP7_ANALYSIS_LABELS_v1.csv). No oracle adjudication or fresh benchmark run.
+- [ ] **Step 8 (next): Freeze exact lightweight trajectory indicator formulas, parsing, missingness, leakage restrictions and task-grouping rules before inspecting outcome associations.**
+- [ ] Step 9: Extract trajectory features, verify exact (sample, instance, patch-hash) matches, and audit coverage. Track unresolved reruns and human/oracle test-validity review separately; never overwrite old evidence.
 - [ ] Perform task-aware predictive analysis (including repeated-instance dependence), uncertainty checks, and robustness/sensitivity analyses; only then write up the paper.
 
 **No predictive result is claimed yet.** The research question is still open.
