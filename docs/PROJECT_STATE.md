@@ -2,7 +2,7 @@
 
 > **Canonical human/AI handoff document.** Read this before continuing work.  
 > **Last state verification:** 2026-11-12 (Asia/Dhaka)  
-> **Current phase:** Stronger-test execution finished; provisional outcome audit finished; **evidence preservation has been completed with a private raw-ZIP backup; historical 83-row audit consistency is the next unfinished milestone**.  
+> **Current phase:** Stronger-test execution finished; provisional outcome audit finished; **Step 5 historical 83-run reconciliation is complete and the versioned v2 outcome CSV is archived; Step 6 independent FAIL-test validity review is next**.  
 > **Project repository:** https://github.com/Foysal-Munsy/sweabs-free-eval  
 > **This is a public repository:** this document is not private. Never add passwords, access tokens, personal information, or unreleased sensitive material.
 
@@ -48,22 +48,22 @@ If resuming in a new chat, give the assistant the repository URL and ask it to r
 
 | Sample | Originally passing runs | Evaluated | Provisional PASS | Provisional FAIL | UNVERIFIED |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| 1 | 63 | 63 | 48 | 11 | 4 |
+| 1 | 63 | 63 | 48 | 10 | 5 |
 | 2 | 68 | 68 | 53 | 11 | 4 |
 | 3 | 67 | 67 | 52 | 10 | 5 |
-| **Total** | **198** | **198** | **153** | **32** | **13** |
+| **Total** | **198** | **198** | **153** | **31** | **14** |
 
-**What is established:** all 198 evaluation attempts completed. The cumulative provisional audit CSV has 198 rows with unique `(sample, offset)` and 73 distinct task IDs. Full raw-log checking was performed for **115 recent records**: Sample 2 offsets 20–67 and Sample 3 offsets 0–66. The earlier **83 records** (Sample 1 and Sample 2 offsets 0–19) were retained from previous audits rather than re-reviewed in the 115-record audit.
+**What is established:** all 198 evaluation attempts completed. The cumulative provisional audit CSV has 198 rows with unique `(sample, offset)` and 73 distinct task IDs. Full raw-log checking was performed for **115 recent records** (Sample 2 offsets 20–67 and Sample 3 offsets 0–66), followed by a separate **83-run historical re-audit** (Sample 1 offsets 0–62 and Sample 2 offsets 0–19). Historical 83-row v1 values were preserved unmodified in the immutable checkpoint. Step 5 produced [the current 198-row v2](../results/2026-11-12/sweabs_full_198_cumulative_v2.csv), with exactly one documented historical correction, and [an append-only corrections ledger](../results/2026-11-12/sweabs_historical_83_corrections.csv).
 
 **What is NOT established:** a final claim about patch semantic correctness, the strength/soundness of all augmented assertions, the predictive value of messiness indicators, or any final publication-ready results.
 
 **Outstanding validity concerns:**
-- **32 provisional FAIL:** independent review of augmented-test semantics and environment assumptions is not done. The earlier audit reported these failures across **16 distinct task IDs**; recheck this figure against the archived CSV before using it in a paper.
-- **13 UNVERIFIED:** skipped/incomplete strengthened-test coverage and patch-identity issues; keep excluded or separately analyzed until reviewed.
-- **3 exact-patch overlap cases:** Sample 2 offset 63 (`sympy__sympy-23413`), Sample 3 offset 7 (`django__django-11206`), Sample 3 offset 62 (`sympy__sympy-23413`). Augmented-test setup reset a test file also modified by the agent. Do not treat their observed raw runner outcomes as exact-patch PASS/FAIL.
+- **31 provisional FAIL across 15 distinct instance IDs:** independent review of augmented-test semantics and environment assumptions is not done. This count was recomputed from v2, not inherited from v1.
+- **14 UNVERIFIED across 6 distinct instance IDs:** skipped/incomplete strengthened-test coverage and patch-identity issues; keep excluded or separately analyzed until reviewed.
+- **4 exact-patch overlap cases:** Sample 1 offset 58 (`sympy__sympy-23413`, newly corrected FAIL → UNVERIFIED), Sample 2 offset 63 (`sympy__sympy-23413`), Sample 3 offset 7 (`django__django-11206`), Sample 3 offset 62 (`sympy__sympy-23413`). Augmented-test setup/cleanup reset a test file also modified by the agent; complete patch preservation was not established. Do not treat their observed raw runner outcomes as exact-patch PASS/FAIL.
 - Skipped database/backend tests include some Django cases. A PASS for the executed subset is **not** full-coverage verification if required augmented tests were skipped.
 
-**Evidence:** [audited workflow history](https://github.com/Foysal-Munsy/sweabs-free-eval/actions), [current public README](../README.md), and the offline audit files in the inventory below. The **198-row CSV, 115-row provenance CSV, audit report, historical 83-row input, and audit script are now archived on GitHub** with verified original bytes. The raw 5.1-MB evidence ZIP is privately backed up to the owner's ChatGPT Library and is **not** publicly accessible. See the [artifact manifest](../results/2026-11-12/MANIFEST.md).
+**Evidence:** [audited workflow history](https://github.com/Foysal-Munsy/sweabs-free-eval/actions), [current public README](../README.md), and the offline audit files in the inventory below. The **198-row CSV, 115-row provenance CSV, audit report, historical 83-row input, and audit script are now archived on GitHub** with verified original bytes. Two private raw evidence ZIPs are backed up in the owner's ChatGPT Library: the prior 5.1-MB Sample 2/3 bundle, and the new 2.8-MB historical 83-run ZIP (plus the initial failed Sample 1 offset-5 attempt). Neither is publicly accessible from GitHub. See the [artifact manifest](../results/2026-11-12/MANIFEST.md).
 
 ## 3. Full milestone checklist (order matters)
 
@@ -73,11 +73,11 @@ Legend: **DONE** = completed to stated scope, **PROVISIONAL** = complete as a pr
 | --- | --- | --- | --- |
 | 1 | Research question and data selection | DONE | Originally passing Gemini 3 Flash trajectories, SWE-ABS tests, fixed evaluation setup |
 | 2 | Run strengthened evaluations | DONE | 63 + 68 + 67 = 198 evaluation attempts |
-| 3 | Audit runner outputs | PROVISIONAL | 198-row provisional CSV; latest 115 raw logs checked, 83 earlier rows preserved |
+| 3 | Audit runner outputs | PROVISIONAL | 198-run v2 provisional CSV; all 115 recent and all 83 historical raw artifacts checked; independent augmented-test semantics pending |
 | 4 | Preserve evidence and provenance | **DONE — PRIVATE RAW ZIP** | [Versioned GitHub audit files and checksums](../results/2026-11-12/MANIFEST.md); original raw ZIP re-downloaded from private Library and SHA-256/ZIP-integrity verified; not public |
-| 5 | **Reconcile earlier audit records** | **NEXT** | Recheck the 83 historical rows against available logs, patch identity, coverage, and current label policy; keep original version and any corrections traceable |
-| 6 | Validate strengthened-test FAIL cases | TODO | Review all 32 provisional FAIL records, group by task, record soundness / invalidity / unresolved decisions |
-| 7 | Triage UNVERIFIED and freeze labels | TODO | Investigate 13 UNVERIFIED, controlled reruns only where justified, documented exclusions and versioned label manifest |
+| 5 | Reconcile earlier audit records | **DONE** | All 83 per-patch ZIPs checked; [report](../results/2026-11-12/STEP5_RECONCILIATION_REPORT.md), [83-row evidence](../results/2026-11-12/sweabs_historical_83_reaudit_evidence.csv), [one correction](../results/2026-11-12/sweabs_historical_83_corrections.csv), [current v2 CSV](../results/2026-11-12/sweabs_full_198_cumulative_v2.csv) |
+| 6 | **Validate strengthened-test FAIL cases** | **NEXT** | Independently review 31 provisional FAIL records across 15 unique instance IDs; audit assertions, environments and validity, preserve reviewer decisions |
+| 7 | Triage UNVERIFIED and freeze labels | TODO | Investigate 14 UNVERIFIED, controlled reruns only where justified, documented exclusions and versioned label manifest |
 | 8 | Freeze trajectory messiness indicator specification | TODO | Precise indicators, parsing rules, missingness, exclusions fixed without outcome-driven tuning |
 | 9 | Extract trajectory features and exact-match | TODO | Reproducible extraction pipeline; match sample + instance + patch hash; coverage/dedup audit |
 | 10 | Quantitative analysis | TODO | Appropriate baselines, association metrics (e.g. AUROC), uncertainty and task-aware treatment of repeated instances |
@@ -86,7 +86,7 @@ Legend: **DONE** = completed to stated scope, **PROVISIONAL** = complete as a pr
 | 13 | Draft research paper | TODO | Introduction, related work, methods, experiments, results, discussion, limitations, conclusion |
 | 14 | Reproducibility and submission readiness | TODO | Code/data provenance, final figures/tables, checked citations, mentor feedback, venue-specific requirements |
 
-**Current checkpoint:** Steps 1–2 DONE; Step 3 PROVISIONAL; Step 4 DONE with an owner-private raw archive; Step 5 is NEXT. Steps 6–14 remain pending. Public release of the raw ZIP is still withheld pending review.
+**Current checkpoint:** Steps 1–2 DONE; Step 3 PROVISIONAL; Steps 4–5 DONE (including private raw archives, not public raw release). **Step 6 is NEXT**. Steps 7–14 remain pending. Test semantic validity remains unverified.
 
 ## 4. Completed archival checkpoint — Step 4 (evidence preservation)
 
@@ -106,13 +106,23 @@ Legend: **DONE** = completed to stated scope, **PROVISIONAL** = complete as a pr
 
 **Source of truth for exact hashes and storage status:** [2026-11-12/MANIFEST.md](../results/2026-11-12/MANIFEST.md). No evaluation was rerun and no outcome labels were changed by archival. The archived offline audit script has session-specific paths; it is historical provenance, not a newly tested production tool.
 
-## 4A. Next exact action — Step 5 (historical audit consistency)
+## 4A. Completed Step 5 — historical 83-run reconciliation
 
-1. Read the archived [first83 CSV](../results/2026-11-12/sweabs_samples1_2_first83_cumulative.csv) alongside the [198-row CSV](../results/2026-11-12/sweabs_full_198_cumulative_audited.csv). Verify that rows for Sample 1 offsets 0–62 and Sample 2 offsets 0–19 remain identical by field and identity; record the comparison digest/summary.
-2. Retrieve available Sample 1 and early Sample 2 GitHub Actions raw evidence (use the explicit run links and existing patch/source evidence; availability may be limited by the workflow's 14-day retention).
-3. Re-evaluate those 83 **previously preserved** classifications using the 115-run audit policy: patch/test identity, base commits, repository diff integrity, actual outer augmented runner results, and any skips. Prioritize `RETROSPECTIVE_REVIEW_REQUIRED`, FAIL, and UNVERIFIED.
-4. If any outcome changes, save an **append-only corrections table**, keep the original 198-row archival checkpoint immutable, and create a **new version** of the reviewed label manifest; document old vs new and why.
-5. Record unresolved missing raw evidence as **unverified**, update this state, WORK_LOG, README, and a new manifest. **Only then mark Step 5 DONE.** No trajectory-feature extraction or final correctness claims yet.
+**Completed on 2026-11-12.** Recovered all 83 historical selected GitHub Actions per-patch artifacts and the prior failed Sample 1 offset-5 artifact. Verified 83 original CSV records field-for-field against archived v1 (all identical), inspected each raw ZIP and model/test-patch identity, pinned revisions, base commits, pre/post repository diffs, outer runner counts, skips and infrastructure issues. Review details: [Step 5 report](../results/2026-11-12/STEP5_RECONCILIATION_REPORT.md) and [83-run evidence](../results/2026-11-12/sweabs_historical_83_reaudit_evidence.csv).
+
+**82 existing labels unchanged; one correction:** Sample 1 offset 58, `sympy__sympy-23413`, **FAIL → UNVERIFIED**. Raw tests reported 7 passed and 1 exception; however, the exact agent-modified test file did not survive augmented-test file reset, so the complete intended patch was not verified. The original v1 CSV remains immutable, and [the corrections ledger](../results/2026-11-12/sweabs_historical_83_corrections.csv) explains the reclassification. Sample 1 offset 36, `psf__requests-1142`, remains UNVERIFIED despite 15 executed tests passing because the 884 KB patch's full source/build diff was not verified.
+
+**Revised 198-run v2 totals:** 153 PASS, 31 FAIL, 14 UNVERIFIED. New sample-specific counts in the current snapshot above. The analysis unit still repeats 73 unique task IDs across 198 agent runs.
+
+**Raw evidence privately preserved:** `sweabs_historical_83_raw_evidence_private.zip`, 2,790,331 bytes, SHA-256 `cc7c5f4280c3dd7e4ccfb34f55ea151f472435e33d1e7465fb73cf9c75c586e4`. Owner's private ChatGPT Library path: `/Research/SWE-ABS/2026-11-12/sweabs_historical_83_raw_evidence_private.zip`. Re-materialized, SHA-256 verified, ZIP integrity clean (86 members). **Not public or automatically available to new users/chats**. See [the updated manifest](../results/2026-11-12/MANIFEST.md).
+
+### Step 6 — exact next action: independent FAIL validity review
+
+1. Use [v2 cumulative outcomes](../results/2026-11-12/sweabs_full_198_cumulative_v2.csv) as the input. Select the **31 FAIL run records**, group by the **15 distinct task IDs** and shared strengthened test patches, and retain the per-run sample/patch hashes.
+2. For each unique task, inspect the strengthened test patch and relevant original task requirements. Test assertion semantics must be independently evaluated, not inferred from green/red runner output. Document expected behavior, environmental assumptions, exception class, and alternative plausible explanations.
+3. Create a versioned decision table per FAIL run: `valid_failure`, `invalid_test`, `environment_sensitive`, or `unresolved`, with explicit evidence pointers. Reviewers must justify every change. **Do not silently promote provisional FAIL to final semantic failure.**
+4. Where justified, controlled reruns may be proposed/implemented with *separate* IDs and preserved original evidence. Avoid changing the pinned methodology without recording the amendment.
+5. Update the PROJECT_STATE, WORK_LOG, README, and results manifest. Step 6 is DONE only when each FAIL has a documented review disposition and uncertainties are reported. Step 7 then addresses 14 UNVERIFIED and freezes the analysis-ready labels.
 
 ## 5. Where to find workflow evidence
 
