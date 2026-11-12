@@ -4,7 +4,7 @@ Reproducible GitHub Actions evaluation of **coding-agent patches that originally
 
 > **Research question:** Among originally successful coding-agent trajectories, do lightweight trajectory-level messiness indicators predict failure under strengthened tests?
 
-This repository covers the **stronger-test evaluation and evidence collection stage**. Trajectory indicator extraction, predictive analysis, and paper writing have **not** been completed. The outcomes below are *provisional augmented-test labels*, not final semantic-correctness judgments.
+This repository now covers **strengthened-test evaluation, exact-match trajectory feature extraction, and exploratory task-aware AUROC analysis**. A validated classifier, independently adjudicated semantic labels, external/generalization testing, and paper writing have **not** been completed. The outcomes below remain *provisional augmented-test labels*, not final correctness judgments.
 
 ### Project continuity and research handoff
 
@@ -14,7 +14,7 @@ This README is the **public summary**. For a precise human/AI continuation point
 
 ## Research status — 2026-11-12
 
-**Milestone: all 198 evaluation attempts complete; all per-patch raw logs reconciled to a current provisional v2 dataset.** Step 6 documented all 31 FAIL test-validity reviews; **Step 7 triaged all 14 UNVERIFIED cases and froze a versioned *provisional analysis-eligibility policy***. This is **not** independent human/maintainer adjudication or final semantic ground truth. **Step 8 (trajectory-indicator specification) is next**.
+**Milestone: all 198 stronger-test attempts and audits complete; Step 8 indicators frozen before extraction, Step 9 features exactly matched, and Step 10 exploratory AUROCs computed.** Step 6 reviewed the 31 FAILs and Step 7 retained 14 UNVERIFIED with explicit provisional analysis screens. None is an independent human/maintainer semantic oracle. **Step 11 (independent pipeline reproduction and robustness) is next.**
 
 | Subset | Originally passing agent runs | Evaluation attempts | PASS | FAIL | UNVERIFIED |
 | --- | ---: | ---: | ---: | ---: | ---: |
@@ -65,6 +65,27 @@ A [versioned 198-row analysis-label manifest](results/2026-11-12/STEP7_ANALYSIS_
 | Hypothetical skipped-as-PASS sensitivity (not a genuine runner PASS) | 162 | 9 | 27 |
 
 The **primary screen has 162 runs representing 61 distinct tasks, but just 9 FAIL runs across 5 tasks**. Its review-supported FAILs remain provisional, and the excluded cases are **not** relabeled PASS. Any later analysis must group by task, report uncertainty and compare sensitivity definitions. This work does not establish a trajectory-messiness predictor.
+
+## Steps 8–10 — frozen trajectory indicators and provisional quantitative analysis
+
+**Step 8:** [Versioned indicator/analysis specification](docs/STEP8_FROZEN_INDICATORS_v1.md) was committed before all-run feature extraction. Four prespecified messiness proxies: exact duplicate terminal command rate, explicitly observed terminal errors, absence of a recognized verification command, and file-editor calls after the last recognized verification. These are *proxies*, not proof of blind retries or substantive verification.
+
+**Step 9:** [198-run exact-match features](results/2026-11-12/STEP9_TRAJECTORY_FEATURES_v1.csv) and [coverage](results/2026-11-12/STEP9_COVERAGE_v1.json) were computed from the pinned [trajectory dataset](https://huggingface.co/datasets/tarsur385/swe-verified-gemini3-flash-trajectories). The queried dataset revision matched pinned `b5515d1dce40036633293b70477f0633b24593f7`; all 198 originally successful runs matched their sample, instance and **patch SHA-256** among 296 dataset rows. There are 73 distinct tasks; 191 runs contain at least one recognized verification command. No raw private trajectory text was published. [Extractor](scripts/step9_extract_trajectory_features.py) and an independent Python `--check` execution remain a reproducibility gate.
+
+**Step 10:** Frozen individual features were evaluated against four Step 7 outcome screens using in-sample AUROCs and 500 **task-ID-cluster** bootstrap resamples. The conservative primary has **153 runner PASS, 9 review-supported provisional FAIL, 36 excluded**: 162 runs, 61 distinct tasks, only five distinct FAIL task IDs.
+
+| Prespecified feature (higher = more presumed messiness) | Primary AUROC | 95% task-cluster interval |
+| --- | ---: | --- |
+| Duplicate terminal commands / terminal calls | **0.489** | 0.270–0.706 |
+| Explicit terminal error rate | **0.599** | 0.420–0.790 |
+| Missing recognized verification | **0.480** | 0.459–0.497 |
+| Editor calls after last recognized verification | **0.435** | 0.166–0.757 |
+
+The **same duplicate-command feature** has AUROC **0.721** against noninvalid-test sensitivity labels and **0.708** against all provisional raw runner FAILs. This outcome-policy sensitivity is the most important finding: the **primary dataset does not establish a reliable predictor**, while broader ambiguous labels show a potential association that requires further validity checks. The 95% intervals quantify resampling variability conditional on this sample; they do not establish statistical significance or external generalization.
+
+[Full Step 10 report and competing interpretations](results/2026-11-12/STEP10_QUANTITATIVE_REPORT_v1.md) · [Corrected task-cluster AUROC results v2](results/2026-11-12/STEP10_AUROC_TASK_CLUSTER_v2.json) · [Analysis script](scripts/step10_analyze_frozen_features.py).
+
+**Reproducibility correction:** The originally archived [Step 10 JSON v1](results/2026-11-12/STEP10_AUROC_TASK_CLUSTER_v1.json) contains **invalid degenerate bootstrap confidence intervals** caused by a low-bit PRNG sampling defect; it is preserved for provenance, **not** for use in claims. Corrected v2 retains the original indicators, labels and point estimates. Independent Python `--check` commands have not yet been executed and verified.
 
 ## Dataset and reproducibility
 
@@ -127,11 +148,13 @@ A 5.1-MB raw-evidence ZIP for the original recent audits and a separate **2.8-MB
 - [x] **Document an AI-assisted semantic validity review for all 31 FAILs across 15 tasks**, with evidence-backed dispositions, opposing interpretations, and open questions; no raw label changes.
 - [ ] Seek independent/human issue-specific confirmation for unresolved or environment-sensitive FAIL tests before claiming final semantic correctness.
 - [x] **Step 7: Triage all 14 UNVERIFIED and freeze provisional analysis eligibility/sensitivity rules**, preserving raw labels; publish the [Step 7 report](results/2026-11-12/STEP7_TRIAGE_AND_LABEL_POLICY.md), [14-case ledger](results/2026-11-12/STEP7_UNVERIFIED_TRIAGE_14.csv), and [198-row label manifest v1](results/2026-11-12/STEP7_ANALYSIS_LABELS_v1.csv). No oracle adjudication or fresh benchmark run.
-- [ ] **Step 8 (next): Freeze exact lightweight trajectory indicator formulas, parsing, missingness, leakage restrictions and task-grouping rules before inspecting outcome associations.**
-- [ ] Step 9: Extract trajectory features, verify exact (sample, instance, patch-hash) matches, and audit coverage. Track unresolved reruns and human/oracle test-validity review separately; never overwrite old evidence.
+- [x] **Step 8:** Commit [frozen indicator specification](docs/STEP8_FROZEN_INDICATORS_v1.md) before extracting trajectory features.
+- [x] **Step 9:** Extract and exact-match all 198 run features with pinned patch hashes; [coverage table](results/2026-11-12/STEP9_COVERAGE_v1.json); independent Python reproduction pending.
+- [x] **Step 10:** Compute four prespecified individual-indicator AUROCs under four label screens, task-cluster intervals and [limitations](results/2026-11-12/STEP10_QUANTITATIVE_REPORT_v1.md) — **exploratory, not a validated predictor**.
+- [ ] **Step 11 (next):** Reproduce pinned Python pipeline, validate a subset of raw trajectory parsing, conduct task-aware robustness and resolve semantic/coverage uncertainties before substantive predictive claims.
 - [ ] Perform task-aware predictive analysis (including repeated-instance dependence), uncertainty checks, and robustness/sensitivity analyses; only then write up the paper.
 
-**No predictive result is claimed yet.** The research question is still open.
+**Only preliminary in-sample descriptive AUROCs are reported; no validated predictive performance, reliable semantic ground truth, or causal relationship is claimed.** The research question remains open.
 
 ## Progress / README maintenance
 
