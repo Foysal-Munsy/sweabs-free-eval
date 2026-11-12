@@ -72,6 +72,7 @@ def analyze():
         "spec":"docs/STEP8_FROZEN_INDICATORS_v1.md","seed":SEED,"bootstrap_replicates":B,
         "resampling_unit":"instance_id (all sample/patch runs kept in same task cluster)",
         "score_orientation":"Higher score means presumed messier; any_verification is negated.",
+        "bootstrap_correction":"v2: task-cluster draws use high-bit scaling floor(state * n_clusters / 2^32), not low-order LCG modulo, which caused degenerate CIs at n_clusters=64 in archived v1.",
         "targets":{}}
     for target in TARGETS:
         selected=[r for r in labs if r[target] in ("0","1")]
@@ -111,7 +112,7 @@ def main():
     out=analyze()
     content=json.dumps(out,indent=2,sort_keys=True)+"\n"
     if args.check:
-        if OUT.read_text(encoding="utf-8")!=content:raise ValueError("Analysis mismatch")
+        if json.loads(OUT.read_text(encoding="utf-8"))!=out:raise ValueError("Analysis mismatch")
     else:OUT.write_text(content,encoding="utf-8")
     print(json.dumps(out["targets"]["primary_y"],indent=2))
 if __name__=="__main__":main()
