@@ -2,7 +2,7 @@
 
 > **Canonical human/AI handoff document.** Read this before continuing work.  
 > **Last state verification:** 2026-11-12 (Asia/Dhaka)  
-> **Current phase:** Stronger-test execution finished; provisional outcome audit finished; **evidence preservation is the next unfinished milestone**.  
+> **Current phase:** Stronger-test execution finished; provisional outcome audit finished; **evidence preservation has been completed with a private raw-ZIP backup; historical 83-row audit consistency is the next unfinished milestone**.  
 > **Project repository:** https://github.com/Foysal-Munsy/sweabs-free-eval  
 > **This is a public repository:** this document is not private. Never add passwords, access tokens, personal information, or unreleased sensitive material.
 
@@ -63,7 +63,7 @@ If resuming in a new chat, give the assistant the repository URL and ask it to r
 - **3 exact-patch overlap cases:** Sample 2 offset 63 (`sympy__sympy-23413`), Sample 3 offset 7 (`django__django-11206`), Sample 3 offset 62 (`sympy__sympy-23413`). Augmented-test setup reset a test file also modified by the agent. Do not treat their observed raw runner outcomes as exact-patch PASS/FAIL.
 - Skipped database/backend tests include some Django cases. A PASS for the executed subset is **not** full-coverage verification if required augmented tests were skipped.
 
-**Evidence:** [audited workflow history](https://github.com/Foysal-Munsy/sweabs-free-eval/actions), [current public README](../README.md), and the offline audit files in the inventory below. The audit files are **not yet in this Git repository** as of this snapshot; file names and SHA-256 digests identify the prior-session outputs, not publicly accessible GitHub assets.
+**Evidence:** [audited workflow history](https://github.com/Foysal-Munsy/sweabs-free-eval/actions), [current public README](../README.md), and the offline audit files in the inventory below. The **198-row CSV, 115-row provenance CSV, audit report, historical 83-row input, and audit script are now archived on GitHub** with verified original bytes. The raw 5.1-MB evidence ZIP is privately backed up to the owner's ChatGPT Library and is **not** publicly accessible. See the [artifact manifest](../results/2026-11-12/MANIFEST.md).
 
 ## 3. Full milestone checklist (order matters)
 
@@ -74,8 +74,8 @@ Legend: **DONE** = completed to stated scope, **PROVISIONAL** = complete as a pr
 | 1 | Research question and data selection | DONE | Originally passing Gemini 3 Flash trajectories, SWE-ABS tests, fixed evaluation setup |
 | 2 | Run strengthened evaluations | DONE | 63 + 68 + 67 = 198 evaluation attempts |
 | 3 | Audit runner outputs | PROVISIONAL | 198-row provisional CSV; latest 115 raw logs checked, 83 earlier rows preserved |
-| 4 | **Preserve evidence and provenance** | **NEXT** | Durable archived CSVs, audit report, raw evidence bundle, checksums, source links; verify archive downloads |
-| 5 | Reconcile earlier audit records | TODO | Reconcile the prior 83 rows with available logs, identity checks, and current audit policy; maintain revision trail |
+| 4 | Preserve evidence and provenance | **DONE — PRIVATE RAW ZIP** | [Versioned GitHub audit files and checksums](../results/2026-11-12/MANIFEST.md); original raw ZIP re-downloaded from private Library and SHA-256/ZIP-integrity verified; not public |
+| 5 | **Reconcile earlier audit records** | **NEXT** | Recheck the 83 historical rows against available logs, patch identity, coverage, and current label policy; keep original version and any corrections traceable |
 | 6 | Validate strengthened-test FAIL cases | TODO | Review all 32 provisional FAIL records, group by task, record soundness / invalidity / unresolved decisions |
 | 7 | Triage UNVERIFIED and freeze labels | TODO | Investigate 13 UNVERIFIED, controlled reruns only where justified, documented exclusions and versioned label manifest |
 | 8 | Freeze trajectory messiness indicator specification | TODO | Precise indicators, parsing rules, missingness, exclusions fixed without outcome-driven tuning |
@@ -86,28 +86,33 @@ Legend: **DONE** = completed to stated scope, **PROVISIONAL** = complete as a pr
 | 13 | Draft research paper | TODO | Introduction, related work, methods, experiments, results, discussion, limitations, conclusion |
 | 14 | Reproducibility and submission readiness | TODO | Code/data provenance, final figures/tables, checked citations, mentor feedback, venue-specific requirements |
 
-**Current checkpoint:** Steps 1–2 DONE; step 3 complete **only for provisional labels**; step 4 is the exact next action. Steps 5–14 are pending.
+**Current checkpoint:** Steps 1–2 DONE; Step 3 PROVISIONAL; Step 4 DONE with an owner-private raw archive; Step 5 is NEXT. Steps 6–14 remain pending. Public release of the raw ZIP is still withheld pending review.
 
-## 4. Next exact action — Step 4 (evidence preservation)
+## 4. Completed archival checkpoint — Step 4 (evidence preservation)
 
-**Do this before new experiments.** Existing workflow artifacts declare `retention-days: 14`, so raw logs may disappear from GitHub Actions.
+**Status: DONE for owner-accessible preservation, not a public raw-data release.** On 2026-11-12 the following files were committed to [the GitHub artifact directory](../results/2026-11-12/), read back, and checked for byte identity against the original outputs. The three principal files' SHA-256 digests were independently recomputed on the GitHub-fetched content.
 
-1. Locate the four prior-session outputs named below. They were created in the earlier ChatGPT audit environment, **not committed to GitHub**. A new chat may need the user to provide them or must download/reconstruct from still-available Actions artifacts. **Do not claim they exist locally without checking.**
-2. Verify CSV schema/row counts/labels and compare SHA-256 with the manifest below. If different, investigate and record an explicit version/change reason; never silently overwrite history.
-3. Examine public-release suitability of the evidence ZIP (agent traces/logs can contain unexpected content). Commit the small, verified CSV/report/provenance files to a versioned repository directory; back up the larger raw ZIP to an appropriate durable location such as a release or external archival store after review.
-4. Verify the committed/downloadable copies can actually be opened; record exact Git commit/release URLs and digests here and in WORK_LOG.
-5. Update the README only with **verified** public milestones; mark Step 4 DONE here only after all designated evidence is durably stored and retrievable.
+| File | Original bytes | SHA-256 | Location |
+| --- | ---: | --- | --- |
+| `sweabs_full_198_cumulative_audited.csv` | 93852 | `7a848f2dfbbad224ea110a9d090ba4f2194ed157df7fd49d1946ae88743c6da8` | [GitHub](../results/2026-11-12/sweabs_full_198_cumulative_audited.csv) |
+| `sweabs_samples2_3_full_audit_evidence_115.csv` | 132150 | `3e4218862ac500872b2645ad766835579e146e58b004e394031e8c9c707cb18f` | [GitHub](../results/2026-11-12/sweabs_samples2_3_full_audit_evidence_115.csv) |
+| `sweabs_full_198_audit_report.md` | 11814 | `76559162321d9cab1e5fee4f9ad7bdba999a4379a0e38f651819f1571201ea07` | [GitHub](../results/2026-11-12/sweabs_full_198_audit_report.md) |
+| `sweabs_samples1_2_first83_cumulative.csv` | 23453 | `919c137b315fbe8ba6e9cdbe9491222304a36f17e920ae05aa15f405ab08aea4` | [GitHub](../results/2026-11-12/sweabs_samples1_2_first83_cumulative.csv) |
+| `sweabs_full_audit.py` | 15509 | `8f9061760eda1c8f4f6188a66bce4b6d6da24e75c7977be05a95ad0f719f74f9` | [GitHub](../results/2026-11-12/sweabs_full_audit.py) |
 
-### Evidence inventory (verified in the 2026-11-12 working session)
+**Private raw ZIP:** `sweabs_full_audit_evidence_bundle.zip`, 5136675 bytes, SHA-256 `b7f5fd76f747a23a83fb5b2d5e2c355d6123c2e2c9ddfe6fea974b3ac3c73d99`. Archived in the owner's **personal ChatGPT Library**: `/Research/SWE-ABS/2026-11-12/sweabs_full_audit_evidence_bundle.zip`. It was materialized back to the analysis runtime, its SHA-256 matched, and ZIP integrity testing passed for its 140 entries. **This is not a public GitHub download and is not automatically available to an arbitrary chat/account.** It contains Sample 2 and 3 per-patch ZIPs; Sample 1 raw evidence remains outside this bundle.
 
-| File name from audit session | Size (bytes) | SHA-256 |
-| --- | ---: | --- |
-| `sweabs_full_198_cumulative_audited.csv` | 93852 | `7a848f2dfbbad224ea110a9d090ba4f2194ed157df7fd49d1946ae88743c6da8` |
-| `sweabs_samples2_3_full_audit_evidence_115.csv` | 132150 | `3e4218862ac500872b2645ad766835579e146e58b004e394031e8c9c707cb18f` |
-| `sweabs_full_198_audit_report.md` | 11814 | `76559162321d9cab1e5fee4f9ad7bdba999a4379a0e38f651819f1571201ea07` |
-| `sweabs_full_audit_evidence_bundle.zip` | 5136675 | `b7f5fd76f747a23a83fb5b2d5e2c355d6123c2e2c9ddfe6fea974b3ac3c73d99` |
+**Privacy boundary:** Nested raw artifacts contain email-like and password-like strings in test data/logs. Automated scanning found no obvious GitHub PAT/AWS-key/private-key patterns, but this is not a comprehensive security audit. The raw ZIP was intentionally kept private. Public release remains a later, separately reviewed reproducibility decision.
 
-These digests describe **specific previous outputs**, not the latest repository state. Status: **local/previous-session outputs verified; GitHub archival NOT DONE**.
+**Source of truth for exact hashes and storage status:** [2026-11-12/MANIFEST.md](../results/2026-11-12/MANIFEST.md). No evaluation was rerun and no outcome labels were changed by archival. The archived offline audit script has session-specific paths; it is historical provenance, not a newly tested production tool.
+
+## 4A. Next exact action — Step 5 (historical audit consistency)
+
+1. Read the archived [first83 CSV](../results/2026-11-12/sweabs_samples1_2_first83_cumulative.csv) alongside the [198-row CSV](../results/2026-11-12/sweabs_full_198_cumulative_audited.csv). Verify that rows for Sample 1 offsets 0–62 and Sample 2 offsets 0–19 remain identical by field and identity; record the comparison digest/summary.
+2. Retrieve available Sample 1 and early Sample 2 GitHub Actions raw evidence (use the explicit run links and existing patch/source evidence; availability may be limited by the workflow's 14-day retention).
+3. Re-evaluate those 83 **previously preserved** classifications using the 115-run audit policy: patch/test identity, base commits, repository diff integrity, actual outer augmented runner results, and any skips. Prioritize `RETROSPECTIVE_REVIEW_REQUIRED`, FAIL, and UNVERIFIED.
+4. If any outcome changes, save an **append-only corrections table**, keep the original 198-row archival checkpoint immutable, and create a **new version** of the reviewed label manifest; document old vs new and why.
+5. Record unresolved missing raw evidence as **unverified**, update this state, WORK_LOG, README, and a new manifest. **Only then mark Step 5 DONE.** No trajectory-feature extraction or final correctness claims yet.
 
 ## 5. Where to find workflow evidence
 
