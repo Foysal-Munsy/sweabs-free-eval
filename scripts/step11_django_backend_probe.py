@@ -136,8 +136,8 @@ def execute(task,sample):
     detail=[x.strip()[:300] for x in lines if
        re.search(r"(^test_.*\.\.\. (?:ok|skipped|FAIL|ERROR)|^Ran \d+ tests?|^FAILED \(|^OK$|^System check|^Creating test database|^Destroying test database|^ERROR:|^FAIL:)",x)]
     status="INCOMPLETE_SETUP_OR_ENVIRONMENT"
-    if supported and exit_code==0 and any(re.search(r"^Ran 1 test",x) for x in lines) and
-            any(re.search(r"\.\.\. ok\s*$",x) for x in lines):
+    if (supported and exit_code==0 and any(re.search(r"^Ran 1 test",x) for x in lines) and
+            any(re.search(r"\.\.\. ok\s*$",x) for x in lines)):
         status="TARGETED_TEST_PASSED_ON_POSTGRES"
     elif supported and exit_code!=0 and
             any(re.search(r"^Ran 1 test",x) for x in lines):
