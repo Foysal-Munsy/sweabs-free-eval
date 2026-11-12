@@ -139,8 +139,8 @@ def execute(task,sample):
     if (supported and exit_code==0 and any(re.search(r"^Ran 1 test",x) for x in lines) and
             any(re.search(r"\.\.\. ok\s*$",x) for x in lines)):
         status="TARGETED_TEST_PASSED_ON_POSTGRES"
-    elif supported and exit_code!=0 and
-            any(re.search(r"^Ran 1 test",x) for x in lines):
+    elif (supported and exit_code!=0 and
+            any(re.search(r"^Ran 1 test",x) for x in lines)):
         status="TARGETED_TEST_FAILED_ON_POSTGRES"
     elif any("skipped" in x.lower() for x in detail):
         status="TARGET_SKIPPED_OR_INCOMPLETE"
