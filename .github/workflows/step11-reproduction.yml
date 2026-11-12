@@ -13,6 +13,7 @@ on:
       - "scripts/step11_trace_spotcheck.py"
       - "scripts/step11_semantic_structural_audit.py"
       - "scripts/step11_raw_artifact_reaudit14.py"
+      - "scripts/step11_skip_attribution.py"
 
 permissions:
   contents: read
@@ -79,6 +80,14 @@ jobs:
           echo 'STEP11_RAW_ZIP_AUDIT_BEGIN'
           cat results/2026-11-12/STEP11_RAW_ARTIFACT_REAUDIT14_v1.json
           echo 'STEP11_RAW_ZIP_AUDIT_END'
+      - name: Attribute nine skipped runs to newly added augmented test method names
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python scripts/step11_skip_attribution.py
+          echo 'STEP11_SKIP_ATTRIBUTION_BEGIN'
+          cat results/2026-11-12/STEP11_SKIP_ATTRIBUTION_9_v1.json
+          echo 'STEP11_SKIP_ATTRIBUTION_END'
       - name: Assert the verification workflow did not modify source evidence
         run: |
           git diff --exit-code -- results/2026-11-12/STEP7_ANALYSIS_LABELS_v1.csv \
