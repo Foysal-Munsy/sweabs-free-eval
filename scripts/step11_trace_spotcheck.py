@@ -69,7 +69,7 @@ def recount(messages):
     normal=[s for _,_,s in commands]
     # Same frozen decision boundary, separately implemented with word-boundary matching.
     verification=[at for at,ident,cmd in commands if re.search(
-        r"\\b(?:pytest|unittest|runtests\\.py|tox|nosetests)\\b|python[0-9.]* -m (?:pytest|unittest)",cmd,re.I)]
+        r"\b(?:pytest|unittest|runtests\.py|tox|nosetests)\b|python[0-9.]* -m (?:pytest|unittest)",cmd,re.I)]
     seen=Counter(normal)
     exact_duplicate=sum(v-1 for v in seen.values() if v>1)
     immediate=sum(normal[i]==normal[i-1] for i in range(1,len(normal)))
