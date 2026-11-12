@@ -2,6 +2,26 @@
 
 **Status:** Archival of provisional strengthened-test labels and audit provenance. Not a final semantic-correctness dataset. This manifest is a record of verified bytes and storage locations as of 2026-11-12.
 
+## Step 11 original-base in-place coverage and missing Oracle method (2026-11-12)
+
+**Pinned source & raw test-log validation:** [read-only CI #43267304895 SUCCESS](https://github.com/Foysal-Munsy/sweabs-free-eval/actions/runs/43267304895) independently loaded original Django source at base commit `5e04e84d67da8163f365e9f5fcd169e2630e2873` (SHA-256 `70a046a812c17e7c8dbf0ec8d34cd6a4c5e3cd8bbcd0615c85460469769bfa5a`) and mapped the pinned SWE-ABS `django-14434` 10 insertion hunks to **one added plus nine modified existing tests**. Original test-output logs from **three** runs show the new method `ok`, **8/9 modified methods `ok`**, and **one modified method `skipped`** (`test_func_unique_constraint_covering`, backend lacks `supports_expression_indexes` and `supports_covering_indexes`). This proves incomplete enhanced test-method coverage but **not** semantic failure.
+
+[Oracle source/log check](STEP11_MISSING_DJANGO15503_ORACLE_METHOD_v1.json), with [CI #43268521977 SUCCESS](https://github.com/Foysal-Munsy/sweabs-free-eval/actions/runs/43268521977) and [CI #43268574096 SUCCESS](https://github.com/Foysal-Munsy/sweabs-free-eval/actions/runs/43268574096), verified `django-15503` declares `test_oracle_json_path_final_key_is_quoted_for_numeric_strings` inside `JSONFieldNumericKeyLookupsTests` while the method is absent from each original SHA-identified verbose log. It reused previously independently audited original ZIP + method logs: **not a fresh raw ZIP download, not a runtime/semantic oracle**.
+
+**Repository infrastructure caveat:** [intermediate workflow #43268071356 FAILED](https://github.com/Foysal-Munsy/sweabs-free-eval/actions/runs/43268071356) due to GitHub artifact storage **HTTP 503 egress limit** during redundant ZIP download; this was **not a coding-agent test failure**. Updated read-only [Step 11 CI workflow](../../.github/workflows/step11-reproduction.yml) makes raw ZIP redownloads **manual `workflow_dispatch` opt-in**, defaulting to already verified SHA-identified metadata; [later workflow #43268574096](https://github.com/Foysal-Munsy/sweabs-free-eval/actions/runs/43268574096) PASSED without rerunning ZIP downloads.
+
+| Added versioned public artifact | Verified UTF-8 bytes | GitHub blob SHA-1 (NOT SHA-256) |
+| --- | ---: | --- |
+| [Django-14434 original-base in-place method audit script](../../scripts/step11_inplace_method_audit.py) | 9716 | `fdd276bf2886934686c8d81f5f95639018153f29` |
+| [Django-15503 Oracle source/log method audit script](../../scripts/step11_missing_oracle_method_audit.py) | 9338 | `c66a1f49e2efb4291ee01ea95625e8431d512711` |
+| [STEP11_INPLACE_METHOD_AUDIT_DJANGO14434_v1.json](STEP11_INPLACE_METHOD_AUDIT_DJANGO14434_v1.json) | 10965 | `8965cb43016ac0480a87ed792ad3c8def1129865` |
+| [STEP11_MISSING_DJANGO15503_ORACLE_METHOD_v1.json](STEP11_MISSING_DJANGO15503_ORACLE_METHOD_v1.json) | 2990 | `3f63393b61edb0f92fa31de901efb39ec530aed2` |
+| [STEP11_INPLACE_AND_ORACLE_COLLECTION_REVIEW_v1.md](STEP11_INPLACE_AND_ORACLE_COLLECTION_REVIEW_v1.md) | 7412 | `344ec8b9b397801ed234570736f62646b8b0a060` |
+| [STEP11_SEMANTIC_VALIDITY_GATE_v1.md](STEP11_SEMANTIC_VALIDITY_GATE_v1.md) — updated | 19161 | `daf70d04484d3b0d930fe7c9cf3d44b82ec4591e` |
+| [Read-only Step 11 CI workflow](../../.github/workflows/step11-reproduction.yml) — manual-raw-download default | 5599 | `892a80bcb3cd94f3e43d06b6333f8c7d30db45bf` |
+
+**Research invariant:** Original runner v2 remains **153 PASS / 31 FAIL / 14 UNVERIFIED**; Step 7 conservative eligibility **153/9/36** unchanged; Step 8 frozen indicators and corrected v2 analysis unchanged. Controlled backend execution and human semantic label adjudication still **NOT verified**. Do not promote three Django-14434 or three Django-15503 UNVERIFIED records to PASS.
+
 ## Step 11 semantic/source, original ZIP and augmented-method evidence (2026-11-12)
 
 **Evidence chain:** [CI #43262365929](https://github.com/Foysal-Munsy/sweabs-free-eval/actions/runs/43262365929) independently matched original model/test SHA for **31 FAIL + 14 UNVERIFIED = 45 exact runs**, 20 distinct tasks. [CI #43263048387](https://github.com/Foysal-Munsy/sweabs-free-eval/actions/runs/43263048387) freshly downloaded all **14** short-retention original Actions `sweabs-result-*` ZIPs from 11 evaluation runs, checked original model hash metadata, read **14 test output files**, and recorded SHA-256 digests. 14/14 original test patch hashes also match the independently pinned SWE-ABS structural crosswalk (verified from the two archived JSON records). [CI #43264326911](https://github.com/Foysal-Munsy/sweabs-free-eval/actions/runs/43264326911) independently matched added Django test methods to original verbose test results in all nine skipped-coverage runs.
@@ -16,8 +36,8 @@
 | [STEP11_SEMANTIC_STRUCTURAL_CROSSWALK_v1.json](STEP11_SEMANTIC_STRUCTURAL_CROSSWALK_v1.json) | 75970 | `c88ba18ee0c12ddb41313b2e1e3f821bff20af92` |
 | [STEP11_RAW_ARTIFACT_REAUDIT14_v1.json](STEP11_RAW_ARTIFACT_REAUDIT14_v1.json) | 36574 | `b3a5ea755bd12ecfd0a1bcd5516c2360b1e91ac5` |
 | [STEP11_SKIP_ATTRIBUTION_9_v1.json](STEP11_SKIP_ATTRIBUTION_9_v1.json) | 21965 | `1421b2b7e4b5a93b8cb2593868468d71815f0683` |
-| [STEP11_SEMANTIC_VALIDITY_GATE_v1.md](STEP11_SEMANTIC_VALIDITY_GATE_v1.md) | 15495 | `deb675711fcc2f59c007dc9a5a20b87e82c81932` |
-| [Read-only updated Step 11 reproduction workflow](../../.github/workflows/step11-reproduction.yml) | 4023 | `11bf436af68bd23d080378bd2f70daa35c25c8ff` |
+| [STEP11_SEMANTIC_VALIDITY_GATE_v1.md](STEP11_SEMANTIC_VALIDITY_GATE_v1.md) | 19161 | `daf70d04484d3b0d930fe7c9cf3d44b82ec4591e` |
+| [Read-only updated Step 11 reproduction workflow](../../.github/workflows/step11-reproduction.yml) | 5599 | `892a80bcb3cd94f3e43d06b6333f8c7d30db45bf` |
 
 **Limitations:** GitHub artifact ZIPs have short retention; future `--check` reproduction depends on still-unexpired original artifacts and a token with Actions read permission. No private raw ZIP or full raw test log is published here. Source-level file collision is NOT a semantic failure verdict; skipped/backend and in-place modified existing test methods need controlled reruns or an independently defensible oracle. Four test-file overlaps, one huge generated Requests patch and 16 unresolved/2 environment-sensitive FAIL reviews remain open. Original runner v2 (153/31/14), Step 7 labels (153/9/36) and Step 8 feature formulas are **unchanged**.
 
