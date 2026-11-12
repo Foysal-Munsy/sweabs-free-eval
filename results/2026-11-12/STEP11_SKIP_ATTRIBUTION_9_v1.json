@@ -1,0 +1,678 @@
+{
+  "cases": 9,
+  "complete_source_test_SHA_matches": 9,
+  "labels_modified": false,
+  "purpose": "descriptive method-to-log crosswalk, not semantic oracle or coverage completion",
+  "rows": [
+    {
+      "added_function_count": 13,
+      "added_function_names_not_seen": 0,
+      "added_function_names_observed_ok": 9,
+      "added_function_names_observed_skipped": 4,
+      "augmented_added_test_function_names": [
+        {
+          "name": "test_columns_list_sql",
+          "observed_result_types": [
+            "ok"
+          ],
+          "observed_verbose_matches": 1
+        },
+        {
+          "name": "test_descending_columns_list_sql",
+          "observed_result_types": [
+            "ok"
+          ],
+          "observed_verbose_matches": 1
+        },
+        {
+          "name": "test_mixed_columns_list_sql",
+          "observed_result_types": [
+            "ok"
+          ],
+          "observed_verbose_matches": 1
+        },
+        {
+          "name": "test_multiple_ascending_columns_list_sql",
+          "observed_result_types": [
+            "ok"
+          ],
+          "observed_verbose_matches": 1
+        },
+        {
+          "name": "test_multiple_descending_columns_list_sql",
+          "observed_result_types": [
+            "ok"
+          ],
+          "observed_verbose_matches": 1
+        },
+        {
+          "name": "test_opclass_col_suffixes_shorter_triggers_indexerror_handling",
+          "observed_result_types": [
+            "ok"
+          ],
+          "observed_verbose_matches": 1
+        },
+        {
+          "name": "test_opclass_multiple_columns_mixed_suffixes",
+          "observed_result_types": [
+            "ok"
+          ],
+          "observed_verbose_matches": 1
+        },
+        {
+          "name": "test_opclass_with_desc_suffix_has_space",
+          "observed_result_types": [
+            "ok"
+          ],
+          "observed_verbose_matches": 1
+        },
+        {
+          "name": "test_opclass_with_empty_suffix_no_trailing_space",
+          "observed_result_types": [
+            "ok"
+          ],
+          "observed_verbose_matches": 1
+        },
+        {
+          "name": "test_ops_class_columns_lists_sql",
+          "observed_result_types": [
+            "skipped"
+          ],
+          "observed_verbose_matches": 1
+        },
+        {
+          "name": "test_ops_class_descending_columns_list_sql",
+          "observed_result_types": [
+            "skipped"
+          ],
+          "observed_verbose_matches": 1
+        },
+        {
+          "name": "test_ops_class_mixed_columns_list_sql",
+          "observed_result_types": [
+            "skipped"
+          ],
+          "observed_verbose_matches": 1
+        },
+        {
+          "name": "test_ops_class_multiple_ascending_columns_list_sql",
+          "observed_result_types": [
+            "skipped"
+          ],
+          "observed_verbose_matches": 1
+        }
+      ],
+      "instance_id": "django__django-12039",
+      "limits": "Only newly added def test_* names are matched. Existing test functions modified by the augmented patch are NOT identified; inherited test cases and setup/backend skips may affect coverage. No label promotion.",
+      "model_patch_sha256": "13c384a48bed11df0ebfeae126594ab1edd5ec67cca9905e4363150875ee2f60",
+      "observed_verbose_test_status_tallies": {
+        "ok": 9,
+        "skipped": 4
+      },
+      "offset": 10,
+      "prior_reported_skips": 4,
+      "sample": 1,
+      "test_patch_sha256": "61558d5999d778ae30244c80639939701db259296d95e38984079f539b111eba"
+    },
+    {
+      "added_function_count": 1,
+      "added_function_names_not_seen": 0,
+      "added_function_names_observed_ok": 1,
+      "added_function_names_observed_skipped": 0,
+      "augmented_added_test_function_names": [
+        {
+          "name": "test_unique_constraint_field",
+          "observed_result_types": [
+            "ok"
+          ],
+          "observed_verbose_matches": 1
+        }
+      ],
+      "instance_id": "django__django-14434",
+      "limits": "Only newly added def test_* names are matched. Existing test functions modified by the augmented patch are NOT identified; inherited test cases and setup/backend skips may affect coverage. No label promotion.",
+      "model_patch_sha256": "6f7fefd14ffc1579c9f58f362521ba473257443a6fac9f18127844e75ff20f7a",
+      "observed_verbose_test_status_tallies": {
+        "ok": 80,
+        "skipped": 23
+      },
+      "offset": 28,
+      "prior_reported_skips": 28,
+      "sample": 1,
+      "test_patch_sha256": "4d4f1a7c34dd451b755f4124af0efc3a16ccb98c058fbdc123da5a435e585acf"
+    },
+    {
+      "added_function_count": 10,
+      "added_function_names_not_seen": 1,
+      "added_function_names_observed_ok": 8,
+      "added_function_names_observed_skipped": 1,
+      "augmented_added_test_function_names": [
+        {
+          "name": "test_array_vs_object_behavior_with_numeric_like_keys",
+          "observed_result_types": [
+            "ok"
+          ],
+          "observed_verbose_matches": 1
+        },
+        {
+          "name": "test_contains_and_contained_by_with_numeric_string_keys",
+          "observed_result_types": [
+            "skipped"
+          ],
+          "observed_verbose_matches": 1
+        },
+        {
+          "name": "test_has_any_keys_with_numeric_strings",
+          "observed_result_types": [
+            "ok"
+          ],
+          "observed_verbose_matches": 1
+        },
+        {
+          "name": "test_has_key_numeric_strings",
+          "observed_result_types": [
+            "ok"
+          ],
+          "observed_verbose_matches": 1
+        },
+        {
+          "name": "test_has_key_with_special_character_final_segments",
+          "observed_result_types": [
+            "ok"
+          ],
+          "observed_verbose_matches": 1
+        },
+        {
+          "name": "test_has_keys_and_any_keys_with_special_char_final_segments",
+          "observed_result_types": [
+            "ok"
+          ],
+          "observed_verbose_matches": 1
+        },
+        {
+          "name": "test_has_keys_multiple_numeric_strings",
+          "observed_result_types": [
+            "ok"
+          ],
+          "observed_verbose_matches": 1
+        },
+        {
+          "name": "test_isnull_with_numeric_string_keys_and_arrays_sqlite",
+          "observed_result_types": [
+            "ok"
+          ],
+          "observed_verbose_matches": 1
+        },
+        {
+          "name": "test_negative_and_leading_zero_numeric_string_keys",
+          "observed_result_types": [
+            "ok"
+          ],
+          "observed_verbose_matches": 1
+        },
+        {
+          "name": "test_oracle_json_path_final_key_is_quoted_for_numeric_strings",
+          "observed_result_types": [],
+          "observed_verbose_matches": 0
+        }
+      ],
+      "instance_id": "django__django-15503",
+      "limits": "Only newly added def test_* names are matched. Existing test functions modified by the augmented patch are NOT identified; inherited test cases and setup/backend skips may affect coverage. No label promotion.",
+      "model_patch_sha256": "d58fae87e89fcb952bc5b348ccaaea5d6f417fb7983c7fdb4bdde1fcc7e28a74",
+      "observed_verbose_test_status_tallies": {
+        "ok": 8,
+        "skipped": 1
+      },
+      "offset": 34,
+      "prior_reported_skips": 1,
+      "sample": 1,
+      "test_patch_sha256": "94397c81c4cf6d2118dc77bcc748e8a42b6da8d7e78b8653b61290845ed6165c"
+    },
+    {
+      "added_function_count": 13,
+      "added_function_names_not_seen": 0,
+      "added_function_names_observed_ok": 9,
+      "added_function_names_observed_skipped": 4,
+      "augmented_added_test_function_names": [
+        {
+          "name": "test_columns_list_sql",
+          "observed_result_types": [
+            "ok"
+          ],
+          "observed_verbose_matches": 1
+        },
+        {
+          "name": "test_descending_columns_list_sql",
+          "observed_result_types": [
+            "ok"
+          ],
+          "observed_verbose_matches": 1
+        },
+        {
+          "name": "test_mixed_columns_list_sql",
+          "observed_result_types": [
+            "ok"
+          ],
+          "observed_verbose_matches": 1
+        },
+        {
+          "name": "test_multiple_ascending_columns_list_sql",
+          "observed_result_types": [
+            "ok"
+          ],
+          "observed_verbose_matches": 1
+        },
+        {
+          "name": "test_multiple_descending_columns_list_sql",
+          "observed_result_types": [
+            "ok"
+          ],
+          "observed_verbose_matches": 1
+        },
+        {
+          "name": "test_opclass_col_suffixes_shorter_triggers_indexerror_handling",
+          "observed_result_types": [
+            "ok"
+          ],
+          "observed_verbose_matches": 1
+        },
+        {
+          "name": "test_opclass_multiple_columns_mixed_suffixes",
+          "observed_result_types": [
+            "ok"
+          ],
+          "observed_verbose_matches": 1
+        },
+        {
+          "name": "test_opclass_with_desc_suffix_has_space",
+          "observed_result_types": [
+            "ok"
+          ],
+          "observed_verbose_matches": 1
+        },
+        {
+          "name": "test_opclass_with_empty_suffix_no_trailing_space",
+          "observed_result_types": [
+            "ok"
+          ],
+          "observed_verbose_matches": 1
+        },
+        {
+          "name": "test_ops_class_columns_lists_sql",
+          "observed_result_types": [
+            "skipped"
+          ],
+          "observed_verbose_matches": 1
+        },
+        {
+          "name": "test_ops_class_descending_columns_list_sql",
+          "observed_result_types": [
+            "skipped"
+          ],
+          "observed_verbose_matches": 1
+        },
+        {
+          "name": "test_ops_class_mixed_columns_list_sql",
+          "observed_result_types": [
+            "skipped"
+          ],
+          "observed_verbose_matches": 1
+        },
+        {
+          "name": "test_ops_class_multiple_ascending_columns_list_sql",
+          "observed_result_types": [
+            "skipped"
+          ],
+          "observed_verbose_matches": 1
+        }
+      ],
+      "instance_id": "django__django-12039",
+      "limits": "Only newly added def test_* names are matched. Existing test functions modified by the augmented patch are NOT identified; inherited test cases and setup/backend skips may affect coverage. No label promotion.",
+      "model_patch_sha256": "fe1d826efc0c3281c514f807709714080b7087d037da4ece719ccb3255632d54",
+      "observed_verbose_test_status_tallies": {
+        "ok": 9,
+        "skipped": 4
+      },
+      "offset": 11,
+      "prior_reported_skips": 4,
+      "sample": 2,
+      "test_patch_sha256": "61558d5999d778ae30244c80639939701db259296d95e38984079f539b111eba"
+    },
+    {
+      "added_function_count": 1,
+      "added_function_names_not_seen": 0,
+      "added_function_names_observed_ok": 1,
+      "added_function_names_observed_skipped": 0,
+      "augmented_added_test_function_names": [
+        {
+          "name": "test_unique_constraint_field",
+          "observed_result_types": [
+            "ok"
+          ],
+          "observed_verbose_matches": 1
+        }
+      ],
+      "instance_id": "django__django-14434",
+      "limits": "Only newly added def test_* names are matched. Existing test functions modified by the augmented patch are NOT identified; inherited test cases and setup/backend skips may affect coverage. No label promotion.",
+      "model_patch_sha256": "90412c763f14b060260efdcf65d725bf632fbae15284dac1cf8efc4e36a6ade2",
+      "observed_verbose_test_status_tallies": {
+        "ok": 80,
+        "skipped": 23
+      },
+      "offset": 30,
+      "prior_reported_skips": 28,
+      "sample": 2,
+      "test_patch_sha256": "4d4f1a7c34dd451b755f4124af0efc3a16ccb98c058fbdc123da5a435e585acf"
+    },
+    {
+      "added_function_count": 10,
+      "added_function_names_not_seen": 1,
+      "added_function_names_observed_ok": 8,
+      "added_function_names_observed_skipped": 1,
+      "augmented_added_test_function_names": [
+        {
+          "name": "test_array_vs_object_behavior_with_numeric_like_keys",
+          "observed_result_types": [
+            "ok"
+          ],
+          "observed_verbose_matches": 1
+        },
+        {
+          "name": "test_contains_and_contained_by_with_numeric_string_keys",
+          "observed_result_types": [
+            "skipped"
+          ],
+          "observed_verbose_matches": 1
+        },
+        {
+          "name": "test_has_any_keys_with_numeric_strings",
+          "observed_result_types": [
+            "ok"
+          ],
+          "observed_verbose_matches": 1
+        },
+        {
+          "name": "test_has_key_numeric_strings",
+          "observed_result_types": [
+            "ok"
+          ],
+          "observed_verbose_matches": 1
+        },
+        {
+          "name": "test_has_key_with_special_character_final_segments",
+          "observed_result_types": [
+            "ok"
+          ],
+          "observed_verbose_matches": 1
+        },
+        {
+          "name": "test_has_keys_and_any_keys_with_special_char_final_segments",
+          "observed_result_types": [
+            "ok"
+          ],
+          "observed_verbose_matches": 1
+        },
+        {
+          "name": "test_has_keys_multiple_numeric_strings",
+          "observed_result_types": [
+            "ok"
+          ],
+          "observed_verbose_matches": 1
+        },
+        {
+          "name": "test_isnull_with_numeric_string_keys_and_arrays_sqlite",
+          "observed_result_types": [
+            "ok"
+          ],
+          "observed_verbose_matches": 1
+        },
+        {
+          "name": "test_negative_and_leading_zero_numeric_string_keys",
+          "observed_result_types": [
+            "ok"
+          ],
+          "observed_verbose_matches": 1
+        },
+        {
+          "name": "test_oracle_json_path_final_key_is_quoted_for_numeric_strings",
+          "observed_result_types": [],
+          "observed_verbose_matches": 0
+        }
+      ],
+      "instance_id": "django__django-15503",
+      "limits": "Only newly added def test_* names are matched. Existing test functions modified by the augmented patch are NOT identified; inherited test cases and setup/backend skips may affect coverage. No label promotion.",
+      "model_patch_sha256": "2cfb3f3f9d78a25414b94bb4ae56e0128816f4a4ae503b40af0f72a42ee2ed83",
+      "observed_verbose_test_status_tallies": {
+        "ok": 8,
+        "skipped": 1
+      },
+      "offset": 37,
+      "prior_reported_skips": 1,
+      "sample": 2,
+      "test_patch_sha256": "94397c81c4cf6d2118dc77bcc748e8a42b6da8d7e78b8653b61290845ed6165c"
+    },
+    {
+      "added_function_count": 13,
+      "added_function_names_not_seen": 0,
+      "added_function_names_observed_ok": 9,
+      "added_function_names_observed_skipped": 4,
+      "augmented_added_test_function_names": [
+        {
+          "name": "test_columns_list_sql",
+          "observed_result_types": [
+            "ok"
+          ],
+          "observed_verbose_matches": 1
+        },
+        {
+          "name": "test_descending_columns_list_sql",
+          "observed_result_types": [
+            "ok"
+          ],
+          "observed_verbose_matches": 1
+        },
+        {
+          "name": "test_mixed_columns_list_sql",
+          "observed_result_types": [
+            "ok"
+          ],
+          "observed_verbose_matches": 1
+        },
+        {
+          "name": "test_multiple_ascending_columns_list_sql",
+          "observed_result_types": [
+            "ok"
+          ],
+          "observed_verbose_matches": 1
+        },
+        {
+          "name": "test_multiple_descending_columns_list_sql",
+          "observed_result_types": [
+            "ok"
+          ],
+          "observed_verbose_matches": 1
+        },
+        {
+          "name": "test_opclass_col_suffixes_shorter_triggers_indexerror_handling",
+          "observed_result_types": [
+            "ok"
+          ],
+          "observed_verbose_matches": 1
+        },
+        {
+          "name": "test_opclass_multiple_columns_mixed_suffixes",
+          "observed_result_types": [
+            "ok"
+          ],
+          "observed_verbose_matches": 1
+        },
+        {
+          "name": "test_opclass_with_desc_suffix_has_space",
+          "observed_result_types": [
+            "ok"
+          ],
+          "observed_verbose_matches": 1
+        },
+        {
+          "name": "test_opclass_with_empty_suffix_no_trailing_space",
+          "observed_result_types": [
+            "ok"
+          ],
+          "observed_verbose_matches": 1
+        },
+        {
+          "name": "test_ops_class_columns_lists_sql",
+          "observed_result_types": [
+            "skipped"
+          ],
+          "observed_verbose_matches": 1
+        },
+        {
+          "name": "test_ops_class_descending_columns_list_sql",
+          "observed_result_types": [
+            "skipped"
+          ],
+          "observed_verbose_matches": 1
+        },
+        {
+          "name": "test_ops_class_mixed_columns_list_sql",
+          "observed_result_types": [
+            "skipped"
+          ],
+          "observed_verbose_matches": 1
+        },
+        {
+          "name": "test_ops_class_multiple_ascending_columns_list_sql",
+          "observed_result_types": [
+            "skipped"
+          ],
+          "observed_verbose_matches": 1
+        }
+      ],
+      "instance_id": "django__django-12039",
+      "limits": "Only newly added def test_* names are matched. Existing test functions modified by the augmented patch are NOT identified; inherited test cases and setup/backend skips may affect coverage. No label promotion.",
+      "model_patch_sha256": "83a47b5bdad5c4be53fc5072410f5805d05107ea175dcec26586cfd5521bcfa7",
+      "observed_verbose_test_status_tallies": {
+        "ok": 9,
+        "skipped": 4
+      },
+      "offset": 12,
+      "prior_reported_skips": 4,
+      "sample": 3,
+      "test_patch_sha256": "61558d5999d778ae30244c80639939701db259296d95e38984079f539b111eba"
+    },
+    {
+      "added_function_count": 1,
+      "added_function_names_not_seen": 0,
+      "added_function_names_observed_ok": 1,
+      "added_function_names_observed_skipped": 0,
+      "augmented_added_test_function_names": [
+        {
+          "name": "test_unique_constraint_field",
+          "observed_result_types": [
+            "ok"
+          ],
+          "observed_verbose_matches": 1
+        }
+      ],
+      "instance_id": "django__django-14434",
+      "limits": "Only newly added def test_* names are matched. Existing test functions modified by the augmented patch are NOT identified; inherited test cases and setup/backend skips may affect coverage. No label promotion.",
+      "model_patch_sha256": "e46ffbef6e5d87531dec12cde13ed70ac7fdc4784c255074e62a1538af68417c",
+      "observed_verbose_test_status_tallies": {
+        "ok": 80,
+        "skipped": 23
+      },
+      "offset": 30,
+      "prior_reported_skips": 28,
+      "sample": 3,
+      "test_patch_sha256": "4d4f1a7c34dd451b755f4124af0efc3a16ccb98c058fbdc123da5a435e585acf"
+    },
+    {
+      "added_function_count": 10,
+      "added_function_names_not_seen": 1,
+      "added_function_names_observed_ok": 8,
+      "added_function_names_observed_skipped": 1,
+      "augmented_added_test_function_names": [
+        {
+          "name": "test_array_vs_object_behavior_with_numeric_like_keys",
+          "observed_result_types": [
+            "ok"
+          ],
+          "observed_verbose_matches": 1
+        },
+        {
+          "name": "test_contains_and_contained_by_with_numeric_string_keys",
+          "observed_result_types": [
+            "skipped"
+          ],
+          "observed_verbose_matches": 1
+        },
+        {
+          "name": "test_has_any_keys_with_numeric_strings",
+          "observed_result_types": [
+            "ok"
+          ],
+          "observed_verbose_matches": 1
+        },
+        {
+          "name": "test_has_key_numeric_strings",
+          "observed_result_types": [
+            "ok"
+          ],
+          "observed_verbose_matches": 1
+        },
+        {
+          "name": "test_has_key_with_special_character_final_segments",
+          "observed_result_types": [
+            "ok"
+          ],
+          "observed_verbose_matches": 1
+        },
+        {
+          "name": "test_has_keys_and_any_keys_with_special_char_final_segments",
+          "observed_result_types": [
+            "ok"
+          ],
+          "observed_verbose_matches": 1
+        },
+        {
+          "name": "test_has_keys_multiple_numeric_strings",
+          "observed_result_types": [
+            "ok"
+          ],
+          "observed_verbose_matches": 1
+        },
+        {
+          "name": "test_isnull_with_numeric_string_keys_and_arrays_sqlite",
+          "observed_result_types": [
+            "ok"
+          ],
+          "observed_verbose_matches": 1
+        },
+        {
+          "name": "test_negative_and_leading_zero_numeric_string_keys",
+          "observed_result_types": [
+            "ok"
+          ],
+          "observed_verbose_matches": 1
+        },
+        {
+          "name": "test_oracle_json_path_final_key_is_quoted_for_numeric_strings",
+          "observed_result_types": [],
+          "observed_verbose_matches": 0
+        }
+      ],
+      "instance_id": "django__django-15503",
+      "limits": "Only newly added def test_* names are matched. Existing test functions modified by the augmented patch are NOT identified; inherited test cases and setup/backend skips may affect coverage. No label promotion.",
+      "model_patch_sha256": "ef135a08e8340d58b0208e4db34c23ba494239261db1d8e689ac7a407474ea2a",
+      "observed_verbose_test_status_tallies": {
+        "ok": 8,
+        "skipped": 1
+      },
+      "offset": 36,
+      "prior_reported_skips": 1,
+      "sample": 3,
+      "test_patch_sha256": "94397c81c4cf6d2118dc77bcc748e8a42b6da8d7e78b8653b61290845ed6165c"
+    }
+  ],
+  "source_revision": "79fc07a8f4ce5e3720e069948073f5f910b7577b"
+}
