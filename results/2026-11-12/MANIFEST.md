@@ -2,6 +2,23 @@
 
 **Status:** Archival of provisional strengthened-test labels and audit provenance. Not a final semantic-correctness dataset. This manifest is a record of verified bytes and storage locations as of 2026-11-12.
 
+## Step 6 — semantic review of 31 provisional FAIL records
+
+**Status:** Completed an **AI-assisted documentary review** against verified upstream merged PR descriptions, source issue text in the SWE-ABS record, augmented test assertions, and original per-run raw test outputs. **This was not a fresh benchmark rerun, independent human adjudication, or final correctness-label freeze.** The current **v2 runner dataset is unchanged**: 198 total, 153 PASS, 31 provisional FAIL, 14 UNVERIFIED.
+
+| Step 6 artifact (public GitHub) | Bytes | Original SHA-256 |
+| --- | ---: | --- |
+| [STEP6_FAIL_REVIEW_31.csv](STEP6_FAIL_REVIEW_31.csv) — all 31 per-run opinions and evidence links | 47562 | `c1a394dccdb2a331539423f760c2b97b8fee784dcb53de3641c60e80c3a87262` |
+| [STEP6_TASK_SUMMARY_15.csv](STEP6_TASK_SUMMARY_15.csv) — 15 issue-level groups | 4634 | `76e427ffe91f1f50cdd2a38fc74313ac875d5c42af869eacbca8295fecf2a13b` |
+| [STEP6_FAIL_VALIDITY_REVIEW.md](STEP6_FAIL_VALIDITY_REVIEW.md) — full assertion-by-assertion rationale, counterviews, standards | 34498 | `efd61275248f440abf9d2bf7a20bb96d1bc94cd539f9aa007053a8831cb6d6b7` |
+| [scripts/review_step6_fail_cases.py](../../scripts/review_step6_fail_cases.py) — deterministic extraction and documented review rules | 29666 | `6df72830f20869fbecb77f0dca7bf13a46ebb181752152eac77ef76587c62aa5` |
+
+Each file was uploaded from the exact local source text/CSV and fetched back from GitHub with exact content comparison. **Disposition counts among the 31 raw FAILs**: 9 `valid_failure` (documentary support, still provisional); 4 `invalid_test` (specific enhanced-assertion defect / issue-scope mismatch); 2 `environment_sensitive` (Python 3.9 staticmethod behavior); 16 `unresolved` (specification or scope ambiguous). **Do not reinterpret these as revised PASS/FAIL labels.**
+
+Key external sources checked directly: [RFC 7231 §7.1.1.1](https://www.rfc-editor.org/rfc/rfc7231.html#section-7.1.1.1), [RFC 3986 §3.2.1](https://www.rfc-editor.org/rfc/rfc3986.html#section-3.2.1), [Python staticmethod documentation](https://docs.python.org/3/library/functions.html#staticmethod), and the 15 verified upstream merged PR links in the per-run CSV.
+
+**Next stage:** Step 7 — triage 14 UNVERIFIED, choose and document exclusion/sensitivity policies that distinguish raw runner outcomes from semantic review, and freeze a versioned analysis label manifest. Any additional human/maintainer validation of unresolved FAILs remains a research limitation or separate check; do not silently promote them.
+
 ## Current provisional dataset — Step 5 historical reconciliation (v2)
 
 **Current research labels (after the 83-run raw-log re-audit): 153 PASS, 31 FAIL, 14 UNVERIFIED among 198 attempts.** The files in the table immediately below were created on 2026-11-12 and GitHub content was read back after commit. The original v1 CSV and its historical counts (153/32/13) remain unchanged below for reproducibility; **use v2 for subsequent reviewed-label work**.
@@ -64,4 +81,4 @@ To retrieve the private ZIP in a future authorized chat, inspect the **Library**
 
 [All GitHub Actions evaluation runs](https://github.com/Foysal-Munsy/sweabs-free-eval/actions) · [Full audit and known issues](sweabs_full_198_audit_report.md) · [Current milestone state](../../docs/PROJECT_STATE.md)
 
-**Next research milestone:** Step 6 — independently review the 31 provisional FAIL outcomes, then Step 7 triage the 14 UNVERIFIED cases and freeze an analysis-ready label manifest.
+**Next research milestone:** Step 7 — triage 14 UNVERIFIED, define inclusion/exclusion and uncertainty policies for Step 6 reviewed FAILs, and freeze versioned analysis labels. Any independent human/maintainer adjudication remains outstanding.
