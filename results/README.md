@@ -1,15 +1,25 @@
 # Research results and audit artifacts
 
-**Current stage:** Strengthened-test collection complete; provisional labels archived; historical audit consistency and semantic FAIL review pending. These files are **not final ground-truth correctness labels**.
+**Current stage (2026-11-12):** 198 strengthened-test attempts completed, raw-log audits completed for both the earlier 83 and later 115 records. **Current provisional v2 labels: 153 PASS, 31 FAIL, 14 UNVERIFIED**. Strengthened-test assertion soundness still requires independent review; these labels are not final semantic-correctness ground truth.
 
-## Archived checkpoint — 2026-11-12
+## Current version: Step 5, 83-run reconciliation
 
-Open [2026-11-12/MANIFEST.md](2026-11-12/MANIFEST.md) for checksums, sizes, source provenance, audit limitations, and the privacy boundary around the raw ZIP.
+- [Current 198-row cumulative provisional CSV (v2)](2026-11-12/sweabs_full_198_cumulative_v2.csv)
+- [Step 5 detailed 83-row historical re-audit evidence](2026-11-12/sweabs_historical_83_reaudit_evidence.csv)
+- [Step 5 one-row correction ledger](2026-11-12/sweabs_historical_83_corrections.csv)
+- [Step 5 report — correction justification and limitations](2026-11-12/STEP5_RECONCILIATION_REPORT.md)
+- [Re-audit reproduction script](../scripts/reaudit_historical_83.py)
 
-Primary files: [198-row provisional cumulative CSV](2026-11-12/sweabs_full_198_cumulative_audited.csv), [115-row detailed audit evidence CSV](2026-11-12/sweabs_samples2_3_full_audit_evidence_115.csv), [audit report](2026-11-12/sweabs_full_198_audit_report.md), [historical 83-row input](2026-11-12/sweabs_samples1_2_first83_cumulative.csv), and [historical audit script](2026-11-12/sweabs_full_audit.py).
+**Version control:** [v1 (198 runs)](2026-11-12/sweabs_full_198_cumulative_audited.csv) recorded 153 PASS, 32 FAIL, 13 UNVERIFIED. v2 corrects **Sample 1 offset 58: FAIL → UNVERIFIED** due to overlapping agent-modified/augmented test files. **Original v1 is preserved unchanged**. No other v1 rows were changed.
 
-**Observed provisional labels:** 198 evaluated attempts, 153 PASS, 32 FAIL, 13 UNVERIFIED; 73 unique task IDs. Do not treat the 32 FAIL as independently confirmed semantic failures or 13 UNVERIFIED as negative results.
+## Other archived evidence
 
-The private 5.1-MB raw evidence ZIP is stored in the owner's ChatGPT Library, not in this GitHub repository. See the manifest. The repository publicly exposes the CSVs, audit report and audit script only.
+- [Detailed 115-run raw-audit evidence](2026-11-12/sweabs_samples2_3_full_audit_evidence_115.csv) and [original audit report](2026-11-12/sweabs_full_198_audit_report.md).
+- [Historical first83 input](2026-11-12/sweabs_samples1_2_first83_cumulative.csv) and [original audit script](2026-11-12/sweabs_full_audit.py).
+- [Full file manifest, sizes, SHA-256 checksums and raw-archive access limitations](2026-11-12/MANIFEST.md).
 
-For current research work and next steps, read [PROJECT_STATE.md](../docs/PROJECT_STATE.md) and [WORK_LOG.md](../docs/WORK_LOG.md).
+**Private raw data:** Two checksum-verified ZIP archives are backed up in the owner's ChatGPT Library (historical 83 and Sample 2/3 combined). They contain raw logs/test fixtures and **are not publicly hosted here**. The public GitHub files are audit tables, scripts, and reports only.
+
+**Next milestone:** Step 6 — independently review 31 provisional FAIL outcomes for augmented-test validity; then triage 14 UNVERIFIED and freeze an analysis-ready version. Statistical/trajectory feature work has **not** started.
+
+For current research state: [PROJECT_STATE.md](../docs/PROJECT_STATE.md) · [WORK_LOG.md](../docs/WORK_LOG.md).
