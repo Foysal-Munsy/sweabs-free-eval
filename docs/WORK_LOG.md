@@ -5,6 +5,28 @@
 
 This log should record **what actually changed**, not hoped-for progress. The newest entry comes first. When a past conclusion needs correction, add a new dated correction entry with sources; do not erase the original record. Every entry should give (a) scope, (b) verified result, (c) files/commit/log evidence, (d) unresolved issues, (e) next handoff.
 
+## 2026-11-12 — Step 6: documented validity review of 31 provisional FAIL cases
+
+**Milestone/scope:** Step 6 DONE for **AI-assisted documentary review**, not independently executed semantic ground truth; Step 7 is NEXT. **No modifications to the 198-row v2 runner outcomes.**
+
+**Evidence-backed work completed:**
+- Identified the **31 v2 FAIL runs across 15 distinct instance IDs**, retrieved the corresponding per-run GitHub artifact ZIPs, and rechecked instance/sample identity, model patch SHA-256, enhanced test patch SHA-256, and base commit. A given task's strengthened test patch was identical across its sampled FAIL runs.
+- Inspected each failing enhanced assertion and raw failure/log output; read the original issue statement in the SWE-ABS record and independently checked corresponding merged [Django](https://github.com/django/django/pulls), [Matplotlib](https://github.com/matplotlib/matplotlib/pulls), and [SymPy](https://github.com/sympy/sympy/pulls) pull requests (exact 15 PR URLs appear in the review ledger).
+- Used [RFC 7231 §7.1.1.1](https://www.rfc-editor.org/rfc/rfc7231.html#section-7.1.1.1), [RFC 3986 §3.2.1](https://www.rfc-editor.org/rfc/rfc3986.html#section-3.2.1), and [Python staticmethod documentation](https://docs.python.org/3/library/functions.html#staticmethod) to check contested assertions.
+- Created the [31-run semantic review ledger](../results/2026-11-12/STEP6_FAIL_REVIEW_31.csv), [15-task summary](../results/2026-11-12/STEP6_TASK_SUMMARY_15.csv), [full issue-level report](../results/2026-11-12/STEP6_FAIL_VALIDITY_REVIEW.md), and [review extraction script](../scripts/review_step6_fail_cases.py). Committed all to GitHub and verified content via read-back; SHA-256 digests listed in [manifest](../results/2026-11-12/MANIFEST.md).
+- Dispositions among the same 31 raw FAILs: **9 `valid_failure` (issue-aligned/review-supported but not oracle-confirmed), 4 `invalid_test`, 2 `environment_sensitive`, 16 `unresolved`**. This is a secondary review field; original raw runner FAIL labels are preserved.
+
+**High-impact issues and opposing interpretations:**
+1. **Django #11848 (3 runs):** Enhanced RFC850 century-wrap expects 2000 for a \'00\' date when current time is July 2099; raw parser returns 2100. RFC7231 requires mapping to past year only when the candidate is over 50 years in the future; 2100 is under one year away, so the augmented assertion is invalid. [Original PR](https://github.com/django/django/pull/11848) · [RFC rule](https://www.rfc-editor.org/rfc/rfc7231.html#section-7.1.1.1).
+2. **SymPy #13877 (1 run):** Enhanced failure is a `random_complex_number(tolerance=...)` TypeError, while the original bug/PR concerns zero pivots in symbolic matrix determinants. The reference patch included an auxiliary tolerance API; whether to require that is an additional implementation-equivalence choice, not shown to be necessary for determinant correctness. [PR](https://github.com/sympy/sympy/pull/13877).
+3. **Django #15916 (2 runs):** `formfield_callback=staticmethod(...)` tests fail at class construction on Python 3.9. Direct callability of staticmethod descriptors was introduced in Python 3.10. This is runtime-sensitive, and class-level vs Meta callback precedence remains ambiguous. [PR](https://github.com/django/django/pull/15916) · [Python docs](https://docs.python.org/3/library/functions.html#staticmethod).
+
+**Limitations and decisions:** No independent human/maintainer adjudication, no new Docker test runs, no reapplication of reference patch as a semantic oracle, no final exclusion decisions, and no feature/statistical analysis. `valid_failure` is **review-supported**, not publication-ready ground truth. `invalid_test` does **not** mean the agent patch passes or is correct. Contrasting plausible interpretations are explicitly stored per run.
+
+**Next exact action:** **Step 7 — review all 14 UNVERIFIED**, prepare traceable reruns/exclusions when necessary, and create a frozen analysis label manifest separating raw runner outcomes from semantic review and sensitivity assumptions. Update all milestone documentation in the same session.
+
+**Documentation synchronized:** PROJECT_STATE = yes; WORK_LOG = yes; README = yes; AGENTS = yes; results index/manifest = yes.
+
 ## 2026-11-12 — Step 5: completed historical 83-run raw-evidence reconciliation
 
 **Milestone:** Step 5 DONE; Step 6 (independent FAIL-test validity review) NEXT. Step 3 labels remain *provisional*.
