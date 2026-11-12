@@ -1,6 +1,6 @@
 # Research results and audit artifacts
 
-**Current stage (2026-11-12):** 198 stronger-test attempts and 83+115 raw audits complete; original v2 **153 PASS / 31 FAIL / 14 UNVERIFIED** unchanged. Step 8 versioned frozen indicators, Step 9 exact-match features (198/198) and Step 10 provisional task-aware univariate AUROCs are archived. These are not independently adjudicated semantic labels, a trained classifier or a generalization claim. **Step 11 technical reproduction/robustness VERIFIED; human/maintainer semantic validity and coverage NEXT.**
+**Current stage (2026-11-12):** 198 stronger-test attempts and 83+115 raw audits complete; original v2 **153 PASS / 31 FAIL / 14 UNVERIFIED** unchanged. Step 8 versioned frozen indicators, Step 9 exact-match features (198/198) and Step 10 provisional task-aware univariate AUROCs are archived. These are not independently adjudicated semantic labels, a trained classifier or a generalization claim. **Step 11 technical reproduction, 45-run source crosswalk, 14 original result ZIPs and nine method-level coverage checks VERIFIED; human/maintainer semantic adjudication and controlled backend/exact-patch reruns remain NEXT.**
 
 ## Current version: Step 5, 83-run reconciliation
 
@@ -29,6 +29,13 @@
 - [Deterministic label rebuild/check script](../scripts/build_step7_analysis_labels.py); source v2, audit tables and Step 6 review remain unchanged
 
 Alternative target scenarios (0/1/excluded): noninvalid FAIL **153/27/18**, all runner FAIL **153/31/14**, hypothetical skipped-as-PASS **162/9/27**. These are sensitivity assumptions, **not new observed runner labels or semantic truth**. Actions artifact metadata was cross-checked but raw per-patch ZIPs were not newly re-audited in Step 7.
+
+## Step 11: semantic validity/source artifact checks (2026-11-12)
+
+- [45-run pinned original agent/test structural crosswalk](2026-11-12/STEP11_SEMANTIC_STRUCTURAL_CROSSWALK_v1.json) and [independent checker](../scripts/step11_semantic_structural_audit.py) — [CI #43262365929 success](https://github.com/Foysal-Munsy/sweabs-free-eval/actions/runs/43262365929). Matched 31 reviewed FAIL + 14 UNVERIFIED across 20 tasks on original model SHA; confirmed all Step 6 test hashes, 4 source-level model/test file collisions, and 65 generated Requests `build/` paths.
+- [Original 14 ZIP fresh metadata/log re-audit](2026-11-12/STEP11_RAW_ARTIFACT_REAUDIT14_v1.json) and [read-only downloader](../scripts/step11_raw_artifact_reaudit14.py) — [CI #43263048387 success](https://github.com/Foysal-Munsy/sweabs-free-eval/actions/runs/43263048387): downloaded 14 original result ZIPs, checked 14 exact patch identities, independently matched 14 pinned augmented-test SHA values and recorded 14 raw-test-log digests. Private raw ZIPs/full logs **not published**.
+- [Nine-run newly-added augmented test-method attribution](2026-11-12/STEP11_SKIP_ATTRIBUTION_9_v1.json) and [method matcher](../scripts/step11_skip_attribution.py) — [CI #43264326911 success](https://github.com/Foysal-Munsy/sweabs-free-eval/actions/runs/43264326911). Each sample: `django-12039`: 13 added methods, 9 passed/4 skipped; `django-14434`: 1 added method passed despite 28 total suite skips; `django-15503`: 10 added, 8 passed/1 skipped/1 unobserved in verbose test log. Only **new definitions** counted, not extra assertions injected into existing tests. No original outcomes changed.
+- [Complete evidence hierarchy, opposing interpretations, controlled-rerun prerequisites and semantic limitations](2026-11-12/STEP11_SEMANTIC_VALIDITY_GATE_v1.md). All remain *documentary/structural* findings; semantic labels require separate validated evidence. Original v2 **153/31/14** and Step 7 frozen primary **153/9/36** unchanged.
 
 ## Step 11: pinned independent reproduction and exploratory task-aware robustness
 
