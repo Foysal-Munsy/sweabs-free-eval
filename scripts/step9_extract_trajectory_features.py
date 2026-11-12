@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 """Frozen Step 8 v1 trajectory feature extractor, exact-match run identity.
+
+Step 11 implementation-only fix: Django runtests.py verification pattern uses an
+escaped dot rather than an escaped backslash plus wildcard. Formula unchanged.
 Usage: pip install datasets huggingface_hub; python scripts/step9_extract_trajectory_features.py
        python scripts/step9_extract_trajectory_features.py --check
 Outputs derived metadata only. No trajectory text is written to results.
@@ -16,7 +19,7 @@ OUTPUT=ROOT/"results/2026-11-12/STEP9_TRAJECTORY_FEATURES_v1.csv"
 SUMMARY=ROOT/"results/2026-11-12/STEP9_COVERAGE_v1.json"
 DATASET="tarsur385/swe-verified-gemini3-flash-trajectories"
 REVISION="b5515d1dce40036633293b70477f0633b24593f7"
-VERIFY=re.compile(r"(^|[^A-Za-z0-9_])(pytest|unittest|runtests\\.py|tox|nosetests)(?=$|[^A-Za-z0-9_])|python[0-9.]* -m (pytest|unittest)",re.I)
+VERIFY=re.compile(r"(^|[^A-Za-z0-9_])(pytest|unittest|runtests\.py|tox|nosetests)(?=$|[^A-Za-z0-9_])|python[0-9.]* -m (pytest|unittest)",re.I)
 NONZERO=re.compile(r"""['"]exit_code['"]\s*:\s*(-?\d+)""")
 ERROR=re.compile(r"""(?:'is_error'\s*:\s*True|"is_error"\s*:\s*true)""")
 FIELDS=["sample","offset","instance_id","patch_sha256","n_steps_dataset","assistant_message_count",
