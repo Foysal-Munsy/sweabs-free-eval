@@ -1,6 +1,12 @@
 name: SWE-ABS Patch Pilot (up to 10 runs)
 
 on:
+  # Restricted push trigger for the already-approved Sample 2 remainder.
+  # Manual workflow_dispatch behaviour remains unchanged.
+  push:
+    branches: [main]
+    paths:
+      - ".github/sweabs-sample2-batch.json"
   workflow_dispatch:
     inputs:
       sample:
@@ -45,6 +51,23 @@ jobs:
           OFFSET: ${{ inputs.offset }}
           COUNT: ${{ inputs.count }}
         run: |
+          if [ "$GITHUB_EVENT_NAME" = "push" ]; then
+            python - <<'PY' > batch.env
+          import json
+          from pathlib import Path
+          payload = json.loads(Path(".github/sweabs-sample2-batch.json").read_text())
+          offset = payload.get("offset")
+          sample = payload.get("sample")
+          count = payload.get("count")
+          expected = 8 if offset == 60 else 10
+          if sample != 2 or offset not in (20, 30, 40, 50, 60) or count != expected:
+              raise SystemExit("Invalid Sample 2 remainder batch configuration")
+          print("SAMPLE=2")
+          print(f"OFFSET={offset}")
+          print(f"COUNT={count}")
+          PY
+            source batch.env
+          fi
           python scripts/pilot.py plan --sample "$SAMPLE" --offset "$OFFSET" --count "$COUNT" --output plan.json
           cat plan.json
       - name: Export plan for the evaluation matrix
