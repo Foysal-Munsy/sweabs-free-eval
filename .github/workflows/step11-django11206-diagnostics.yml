@@ -1,0 +1,36 @@
+name: Step 11 - Django 11206 merged test diagnostics
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/step11-django11206-diagnostics.yml"
+permissions:
+  contents: read
+jobs:
+  test-exact-merged-django:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: python -m pip install 'datasets==4.8.5' 'huggingface_hub==1.33.0'
+      - name: Checkout pinned Django base and merge entire exact model/test diffs
+        run: |
+          python scripts/step11_overlap_execution.py prepare \
+            --task django__django-11206 --sample 3
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.9"
+      - name: Install pinned original Django version
+        run: python -m pip install -e ./scratch/step11-merge-11206-s3/repo
+      - name: Execute enhanced formatting tests with bounded actual test traceback if needed
+        run: |
+          python scripts/step11_overlap_execution.py execute \
+            --task django__django-11206 --sample 3
+      - name: Confirm original v2 and Step7 unchanged
+        run: |
+          git diff --exit-code -- results/2026-11-12/sweabs_full_198_cumulative_v2.csv \
+            results/2026-11-12/STEP7_ANALYSIS_LABELS_v1.csv
