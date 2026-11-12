@@ -6,6 +6,12 @@ Reproducible GitHub Actions evaluation of **coding-agent patches that originally
 
 This repository covers the **stronger-test evaluation and evidence collection stage**. Trajectory indicator extraction, predictive analysis, and paper writing have **not** been completed. The outcomes below are *provisional augmented-test labels*, not final semantic-correctness judgments.
 
+### Project continuity and research handoff
+
+This README is the **public summary**. For a precise human/AI continuation point, use [**PROJECT_STATE.md**](docs/PROJECT_STATE.md) (milestones, current snapshot, unresolved issues, next exact action) and [**WORK_LOG.md**](docs/WORK_LOG.md) (dated, evidence-backed work history). Coding/research agents should start with [**AGENTS.md**](AGENTS.md).
+
+> The repository and the linked handoff documents are public. Operational details belong in the handoff docs, but secrets and sensitive/private data do not. These records must be updated together when the verified research state changes.
+
 ## Research status — 2026-11-12
 
 **Milestone: all 198 evaluation attempts have run; the cumulative evidence audit is complete at the provisional-label level.**
