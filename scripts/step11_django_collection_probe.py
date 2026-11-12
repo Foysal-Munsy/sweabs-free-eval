@@ -32,6 +32,10 @@ def main():
     sys.path.insert(0,str(root/"tests"));sys.path.insert(0,str(root))
     os.environ["DJANGO_SETTINGS_MODULE"]="test_sqlite"
     import django
+    from django.conf import settings
+    # The stock test_sqlite example has no INSTALLED_APPS; the regular
+    # runtests.py setup() would populate these before importing test models.
+    settings.INSTALLED_APPS = ["django.contrib.auth", "django.contrib.contenttypes", "django.contrib.sessions", "model_fields"]
     django.setup()
     mod=importlib.import_module(MOD)
     cls=getattr(mod,CLASS)
