@@ -1,0 +1,700 @@
+{
+  "all_artifact_downloads_succeeded": true,
+  "cases": 14,
+  "category_counts": {
+    "partial_coverage_skips": 9,
+    "patch_file_overlap": 4,
+    "whole_patch_integrity_unproven": 1
+  },
+  "identity_checked": 14,
+  "limits": "Test-log checksums and skip snippets are descriptive only; skipped cases remain unresolved without backend-matched reruns, overlap cases require non-destructive exact-patch tests, generated build patch requires full tested-tree integrity.",
+  "raw_outputs_published": false,
+  "rows": [
+    {
+      "artifact_name": "sweabs-result-1-10",
+      "artifact_present": true,
+      "evidence_boundary": "artifact zip downloaded fresh; source identity checked; no new verdict",
+      "file_basenames": [
+        "abs_instance.json",
+        "eval.sh",
+        "gha_pilot.log",
+        "metadata.json",
+        "one_prediction.jsonl",
+        "patch.diff",
+        "report.json",
+        "result.json",
+        "run_instance.log",
+        "test_output.txt"
+      ],
+      "instance_id": "django__django-12039",
+      "metadata_patch_sha256": "13c384a48bed11df0ebfeae126594ab1edd5ec67cca9905e4363150875ee2f60",
+      "metadata_test_patch_sha256": "61558d5999d778ae30244c80639939701db259296d95e38984079f539b111eba",
+      "offset": 10,
+      "patch_sha256": "13c384a48bed11df0ebfeae126594ab1edd5ec67cca9905e4363150875ee2f60",
+      "prior_failed": "0",
+      "prior_passed": "9",
+      "prior_skipped": "4",
+      "raw_test_outputs": [
+        {
+          "bytes": 18962,
+          "observed_summary_lines": [
+            "Ran 13 tests in 0.005s"
+          ],
+          "path": "SWE-ABS/swe-bench/logs/aug_test_center/pilot_42859974651_1_1_10/openhands-gemini3-flash-sample-1/django__django-12039/test_output.txt",
+          "sha256": "c821dedc8e36e161a012e39fa3f521858fef7d5c71fef8301a189de4ae4d12a3",
+          "skip_related_lines": [
+            "test_ops_class_columns_lists_sql (indexes.test_whitespace_create_index.IndexOpClassWhitespacePostgreSQLTests) ... skipped 'PostgreSQL tests'",
+            "test_ops_class_descending_columns_list_sql (indexes.test_whitespace_create_index.IndexOpClassWhitespacePostgreSQLTests) ... skipped 'PostgreSQL tests'",
+            "test_ops_class_mixed_columns_list_sql (indexes.test_whitespace_create_index.IndexOpClassWhitespacePostgreSQLTests) ... skipped 'PostgreSQL tests'",
+            "test_ops_class_multiple_ascending_columns_list_sql (indexes.test_whitespace_create_index.IndexOpClassWhitespacePostgreSQLTests) ... skipped 'PostgreSQL tests'"
+          ]
+        }
+      ],
+      "result_available": true,
+      "result_status": "UNVERIFIED",
+      "run_id": 42859974651,
+      "sample": 1,
+      "triage_category": "partial_coverage_skips"
+    },
+    {
+      "artifact_name": "sweabs-result-1-28",
+      "artifact_present": true,
+      "evidence_boundary": "artifact zip downloaded fresh; source identity checked; no new verdict",
+      "file_basenames": [
+        "abs_instance.json",
+        "eval.sh",
+        "gha_pilot.log",
+        "metadata.json",
+        "one_prediction.jsonl",
+        "patch.diff",
+        "report.json",
+        "result.json",
+        "run_instance.log",
+        "test_output.txt"
+      ],
+      "instance_id": "django__django-14434",
+      "metadata_patch_sha256": "6f7fefd14ffc1579c9f58f362521ba473257443a6fac9f18127844e75ff20f7a",
+      "metadata_test_patch_sha256": "4d4f1a7c34dd451b755f4124af0efc3a16ccb98c058fbdc123da5a435e585acf",
+      "offset": 28,
+      "patch_sha256": "6f7fefd14ffc1579c9f58f362521ba473257443a6fac9f18127844e75ff20f7a",
+      "prior_failed": "0",
+      "prior_passed": "140",
+      "prior_skipped": "28",
+      "raw_test_outputs": [
+        {
+          "bytes": 35442,
+          "observed_summary_lines": [
+            "Ran 168 tests in 1.226s"
+          ],
+          "path": "SWE-ABS/swe-bench/logs/aug_test_center/pilot_42864097323_1_1_28/openhands-gemini3-flash-sample-1/django__django-14434/test_output.txt",
+          "sha256": "cb951a776c7fc0fa1413cc77945bd2641c93ef3b86578faac23b2e18660a1b35",
+          "skip_related_lines": [
+            "Test adding a custom-sized binary field on MySQL (#24846). ... skipped 'MySQL specific'",
+            "test_add_indexed_charfield (schema.tests.SchemaTests) ... skipped 'PostgreSQL specific'",
+            "test_add_inline_fk_index_update_data (schema.tests.SchemaTests) ... skipped \"Database doesn't support feature(s): can_create_inline_fk, allows_multiple_constraints_on_same_fields\"",
+            "test_add_inline_fk_update_data (schema.tests.SchemaTests) ... skipped \"Database doesn't support feature(s): can_create_inline_fk\"",
+            "test_add_unique_charfield (schema.tests.SchemaTests) ... skipped 'PostgreSQL specific'",
+            "test_alter_array_field_decrease_base_field_length (schema.tests.SchemaTests) ... skipped 'PostgreSQL specific'",
+            "test_alter_array_field_decrease_nested_base_field_length (schema.tests.SchemaTests) ... skipped 'PostgreSQL specific'",
+            "test_alter_char_field_decrease_length (schema.tests.SchemaTests) ... skipped 'PostgreSQL specific'",
+            "test_alter_field_add_db_index_to_charfield_with_unique (schema.tests.SchemaTests) ... skipped 'PostgreSQL specific'",
+            "test_alter_field_add_index_to_charfield (schema.tests.SchemaTests) ... skipped 'PostgreSQL specific'",
+            "test_alter_field_add_index_to_textfield (schema.tests.SchemaTests) ... skipped 'PostgreSQL specific'",
+            "test_alter_field_add_unique_to_charfield (schema.tests.SchemaTests) ... skipped 'PostgreSQL specific'",
+            "test_alter_field_add_unique_to_charfield_with_db_index (schema.tests.SchemaTests) ... skipped 'PostgreSQL specific'",
+            "No queries are performed if a field default changes and the field's ... skipped 'SQLite naively remakes the table on field alteration.'",
+            "test_alter_field_remove_unique_and_db_index_from_charfield (schema.tests.SchemaTests) ... skipped 'PostgreSQL specific'",
+            "test_alter_field_swap_unique_and_db_index_with_charfield (schema.tests.SchemaTests) ... skipped 'PostgreSQL specific'",
+            "test_alter_field_with_custom_db_type (schema.tests.SchemaTests) ... skipped 'PostgreSQL specific'",
+            "#23738 - Can change a nullable field with default to non-nullable ... skipped \"Database doesn't support feature(s): supports_combined_alters\"",
+            "test_creation_with_db_table_double_quotes (schema.tests.SchemaTests) ... skipped 'Oracle specific db_table syntax'",
+            "test_func_index_unsupported (schema.tests.SchemaTests) ... skipped 'Database has feature(s) supports_expression_indexes'",
+            "test_func_unique_constraint_covering (schema.tests.SchemaTests) ... skipped \"Database doesn't support feature(s): supports_expression_indexes, supports_covering_indexes\"",
+            "test_func_unique_constraint_unsupported (schema.tests.SchemaTests) ... skipped 'Database has feature(s) supports_expression_indexes'",
+            "test_inline_fk (schema.tests.SchemaTests) ... skipped \"Database doesn't support feature(s): can_create_inline_fk\"",
+            "test_namespaced_db_table_foreign_key_reference (schema.tests.SchemaTests) ... skipped 'PostgreSQL specific db_table syntax.'",
+            "test_rename_column_renames_deferred_sql_references (schema.tests.SchemaTests) ... skipped 'SQLite naively remakes the table on field alteration.'",
+            "AlterField can modify a unique field when there's a reverse M2M ... skipped 'SQLite naively remakes the table on field alteration.'",
+            "If AlterField isn't selective about dropping foreign key constraints ... skipped 'SQLite naively remakes the table on field alteration.'",
+            "test_unsupported_transactional_ddl_disallowed (schema.tests.SchemaTests) ... skipped 'Database has feature(s) can_rollback_ddl'"
+          ]
+        }
+      ],
+      "result_available": true,
+      "result_status": "UNVERIFIED",
+      "run_id": 42864097323,
+      "sample": 1,
+      "triage_category": "partial_coverage_skips"
+    },
+    {
+      "artifact_name": "sweabs-result-1-34",
+      "artifact_present": true,
+      "evidence_boundary": "artifact zip downloaded fresh; source identity checked; no new verdict",
+      "file_basenames": [
+        "abs_instance.json",
+        "eval.sh",
+        "gha_pilot.log",
+        "metadata.json",
+        "one_prediction.jsonl",
+        "patch.diff",
+        "report.json",
+        "result.json",
+        "run_instance.log",
+        "test_output.txt"
+      ],
+      "instance_id": "django__django-15503",
+      "metadata_patch_sha256": "d58fae87e89fcb952bc5b348ccaaea5d6f417fb7983c7fdb4bdde1fcc7e28a74",
+      "metadata_test_patch_sha256": "94397c81c4cf6d2118dc77bcc748e8a42b6da8d7e78b8653b61290845ed6165c",
+      "offset": 34,
+      "patch_sha256": "d58fae87e89fcb952bc5b348ccaaea5d6f417fb7983c7fdb4bdde1fcc7e28a74",
+      "prior_failed": "0",
+      "prior_passed": "9",
+      "prior_skipped": "1",
+      "raw_test_outputs": [
+        {
+          "bytes": 26113,
+          "observed_summary_lines": [
+            "Ran 10 tests in 0.011s"
+          ],
+          "path": "SWE-ABS/swe-bench/logs/aug_test_center/pilot_43161212626_1_1_34/openhands-gemini3-flash-sample-1/django__django-15503/test_output.txt",
+          "sha256": "4331aa12270672726b0a9cc2dd25a12681e0ad7efdaa810a0c52068f9c5ccea9",
+          "skip_related_lines": [
+            "test_contains_and_contained_by_with_numeric_string_keys (model_fields.test_jsonfield_numeric_keys.JSONFieldNumericKeyLookupsTests) ... skipped \"Database doesn't support feature(s): supports_json_field_contains\""
+          ]
+        }
+      ],
+      "result_available": true,
+      "result_status": "UNVERIFIED",
+      "run_id": 43161212626,
+      "sample": 1,
+      "triage_category": "partial_coverage_skips"
+    },
+    {
+      "artifact_name": "sweabs-result-1-36",
+      "artifact_present": true,
+      "evidence_boundary": "artifact zip downloaded fresh; source identity checked; no new verdict",
+      "file_basenames": [
+        "abs_instance.json",
+        "eval.sh",
+        "gha_pilot.log",
+        "metadata.json",
+        "one_prediction.jsonl",
+        "patch.diff",
+        "report.json",
+        "result.json",
+        "run_instance.log",
+        "test_output.txt"
+      ],
+      "instance_id": "psf__requests-1142",
+      "metadata_patch_sha256": "ae2704bc0d0fd84b78919aa3b76ce505ed98be30df979c6dab39bad4d9e1a4f5",
+      "metadata_test_patch_sha256": "2bf49d24a6f0dd6fadad7b43f3a5e9ec22fba13a03dd09143c0858c0804d1e8e",
+      "offset": 36,
+      "patch_sha256": "ae2704bc0d0fd84b78919aa3b76ce505ed98be30df979c6dab39bad4d9e1a4f5",
+      "prior_failed": "0",
+      "prior_passed": "15",
+      "prior_skipped": "0",
+      "raw_test_outputs": [
+        {
+          "bytes": 18124,
+          "observed_summary_lines": [
+            "======================== 15 passed, 1 warning in 0.07s ========================="
+          ],
+          "path": "SWE-ABS/swe-bench/logs/aug_test_center/pilot_43161212626_1_1_36/openhands-gemini3-flash-sample-1/psf__requests-1142/test_output.txt",
+          "sha256": "d4c3bcb76bf85b86f7595c9030a20af21112b1c99f054b26351b0c77f5878f49",
+          "skip_related_lines": []
+        }
+      ],
+      "result_available": true,
+      "result_status": "UNVERIFIED",
+      "run_id": 43161212626,
+      "sample": 1,
+      "triage_category": "whole_patch_integrity_unproven"
+    },
+    {
+      "artifact_name": "sweabs-result-1-58",
+      "artifact_present": true,
+      "evidence_boundary": "artifact zip downloaded fresh; source identity checked; no new verdict",
+      "file_basenames": [
+        "abs_instance.json",
+        "eval.sh",
+        "gha_pilot.log",
+        "metadata.json",
+        "one_prediction.jsonl",
+        "patch.diff",
+        "report.json",
+        "result.json",
+        "run_instance.log",
+        "test_output.txt"
+      ],
+      "instance_id": "sympy__sympy-23413",
+      "metadata_patch_sha256": "894c7d6aaa65dd46b524cda9507c23c93f42cb2049ee7a47f18492248e28b33b",
+      "metadata_test_patch_sha256": "fa6fb0c196945553745f91ea70581ee7c6aaf0adf28f2cd7e5bfa115d8d1cbd9",
+      "offset": 58,
+      "patch_sha256": "894c7d6aaa65dd46b524cda9507c23c93f42cb2049ee7a47f18492248e28b33b",
+      "prior_failed": "1",
+      "prior_passed": "7",
+      "prior_skipped": "0",
+      "raw_test_outputs": [
+        {
+          "bytes": 16967,
+          "observed_summary_lines": [
+            "=========== tests finished: 7 passed, 1 exceptions, in 0.08 seconds ============"
+          ],
+          "path": "SWE-ABS/swe-bench/logs/aug_test_center/pilot_43169378297_1_1_58/openhands-gemini3-flash-sample-1/sympy__sympy-23413/test_output.txt",
+          "sha256": "cbbf33dd7a594bdc5731cfed9910624bd6be0665c615055cd24b9b1aaf5a1cec",
+          "skip_related_lines": []
+        }
+      ],
+      "result_available": true,
+      "result_status": "UNVERIFIED",
+      "run_id": 43169378297,
+      "sample": 1,
+      "triage_category": "patch_file_overlap"
+    },
+    {
+      "artifact_name": "sweabs-result-2-11",
+      "artifact_present": true,
+      "evidence_boundary": "artifact zip downloaded fresh; source identity checked; no new verdict",
+      "file_basenames": [
+        "abs_instance.json",
+        "eval.sh",
+        "gha_pilot.log",
+        "metadata.json",
+        "one_prediction.jsonl",
+        "patch.diff",
+        "report.json",
+        "result.json",
+        "run_instance.log",
+        "test_output.txt"
+      ],
+      "instance_id": "django__django-12039",
+      "metadata_patch_sha256": "fe1d826efc0c3281c514f807709714080b7087d037da4ece719ccb3255632d54",
+      "metadata_test_patch_sha256": "61558d5999d778ae30244c80639939701db259296d95e38984079f539b111eba",
+      "offset": 11,
+      "patch_sha256": "fe1d826efc0c3281c514f807709714080b7087d037da4ece719ccb3255632d54",
+      "prior_failed": "0",
+      "prior_passed": "9",
+      "prior_skipped": "4",
+      "raw_test_outputs": [
+        {
+          "bytes": 19222,
+          "observed_summary_lines": [
+            "Ran 13 tests in 0.003s"
+          ],
+          "path": "SWE-ABS/swe-bench/logs/aug_test_center/pilot_43179075950_1_2_11/openhands-gemini3-flash-sample-2/django__django-12039/test_output.txt",
+          "sha256": "9a949bd5968aafd1f47ae124fccf5bcf2964f7f85a04e3aafb063cef3869dfba",
+          "skip_related_lines": [
+            "test_ops_class_columns_lists_sql (indexes.test_whitespace_create_index.IndexOpClassWhitespacePostgreSQLTests) ... skipped 'PostgreSQL tests'",
+            "test_ops_class_descending_columns_list_sql (indexes.test_whitespace_create_index.IndexOpClassWhitespacePostgreSQLTests) ... skipped 'PostgreSQL tests'",
+            "test_ops_class_mixed_columns_list_sql (indexes.test_whitespace_create_index.IndexOpClassWhitespacePostgreSQLTests) ... skipped 'PostgreSQL tests'",
+            "test_ops_class_multiple_ascending_columns_list_sql (indexes.test_whitespace_create_index.IndexOpClassWhitespacePostgreSQLTests) ... skipped 'PostgreSQL tests'"
+          ]
+        }
+      ],
+      "result_available": true,
+      "result_status": "UNVERIFIED",
+      "run_id": 43179075950,
+      "sample": 2,
+      "triage_category": "partial_coverage_skips"
+    },
+    {
+      "artifact_name": "sweabs-result-2-30",
+      "artifact_present": true,
+      "evidence_boundary": "artifact zip downloaded fresh; source identity checked; no new verdict",
+      "file_basenames": [
+        "abs_instance.json",
+        "eval.sh",
+        "gha_pilot.log",
+        "metadata.json",
+        "one_prediction.jsonl",
+        "patch.diff",
+        "report.json",
+        "result.json",
+        "run_instance.log",
+        "test_output.txt"
+      ],
+      "instance_id": "django__django-14434",
+      "metadata_patch_sha256": "90412c763f14b060260efdcf65d725bf632fbae15284dac1cf8efc4e36a6ade2",
+      "metadata_test_patch_sha256": "4d4f1a7c34dd451b755f4124af0efc3a16ccb98c058fbdc123da5a435e585acf",
+      "offset": 30,
+      "patch_sha256": "90412c763f14b060260efdcf65d725bf632fbae15284dac1cf8efc4e36a6ade2",
+      "prior_failed": "0",
+      "prior_passed": "140",
+      "prior_skipped": "28",
+      "raw_test_outputs": [
+        {
+          "bytes": 35442,
+          "observed_summary_lines": [
+            "Ran 168 tests in 0.931s"
+          ],
+          "path": "SWE-ABS/swe-bench/logs/aug_test_center/pilot_43181332699_1_2_30/openhands-gemini3-flash-sample-2/django__django-14434/test_output.txt",
+          "sha256": "ff30ed743c00ec09b9ce67e7630b1548f5d270bce6deebfbfce2ca3ff86c0667",
+          "skip_related_lines": [
+            "Test adding a custom-sized binary field on MySQL (#24846). ... skipped 'MySQL specific'",
+            "test_add_indexed_charfield (schema.tests.SchemaTests) ... skipped 'PostgreSQL specific'",
+            "test_add_inline_fk_index_update_data (schema.tests.SchemaTests) ... skipped \"Database doesn't support feature(s): can_create_inline_fk, allows_multiple_constraints_on_same_fields\"",
+            "test_add_inline_fk_update_data (schema.tests.SchemaTests) ... skipped \"Database doesn't support feature(s): can_create_inline_fk\"",
+            "test_add_unique_charfield (schema.tests.SchemaTests) ... skipped 'PostgreSQL specific'",
+            "test_alter_array_field_decrease_base_field_length (schema.tests.SchemaTests) ... skipped 'PostgreSQL specific'",
+            "test_alter_array_field_decrease_nested_base_field_length (schema.tests.SchemaTests) ... skipped 'PostgreSQL specific'",
+            "test_alter_char_field_decrease_length (schema.tests.SchemaTests) ... skipped 'PostgreSQL specific'",
+            "test_alter_field_add_db_index_to_charfield_with_unique (schema.tests.SchemaTests) ... skipped 'PostgreSQL specific'",
+            "test_alter_field_add_index_to_charfield (schema.tests.SchemaTests) ... skipped 'PostgreSQL specific'",
+            "test_alter_field_add_index_to_textfield (schema.tests.SchemaTests) ... skipped 'PostgreSQL specific'",
+            "test_alter_field_add_unique_to_charfield (schema.tests.SchemaTests) ... skipped 'PostgreSQL specific'",
+            "test_alter_field_add_unique_to_charfield_with_db_index (schema.tests.SchemaTests) ... skipped 'PostgreSQL specific'",
+            "No queries are performed if a field default changes and the field's ... skipped 'SQLite naively remakes the table on field alteration.'",
+            "test_alter_field_remove_unique_and_db_index_from_charfield (schema.tests.SchemaTests) ... skipped 'PostgreSQL specific'",
+            "test_alter_field_swap_unique_and_db_index_with_charfield (schema.tests.SchemaTests) ... skipped 'PostgreSQL specific'",
+            "test_alter_field_with_custom_db_type (schema.tests.SchemaTests) ... skipped 'PostgreSQL specific'",
+            "#23738 - Can change a nullable field with default to non-nullable ... skipped \"Database doesn't support feature(s): supports_combined_alters\"",
+            "test_creation_with_db_table_double_quotes (schema.tests.SchemaTests) ... skipped 'Oracle specific db_table syntax'",
+            "test_func_index_unsupported (schema.tests.SchemaTests) ... skipped 'Database has feature(s) supports_expression_indexes'",
+            "test_func_unique_constraint_covering (schema.tests.SchemaTests) ... skipped \"Database doesn't support feature(s): supports_expression_indexes, supports_covering_indexes\"",
+            "test_func_unique_constraint_unsupported (schema.tests.SchemaTests) ... skipped 'Database has feature(s) supports_expression_indexes'",
+            "test_inline_fk (schema.tests.SchemaTests) ... skipped \"Database doesn't support feature(s): can_create_inline_fk\"",
+            "test_namespaced_db_table_foreign_key_reference (schema.tests.SchemaTests) ... skipped 'PostgreSQL specific db_table syntax.'",
+            "test_rename_column_renames_deferred_sql_references (schema.tests.SchemaTests) ... skipped 'SQLite naively remakes the table on field alteration.'",
+            "AlterField can modify a unique field when there's a reverse M2M ... skipped 'SQLite naively remakes the table on field alteration.'",
+            "If AlterField isn't selective about dropping foreign key constraints ... skipped 'SQLite naively remakes the table on field alteration.'",
+            "test_unsupported_transactional_ddl_disallowed (schema.tests.SchemaTests) ... skipped 'Database has feature(s) can_rollback_ddl'"
+          ]
+        }
+      ],
+      "result_available": true,
+      "result_status": "UNVERIFIED",
+      "run_id": 43181332699,
+      "sample": 2,
+      "triage_category": "partial_coverage_skips"
+    },
+    {
+      "artifact_name": "sweabs-result-2-37",
+      "artifact_present": true,
+      "evidence_boundary": "artifact zip downloaded fresh; source identity checked; no new verdict",
+      "file_basenames": [
+        "abs_instance.json",
+        "eval.sh",
+        "gha_pilot.log",
+        "metadata.json",
+        "one_prediction.jsonl",
+        "patch.diff",
+        "report.json",
+        "result.json",
+        "run_instance.log",
+        "test_output.txt"
+      ],
+      "instance_id": "django__django-15503",
+      "metadata_patch_sha256": "2cfb3f3f9d78a25414b94bb4ae56e0128816f4a4ae503b40af0f72a42ee2ed83",
+      "metadata_test_patch_sha256": "94397c81c4cf6d2118dc77bcc748e8a42b6da8d7e78b8653b61290845ed6165c",
+      "offset": 37,
+      "patch_sha256": "2cfb3f3f9d78a25414b94bb4ae56e0128816f4a4ae503b40af0f72a42ee2ed83",
+      "prior_failed": "0",
+      "prior_passed": "9",
+      "prior_skipped": "1",
+      "raw_test_outputs": [
+        {
+          "bytes": 25441,
+          "observed_summary_lines": [
+            "Ran 10 tests in 0.025s"
+          ],
+          "path": "SWE-ABS/swe-bench/logs/aug_test_center/pilot_43181332699_1_2_37/openhands-gemini3-flash-sample-2/django__django-15503/test_output.txt",
+          "sha256": "bc9112427729630b34bdbb07f91609a98bda121447ffa32d7a185b7ab1357b01",
+          "skip_related_lines": [
+            "test_contains_and_contained_by_with_numeric_string_keys (model_fields.test_jsonfield_numeric_keys.JSONFieldNumericKeyLookupsTests) ... skipped \"Database doesn't support feature(s): supports_json_field_contains\""
+          ]
+        }
+      ],
+      "result_available": true,
+      "result_status": "UNVERIFIED",
+      "run_id": 43181332699,
+      "sample": 2,
+      "triage_category": "partial_coverage_skips"
+    },
+    {
+      "artifact_name": "sweabs-result-2-63",
+      "artifact_present": true,
+      "evidence_boundary": "artifact zip downloaded fresh; source identity checked; no new verdict",
+      "file_basenames": [
+        "abs_instance.json",
+        "eval.sh",
+        "gha_pilot.log",
+        "metadata.json",
+        "one_prediction.jsonl",
+        "patch.diff",
+        "report.json",
+        "result.json",
+        "run_instance.log",
+        "test_output.txt"
+      ],
+      "instance_id": "sympy__sympy-23413",
+      "metadata_patch_sha256": "a713d1b83690e0adb4dff3f199a0691b9dfa581cc63483c1dc21d65bfca59656",
+      "metadata_test_patch_sha256": "fa6fb0c196945553745f91ea70581ee7c6aaf0adf28f2cd7e5bfa115d8d1cbd9",
+      "offset": 63,
+      "patch_sha256": "a713d1b83690e0adb4dff3f199a0691b9dfa581cc63483c1dc21d65bfca59656",
+      "prior_failed": "0",
+      "prior_passed": "8",
+      "prior_skipped": "0",
+      "raw_test_outputs": [
+        {
+          "bytes": 17055,
+          "observed_summary_lines": [
+            "================== tests finished: 8 passed, in 0.11 seconds ==================="
+          ],
+          "path": "SWE-ABS/swe-bench/logs/aug_test_center/pilot_43181346009_1_2_63/openhands-gemini3-flash-sample-2/sympy__sympy-23413/test_output.txt",
+          "sha256": "5f038ef461fc644859d6089527ee71d09555397705a720eb1569cd5803db5897",
+          "skip_related_lines": []
+        }
+      ],
+      "result_available": true,
+      "result_status": "UNVERIFIED",
+      "run_id": 43181346009,
+      "sample": 2,
+      "triage_category": "patch_file_overlap"
+    },
+    {
+      "artifact_name": "sweabs-result-3-7",
+      "artifact_present": true,
+      "evidence_boundary": "artifact zip downloaded fresh; source identity checked; no new verdict",
+      "file_basenames": [
+        "abs_instance.json",
+        "eval.sh",
+        "gha_pilot.log",
+        "metadata.json",
+        "one_prediction.jsonl",
+        "patch.diff",
+        "report.json",
+        "result.json",
+        "run_instance.log",
+        "test_output.txt"
+      ],
+      "instance_id": "django__django-11206",
+      "metadata_patch_sha256": "2b74b39168d3927e80ecce18cc14f3a5b869c56bfc2ffb5643af427693cc65a7",
+      "metadata_test_patch_sha256": "21ceb4e64f124c2986c748f8c5b10586f1206354dd53bd8507df4d07e61a61e2",
+      "offset": 7,
+      "patch_sha256": "2b74b39168d3927e80ecce18cc14f3a5b869c56bfc2ffb5643af427693cc65a7",
+      "prior_failed": "5",
+      "prior_passed": "7",
+      "prior_skipped": "0",
+      "raw_test_outputs": [
+        {
+          "bytes": 20210,
+          "observed_summary_lines": [
+            "Ran 12 tests in 0.002s",
+            "FAILED (failures=5)"
+          ],
+          "path": "SWE-ABS/swe-bench/logs/aug_test_center/pilot_43182603318_1_3_7/openhands-gemini3-flash-sample-3/django__django-11206/test_output.txt",
+          "sha256": "30cdac1680e54fe7d92987ec293a4e2455e6010c657f1e524bd850c89f4adfa9",
+          "skip_related_lines": []
+        }
+      ],
+      "result_available": true,
+      "result_status": "FAIL",
+      "run_id": 43182603318,
+      "sample": 3,
+      "triage_category": "patch_file_overlap"
+    },
+    {
+      "artifact_name": "sweabs-result-3-12",
+      "artifact_present": true,
+      "evidence_boundary": "artifact zip downloaded fresh; source identity checked; no new verdict",
+      "file_basenames": [
+        "abs_instance.json",
+        "eval.sh",
+        "gha_pilot.log",
+        "metadata.json",
+        "one_prediction.jsonl",
+        "patch.diff",
+        "report.json",
+        "result.json",
+        "run_instance.log",
+        "test_output.txt"
+      ],
+      "instance_id": "django__django-12039",
+      "metadata_patch_sha256": "83a47b5bdad5c4be53fc5072410f5805d05107ea175dcec26586cfd5521bcfa7",
+      "metadata_test_patch_sha256": "61558d5999d778ae30244c80639939701db259296d95e38984079f539b111eba",
+      "offset": 12,
+      "patch_sha256": "83a47b5bdad5c4be53fc5072410f5805d05107ea175dcec26586cfd5521bcfa7",
+      "prior_failed": "0",
+      "prior_passed": "9",
+      "prior_skipped": "4",
+      "raw_test_outputs": [
+        {
+          "bytes": 18962,
+          "observed_summary_lines": [
+            "Ran 13 tests in 0.003s"
+          ],
+          "path": "SWE-ABS/swe-bench/logs/aug_test_center/pilot_43182697559_1_3_12/openhands-gemini3-flash-sample-3/django__django-12039/test_output.txt",
+          "sha256": "3ff41aa327730e4cd4628b40e1baef25b22aa30fcbb204a0fddd91894d088c0e",
+          "skip_related_lines": [
+            "test_ops_class_columns_lists_sql (indexes.test_whitespace_create_index.IndexOpClassWhitespacePostgreSQLTests) ... skipped 'PostgreSQL tests'",
+            "test_ops_class_descending_columns_list_sql (indexes.test_whitespace_create_index.IndexOpClassWhitespacePostgreSQLTests) ... skipped 'PostgreSQL tests'",
+            "test_ops_class_mixed_columns_list_sql (indexes.test_whitespace_create_index.IndexOpClassWhitespacePostgreSQLTests) ... skipped 'PostgreSQL tests'",
+            "test_ops_class_multiple_ascending_columns_list_sql (indexes.test_whitespace_create_index.IndexOpClassWhitespacePostgreSQLTests) ... skipped 'PostgreSQL tests'"
+          ]
+        }
+      ],
+      "result_available": true,
+      "result_status": "UNVERIFIED",
+      "run_id": 43182697559,
+      "sample": 3,
+      "triage_category": "partial_coverage_skips"
+    },
+    {
+      "artifact_name": "sweabs-result-3-30",
+      "artifact_present": true,
+      "evidence_boundary": "artifact zip downloaded fresh; source identity checked; no new verdict",
+      "file_basenames": [
+        "abs_instance.json",
+        "eval.sh",
+        "gha_pilot.log",
+        "metadata.json",
+        "one_prediction.jsonl",
+        "patch.diff",
+        "report.json",
+        "result.json",
+        "run_instance.log",
+        "test_output.txt"
+      ],
+      "instance_id": "django__django-14434",
+      "metadata_patch_sha256": "e46ffbef6e5d87531dec12cde13ed70ac7fdc4784c255074e62a1538af68417c",
+      "metadata_test_patch_sha256": "4d4f1a7c34dd451b755f4124af0efc3a16ccb98c058fbdc123da5a435e585acf",
+      "offset": 30,
+      "patch_sha256": "e46ffbef6e5d87531dec12cde13ed70ac7fdc4784c255074e62a1538af68417c",
+      "prior_failed": "0",
+      "prior_passed": "140",
+      "prior_skipped": "28",
+      "raw_test_outputs": [
+        {
+          "bytes": 35442,
+          "observed_summary_lines": [
+            "Ran 168 tests in 0.885s"
+          ],
+          "path": "SWE-ABS/swe-bench/logs/aug_test_center/pilot_43182706543_1_3_30/openhands-gemini3-flash-sample-3/django__django-14434/test_output.txt",
+          "sha256": "58b3e684b9a48ac7d49535b29255aa5987bbd0bd5a17095a4d0743c45af3bd9a",
+          "skip_related_lines": [
+            "Test adding a custom-sized binary field on MySQL (#24846). ... skipped 'MySQL specific'",
+            "test_add_indexed_charfield (schema.tests.SchemaTests) ... skipped 'PostgreSQL specific'",
+            "test_add_inline_fk_index_update_data (schema.tests.SchemaTests) ... skipped \"Database doesn't support feature(s): can_create_inline_fk, allows_multiple_constraints_on_same_fields\"",
+            "test_add_inline_fk_update_data (schema.tests.SchemaTests) ... skipped \"Database doesn't support feature(s): can_create_inline_fk\"",
+            "test_add_unique_charfield (schema.tests.SchemaTests) ... skipped 'PostgreSQL specific'",
+            "test_alter_array_field_decrease_base_field_length (schema.tests.SchemaTests) ... skipped 'PostgreSQL specific'",
+            "test_alter_array_field_decrease_nested_base_field_length (schema.tests.SchemaTests) ... skipped 'PostgreSQL specific'",
+            "test_alter_char_field_decrease_length (schema.tests.SchemaTests) ... skipped 'PostgreSQL specific'",
+            "test_alter_field_add_db_index_to_charfield_with_unique (schema.tests.SchemaTests) ... skipped 'PostgreSQL specific'",
+            "test_alter_field_add_index_to_charfield (schema.tests.SchemaTests) ... skipped 'PostgreSQL specific'",
+            "test_alter_field_add_index_to_textfield (schema.tests.SchemaTests) ... skipped 'PostgreSQL specific'",
+            "test_alter_field_add_unique_to_charfield (schema.tests.SchemaTests) ... skipped 'PostgreSQL specific'",
+            "test_alter_field_add_unique_to_charfield_with_db_index (schema.tests.SchemaTests) ... skipped 'PostgreSQL specific'",
+            "No queries are performed if a field default changes and the field's ... skipped 'SQLite naively remakes the table on field alteration.'",
+            "test_alter_field_remove_unique_and_db_index_from_charfield (schema.tests.SchemaTests) ... skipped 'PostgreSQL specific'",
+            "test_alter_field_swap_unique_and_db_index_with_charfield (schema.tests.SchemaTests) ... skipped 'PostgreSQL specific'",
+            "test_alter_field_with_custom_db_type (schema.tests.SchemaTests) ... skipped 'PostgreSQL specific'",
+            "#23738 - Can change a nullable field with default to non-nullable ... skipped \"Database doesn't support feature(s): supports_combined_alters\"",
+            "test_creation_with_db_table_double_quotes (schema.tests.SchemaTests) ... skipped 'Oracle specific db_table syntax'",
+            "test_func_index_unsupported (schema.tests.SchemaTests) ... skipped 'Database has feature(s) supports_expression_indexes'",
+            "test_func_unique_constraint_covering (schema.tests.SchemaTests) ... skipped \"Database doesn't support feature(s): supports_expression_indexes, supports_covering_indexes\"",
+            "test_func_unique_constraint_unsupported (schema.tests.SchemaTests) ... skipped 'Database has feature(s) supports_expression_indexes'",
+            "test_inline_fk (schema.tests.SchemaTests) ... skipped \"Database doesn't support feature(s): can_create_inline_fk\"",
+            "test_namespaced_db_table_foreign_key_reference (schema.tests.SchemaTests) ... skipped 'PostgreSQL specific db_table syntax.'",
+            "test_rename_column_renames_deferred_sql_references (schema.tests.SchemaTests) ... skipped 'SQLite naively remakes the table on field alteration.'",
+            "AlterField can modify a unique field when there's a reverse M2M ... skipped 'SQLite naively remakes the table on field alteration.'",
+            "If AlterField isn't selective about dropping foreign key constraints ... skipped 'SQLite naively remakes the table on field alteration.'",
+            "test_unsupported_transactional_ddl_disallowed (schema.tests.SchemaTests) ... skipped 'Database has feature(s) can_rollback_ddl'"
+          ]
+        }
+      ],
+      "result_available": true,
+      "result_status": "UNVERIFIED",
+      "run_id": 43182706543,
+      "sample": 3,
+      "triage_category": "partial_coverage_skips"
+    },
+    {
+      "artifact_name": "sweabs-result-3-36",
+      "artifact_present": true,
+      "evidence_boundary": "artifact zip downloaded fresh; source identity checked; no new verdict",
+      "file_basenames": [
+        "abs_instance.json",
+        "eval.sh",
+        "gha_pilot.log",
+        "metadata.json",
+        "one_prediction.jsonl",
+        "patch.diff",
+        "report.json",
+        "result.json",
+        "run_instance.log",
+        "test_output.txt"
+      ],
+      "instance_id": "django__django-15503",
+      "metadata_patch_sha256": "ef135a08e8340d58b0208e4db34c23ba494239261db1d8e689ac7a407474ea2a",
+      "metadata_test_patch_sha256": "94397c81c4cf6d2118dc77bcc748e8a42b6da8d7e78b8653b61290845ed6165c",
+      "offset": 36,
+      "patch_sha256": "ef135a08e8340d58b0208e4db34c23ba494239261db1d8e689ac7a407474ea2a",
+      "prior_failed": "0",
+      "prior_passed": "9",
+      "prior_skipped": "1",
+      "raw_test_outputs": [
+        {
+          "bytes": 25489,
+          "observed_summary_lines": [
+            "Ran 10 tests in 0.013s"
+          ],
+          "path": "SWE-ABS/swe-bench/logs/aug_test_center/pilot_43182706543_1_3_36/openhands-gemini3-flash-sample-3/django__django-15503/test_output.txt",
+          "sha256": "18930e204a2ac640847e5920fc70fb94ca14f84d58b68d2ee8468f083db35014",
+          "skip_related_lines": [
+            "test_contains_and_contained_by_with_numeric_string_keys (model_fields.test_jsonfield_numeric_keys.JSONFieldNumericKeyLookupsTests) ... skipped \"Database doesn't support feature(s): supports_json_field_contains\""
+          ]
+        }
+      ],
+      "result_available": true,
+      "result_status": "UNVERIFIED",
+      "run_id": 43182706543,
+      "sample": 3,
+      "triage_category": "partial_coverage_skips"
+    },
+    {
+      "artifact_name": "sweabs-result-3-62",
+      "artifact_present": true,
+      "evidence_boundary": "artifact zip downloaded fresh; source identity checked; no new verdict",
+      "file_basenames": [
+        "abs_instance.json",
+        "eval.sh",
+        "gha_pilot.log",
+        "metadata.json",
+        "one_prediction.jsonl",
+        "patch.diff",
+        "report.json",
+        "result.json",
+        "run_instance.log",
+        "test_output.txt"
+      ],
+      "instance_id": "sympy__sympy-23413",
+      "metadata_patch_sha256": "d550e8dc6495a0a5f0cb627e0244f5c62418002e66e2738780e93c30bcf586be",
+      "metadata_test_patch_sha256": "fa6fb0c196945553745f91ea70581ee7c6aaf0adf28f2cd7e5bfa115d8d1cbd9",
+      "offset": 62,
+      "patch_sha256": "d550e8dc6495a0a5f0cb627e0244f5c62418002e66e2738780e93c30bcf586be",
+      "prior_failed": "1",
+      "prior_passed": "7",
+      "prior_skipped": "0",
+      "raw_test_outputs": [
+        {
+          "bytes": 17114,
+          "observed_summary_lines": [
+            "=========== tests finished: 7 passed, 1 exceptions, in 0.11 seconds ============"
+          ],
+          "path": "SWE-ABS/swe-bench/logs/aug_test_center/pilot_43182738449_1_3_62/openhands-gemini3-flash-sample-3/sympy__sympy-23413/test_output.txt",
+          "sha256": "8167eb753b056fe0ec28306857416bc2cdf10a25112de2f7ed6ef1c57f77db75",
+          "skip_related_lines": []
+        }
+      ],
+      "result_available": true,
+      "result_status": "UNVERIFIED",
+      "run_id": 43182738449,
+      "sample": 3,
+      "triage_category": "patch_file_overlap"
+    }
+  ],
+  "status": "fresh original Actions ZIP download and identity/status-log metadata inspection only",
+  "test_output_files_total": 14,
+  "versioned_runner_labels_modified": false
+}
