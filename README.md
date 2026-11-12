@@ -14,28 +14,28 @@ This README is the **public summary**. For a precise human/AI continuation point
 
 ## Research status — 2026-11-12
 
-**Milestone: all 198 evaluation attempts have run; the cumulative evidence audit is complete at the provisional-label level.**
+**Milestone: all 198 evaluation attempts complete; all per-patch raw logs reconciled to a current provisional v2 dataset.** Strengthened-test assertion semantics have not been independently validated.
 
 | Subset | Originally passing agent runs | Evaluation attempts | PASS | FAIL | UNVERIFIED |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| Sample 1 | 63 | 63 | 48 | 11 | 4 |
+| Sample 1 | 63 | 63 | 48 | 10 | 5 |
 | Sample 2 | 68 | 68 | 53 | 11 | 4 |
 | Sample 3 | 67 | 67 | 52 | 10 | 5 |
-| **Total** | **198** | **198** | **153** | **32** | **13** |
+| **Total** | **198** | **198** | **153** | **31** | **14** |
 
 - **PASS:** The audited strengthened-test runner passed the executed augmented tests, with required patch identity and coverage checks met.
-- **FAIL:** The strengthened-test runner exhibited test failure or functional test exception with the intended patch present; **all 32 labels remain subject to independent augmented-test-validity review**.
+- **FAIL:** The strengthened-test runner exhibited test failure or functional test exception with the intended patch present; **all 31 provisional FAIL labels remain subject to independent augmented-test-validity review**.
 - **UNVERIFIED:** Coverage was incomplete, the exact patch under test could not be established, or another validity check was unresolved. **Never count these as FAIL, or silently drop them from reporting.**
 - **GitHub Actions job success is not patch PASS.** Workflow jobs upload evidence even when the model patch fails augmented tests.
 
-The 115 new Sample 2 (offsets 20–67) and Sample 3 (offsets 0–66) records were audited using per-patch ZIPs and raw logs on 2026-11-12. The 83 earlier records (all Sample 1 and Sample 2 offsets 0–19) were **preserved**, not independently re-audited in that last pass. Results should therefore remain explicitly provisional.
+The 115 recent Sample 2 (offsets 20–67) and Sample 3 (offsets 0–66) records were audited from raw artifacts, followed by a separate [83-run historical raw re-audit](results/2026-11-12/STEP5_RECONCILIATION_REPORT.md). The archived v1 (153 PASS / 32 FAIL / 13 UNVERIFIED) remains intact; **v2 corrects Sample 1 offset 58 from FAIL to UNVERIFIED** due to incomplete exact-patch preservation. All outcomes remain provisional.
 
 **Unit of observation:** an agent run defined by `(sample, instance_id, patch_sha256)`. The 198 records contain **73 distinct instance IDs**; tasks repeat across samples. A later model/association analysis must account for repeated tasks and must not treat 198 records as independent task identities.
 
 ### Known audit limitations
 
-- **13 UNVERIFIED total:** 4 in Sample 1, 4 in Sample 2, 5 in Sample 3. Causes include skipped database-dependent tests, incomplete coverage/patch-diff checks, and patch/test-file overlap.
-- **Three recently audited patch-overlap cases:** Sample 2 offset 63 (`sympy__sympy-23413`), Sample 3 offset 7 (`django__django-11206`), and Sample 3 offset 62 (`sympy__sympy-23413`). Test setup checked out files also modified by the agent, so the complete agent patch was not proven active at test time. The observed test results **must not** be interpreted as validated PASS/FAIL outcomes.
+- **14 UNVERIFIED total:** 5 in Sample 1, 4 in Sample 2, 5 in Sample 3. Causes include skipped database-dependent tests, incomplete coverage/patch-diff checks, and patch/test-file overlap.
+- **Four patch-overlap cases:** Sample 1 offset 58 (`sympy__sympy-23413`), Sample 2 offset 63 (`sympy__sympy-23413`), Sample 3 offset 7 (`django__django-11206`), and Sample 3 offset 62 (`sympy__sympy-23413`). Test setup checked out files also modified by the agent, so the complete agent patch was not proven active at test time. The observed test results **must not** be interpreted as validated PASS/FAIL outcomes.
 - **Skipped-test cases** include database-dependent Django tests; a zero-failure report with skipped strengthened tests is not an unqualified PASS under this audit protocol.
 - **FAIL labels remain provisional** until the augmented assertions themselves have been checked for correctness and relevance; observed failures alone do not establish semantic incorrectness.
 
@@ -86,12 +86,13 @@ For automation convenience, the pilot also supports narrowly scoped push-trigger
 
 **Evidence retention:** The GitHub Actions workflow retains temporary artifacts for **14 days**. The principal audited evidence has therefore been archived with verified original bytes in [**results/2026-11-12/**](results/2026-11-12/MANIFEST.md):
 
-- [198-run provisional cumulative CSV](results/2026-11-12/sweabs_full_198_cumulative_audited.csv)
+- [**Current 198-run provisional cumulative CSV (v2)**](results/2026-11-12/sweabs_full_198_cumulative_v2.csv) — **153 PASS, 31 FAIL, 14 UNVERIFIED**; [archived v1](results/2026-11-12/sweabs_full_198_cumulative_audited.csv) preserved
+- [Historical 83-run raw audit evidence](results/2026-11-12/sweabs_historical_83_reaudit_evidence.csv), [correction ledger](results/2026-11-12/sweabs_historical_83_corrections.csv), and [reconciliation report](results/2026-11-12/STEP5_RECONCILIATION_REPORT.md)
 - [115-run raw-audit provenance CSV](results/2026-11-12/sweabs_samples2_3_full_audit_evidence_115.csv)
 - [Full audit report](results/2026-11-12/sweabs_full_198_audit_report.md)
 - [Earlier 83-row snapshot](results/2026-11-12/sweabs_samples1_2_first83_cumulative.csv) and [historical audit script](results/2026-11-12/sweabs_full_audit.py)
 
-A 5.1-MB raw-evidence ZIP (135 Sample 2/3 per-patch ZIPs and the audit files) was independently checksum-verified after retrieval from the owner's **private ChatGPT Library**. **It is not publicly downloadable from this GitHub repository.** Nested test fixtures/logs include email-like and password-like strings; public release requires additional screening. See the [artifact manifest](results/2026-11-12/MANIFEST.md) for checksums, exact scope, and access limitations.
+A 5.1-MB raw-evidence ZIP for the original recent audits and a separate **2.8-MB historical 83-run raw archive** (including the earlier failed offset-5 attempt) were independently checksum-verified after retrieval from the owner's **private ChatGPT Library**. **Neither is publicly downloadable from this GitHub repository.** Nested test fixtures/logs include email-like and password-like strings; public release requires additional screening. See the [artifact manifest](results/2026-11-12/MANIFEST.md) for checksums, exact scope, and access limitations.
 
 ## Next research steps
 
@@ -99,9 +100,9 @@ A 5.1-MB raw-evidence ZIP (135 Sample 2/3 per-patch ZIPs and the audit files) wa
 - [x] Complete 198 strengthened-test evaluation attempts.
 - [x] Produce a cumulative **provisional** audit CSV and detailed raw-evidence report.
 - [x] **Archive the provisional cumulative CSV, provenance, report, historical input and audit script**, preserving original bytes; keep the raw ZIP in a checksum-verified private Library archive (not a public release).
-- [ ] **Reconcile the 83 previously preserved outcome rows** against currently available raw evidence and the conservative 115-run audit protocol; document any correction as a new version.
-- [ ] **Validate the 32 provisional FAIL cases** against the intended behavior and strength/relevance of each added test; distinguish genuine counterexamples from invalid or environment-sensitive assertions.
-- [ ] **Triage 13 UNVERIFIED cases**: prioritize exact-patch preservation for the three overlap cases and skipped-test/backend limitations; rerun only with controlled, documented fixes, keeping original results.
+- [x] **Reconcile the 83 historical rows** against raw GitHub Actions evidence, retain original v1, and document the one patch-identity correction in a reviewed v2.
+- [ ] **Validate the 31 provisional FAIL cases across 15 distinct tasks** against the intended behavior and strength/relevance of each added test; distinguish genuine counterexamples from invalid or environment-sensitive assertions.
+- [ ] **Triage 14 UNVERIFIED cases**: prioritize exact-patch preservation for the four overlap cases and skipped-test/backend limitations; rerun only with controlled, documented fixes, keeping original results.
 - [ ] Freeze a reviewed label manifest with explicit exclusions/uncertainty, then match each exact run/patch with **predefined, frozen trajectory messiness indicators**.
 - [ ] Perform task-aware predictive analysis (including repeated-instance dependence), uncertainty checks, and robustness/sensitivity analyses; only then write up the paper.
 
