@@ -30,7 +30,7 @@ jobs:
       - name: Print environment and dataset package versions
         run: |
           python --version
-          python -m pip install 'datasets>=3,<5' 'huggingface_hub>=0.25,<2'
+          python -m pip install 'datasets==4.8.5' 'huggingface_hub==1.33.0'
           python - <<'PY'
           import datasets, huggingface_hub
           print("datasets", datasets.__version__)
