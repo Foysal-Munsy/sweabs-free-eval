@@ -1,0 +1,195 @@
+{
+  "all_9_backend_case_families_have_new_execution": true,
+  "all_four_collision_source_patches_merge_non_destructively": true,
+  "backend_new_execution": [
+    {
+      "new_backend": "PostgreSQL 15",
+      "probe_feature_flag_irrelevant": "supports_expression_indexes",
+      "sample": 1,
+      "source_automated_status": "AMBIGUOUS_ZERO_EXIT",
+      "target": "full_new_augmented_index_module",
+      "targeted_tests_failed": 0,
+      "targeted_tests_passed": 13,
+      "targeted_tests_skipped": 0,
+      "task": "django__django-12039",
+      "verified_from_unittest_summary": true
+    },
+    {
+      "new_backend": "PostgreSQL 15",
+      "oracle_method_in_independent_unittest_collection": true,
+      "oracle_method_independently_passed_when_explicitly_targeted": true,
+      "sample": 1,
+      "target": "full_augmented_numeric_json_module",
+      "targeted_tests_failed": 0,
+      "targeted_tests_passed": 10,
+      "targeted_tests_skipped": 0,
+      "task": "django__django-15503",
+      "verified_from_unittest_summary": true
+    },
+    {
+      "new_backend": "PostgreSQL 15",
+      "new_postgres_formerly_skipped_modified_method": "PASS",
+      "original_sqlite_modified_method_results": "8 modified OK, 1 modified skipped; one new test OK",
+      "other_full_schema_module_contains_skips": true,
+      "other_full_schema_module_tests_ran": 168,
+      "sample": 1,
+      "target": "formerly_skipped_enhanced_covering_index_method",
+      "targeted_tests_failed": 0,
+      "targeted_tests_passed": 1,
+      "targeted_tests_skipped": 0,
+      "task": "django__django-14434",
+      "verified_from_unittest_summary": true
+    },
+    {
+      "new_backend": "PostgreSQL 15",
+      "probe_feature_flag_irrelevant": "supports_expression_indexes",
+      "sample": 2,
+      "source_automated_status": "AMBIGUOUS_ZERO_EXIT",
+      "target": "full_new_augmented_index_module",
+      "targeted_tests_failed": 0,
+      "targeted_tests_passed": 13,
+      "targeted_tests_skipped": 0,
+      "task": "django__django-12039",
+      "verified_from_unittest_summary": true
+    },
+    {
+      "new_backend": "PostgreSQL 15",
+      "oracle_method_in_independent_unittest_collection": true,
+      "oracle_method_independently_passed_when_explicitly_targeted": true,
+      "sample": 2,
+      "target": "full_augmented_numeric_json_module",
+      "targeted_tests_failed": 0,
+      "targeted_tests_passed": 10,
+      "targeted_tests_skipped": 0,
+      "task": "django__django-15503",
+      "verified_from_unittest_summary": true
+    },
+    {
+      "new_backend": "PostgreSQL 15",
+      "new_postgres_formerly_skipped_modified_method": "PASS",
+      "original_sqlite_modified_method_results": "8 modified OK, 1 modified skipped; one new test OK",
+      "other_full_schema_module_contains_skips": true,
+      "other_full_schema_module_tests_ran": 168,
+      "sample": 2,
+      "target": "formerly_skipped_enhanced_covering_index_method",
+      "targeted_tests_failed": 0,
+      "targeted_tests_passed": 1,
+      "targeted_tests_skipped": 0,
+      "task": "django__django-14434",
+      "verified_from_unittest_summary": true
+    },
+    {
+      "new_backend": "PostgreSQL 15",
+      "probe_feature_flag_irrelevant": "supports_expression_indexes",
+      "sample": 3,
+      "source_automated_status": "AMBIGUOUS_ZERO_EXIT",
+      "target": "full_new_augmented_index_module",
+      "targeted_tests_failed": 0,
+      "targeted_tests_passed": 13,
+      "targeted_tests_skipped": 0,
+      "task": "django__django-12039",
+      "verified_from_unittest_summary": true
+    },
+    {
+      "new_backend": "PostgreSQL 15",
+      "oracle_method_in_independent_unittest_collection": true,
+      "oracle_method_independently_passed_when_explicitly_targeted": true,
+      "sample": 3,
+      "target": "full_augmented_numeric_json_module",
+      "targeted_tests_failed": 0,
+      "targeted_tests_passed": 10,
+      "targeted_tests_skipped": 0,
+      "task": "django__django-15503",
+      "verified_from_unittest_summary": true
+    },
+    {
+      "new_backend": "PostgreSQL 15",
+      "new_postgres_formerly_skipped_modified_method": "PASS",
+      "original_sqlite_modified_method_results": "8 modified OK, 1 modified skipped; one new test OK",
+      "other_full_schema_module_contains_skips": true,
+      "other_full_schema_module_tests_ran": 168,
+      "sample": 3,
+      "target": "formerly_skipped_enhanced_covering_index_method",
+      "targeted_tests_failed": 0,
+      "targeted_tests_passed": 1,
+      "targeted_tests_skipped": 0,
+      "task": "django__django-14434",
+      "verified_from_unittest_summary": true
+    }
+  ],
+  "collection_runtime_check": {
+    "oracle_in_loader": true,
+    "oracle_name": "test_oracle_json_path_final_key_is_quoted_for_numeric_strings",
+    "unittest_module_cases": 10
+  },
+  "collision_new_execution": [
+    {
+      "historical_runner_modified": false,
+      "new_model_preserving_merged_suite_failed": 1,
+      "new_model_preserving_merged_suite_passed": 7,
+      "sample": 1,
+      "task": "sympy__sympy-23413",
+      "test_failure_exception": "IndexError"
+    },
+    {
+      "historical_runner_modified": false,
+      "new_model_preserving_merged_suite_failed": 0,
+      "new_model_preserving_merged_suite_passed": 8,
+      "sample": 2,
+      "task": "sympy__sympy-23413",
+      "test_failure_exception": null
+    },
+    {
+      "historical_runner_modified": false,
+      "new_model_preserving_merged_suite_failed": 1,
+      "new_model_preserving_merged_suite_passed": 7,
+      "sample": 3,
+      "task": "sympy__sympy-23413",
+      "test_failure_exception": "IndexError"
+    },
+    {
+      "failure_semantic_status": "unresolved_negative_zero_formatting_requirement",
+      "historical_runner_modified": false,
+      "new_model_preserving_merged_suite_failed": 5,
+      "new_model_preserving_merged_suite_total": 12,
+      "sample": 3,
+      "task": "django__django-11206"
+    }
+  ],
+  "decision_scope": "new bounded controlled execution evidence for exact original model patches; no independent gold semantic oracle",
+  "limitations": "New PostgreSQL and direct merged tests do not reproduce the historical SWE-ABS Docker image or guarantee full semantic correctness of every strengthened assertion. Primary reviewed FAIL labels remain documentary, not gold. All 14 original UNVERIFIED remain preserved; results may support new versioned secondary observational evidence but are not posthoc appended to frozen primary.",
+  "methodology_outcome_freeze_unchanged": true,
+  "new_backend_evidence_rows": 9,
+  "new_backend_task_categories": {
+    "django_12039": 3,
+    "django_14434": 3,
+    "django_15503": 3
+  },
+  "new_execution_is_original_sweabs_docker_run": false,
+  "original_unverified_cases": 14,
+  "original_v2_outcomes_unchanged": {
+    "FAIL": 31,
+    "PASS": 153,
+    "UNVERIFIED": 14
+  },
+  "requests_full_patch_reconstruction": {
+    "all_model_file_hashes_survived_test_patch": true,
+    "exact_line_diff_match": true,
+    "generated_build_files": 65,
+    "historical_original_docker_tree_verified": false,
+    "whole_changed_file_count": 74
+  },
+  "runner_outcome_relabeling_done": false,
+  "semantic_adjudication_remaining": {
+    "environment_sensitive_fail_runs": 2,
+    "invalid_enhanced_test_fail_runs": 4,
+    "unresolved_fail_runs": 16
+  },
+  "semantic_human_oracle_complete": false,
+  "step7_primary_outcomes_unchanged": {
+    "documentary_supported_fail": 9,
+    "excluded": 36,
+    "runner_pass": 153
+  },
+  "unique_unverified_tasks": 6
+}
