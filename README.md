@@ -14,7 +14,7 @@ This README is the **public summary**. For a precise human/AI continuation point
 
 ## Research status — 2026-11-12
 
-**Milestone: all 198 evaluation attempts complete; all per-patch raw logs reconciled to a current provisional v2 dataset.** Strengthened-test assertion semantics have not been independently validated.
+**Milestone: all 198 evaluation attempts complete; all per-patch raw logs reconciled to a current provisional v2 dataset.** An AI-assisted documentary review of all 31 raw FAILs is complete; **human/maintainer semantic adjudication and final label freezing are not complete**.
 
 | Subset | Originally passing agent runs | Evaluation attempts | PASS | FAIL | UNVERIFIED |
 | --- | ---: | ---: | ---: | ---: | ---: |
@@ -24,7 +24,7 @@ This README is the **public summary**. For a precise human/AI continuation point
 | **Total** | **198** | **198** | **153** | **31** | **14** |
 
 - **PASS:** The audited strengthened-test runner passed the executed augmented tests, with required patch identity and coverage checks met.
-- **FAIL:** The strengthened-test runner exhibited test failure or functional test exception with the intended patch present; **all 31 provisional FAIL labels remain subject to independent augmented-test-validity review**.
+- **FAIL:** The strengthened-test runner exhibited test failure or functional test exception with the intended patch present; **all 31 raw FAILs have a documented AI-assisted validity disposition; independent human/maintainer oracle validation remains pending**.
 - **UNVERIFIED:** Coverage was incomplete, the exact patch under test could not be established, or another validity check was unresolved. **Never count these as FAIL, or silently drop them from reporting.**
 - **GitHub Actions job success is not patch PASS.** Workflow jobs upload evidence even when the model patch fails augmented tests.
 
@@ -42,6 +42,14 @@ The 115 recent Sample 2 (offsets 20–67) and Sample 3 (offsets 0–66) records 
 ### Audit corrections
 
 The automatic collector cannot reliably parse every Django, SymPy, Sphinx/tox, nested pytest, or warning-heavy output. Among the **115 newly audited** runs, manual raw-runner review corrected **38 collector UNVERIFIED → PASS**, **7 collector UNVERIFIED → FAIL**, and **1 collector FAIL → UNVERIFIED** due to a patch-identity problem. These are auditing corrections, **not** newly executed benchmark tasks.
+
+### Step 6 — enhanced-test validity review (documentary, not new labels)
+
+All **31 provisional FAILs across 15 unique task IDs** were compared against [the raw per-run failure evidence and the original upstream issue/PR text](results/2026-11-12/STEP6_FAIL_VALIDITY_REVIEW.md). Review dispositions: **9 issue-supported** (`valid_failure`, still provisional), **4 problematic tests** (`invalid_test`), **2 environment-sensitive**, **16 unresolved**. The raw [v2 cumulative CSV](results/2026-11-12/sweabs_full_198_cumulative_v2.csv) remains **153 PASS / 31 FAIL / 14 UNVERIFIED**; **no agent was relabeled PASS** based on a test-validity concern.
+
+Significant caveats: the Django RFC850 2099→2100 test expectation conflicts with [RFC 7231's 50-year rule](https://www.rfc-editor.org/rfc/rfc7231.html#section-7.1.1.1), an enhanced SymPy determinant test requires an auxiliary tolerance API not established by [the reported pivot bug](https://github.com/sympy/sympy/pull/13877), and two Django ModelForm tests use [Python-version-sensitive `staticmethod` behavior](https://docs.python.org/3/library/functions.html#staticmethod).
+
+Full sources and counterarguments: [31-row review ledger](results/2026-11-12/STEP6_FAIL_REVIEW_31.csv) · [15-task summary](results/2026-11-12/STEP6_TASK_SUMMARY_15.csv) · [detailed review report](results/2026-11-12/STEP6_FAIL_VALIDITY_REVIEW.md). These are **documentary review judgments**, not publication-ready semantic correctness labels.
 
 ## Dataset and reproducibility
 
@@ -101,8 +109,9 @@ A 5.1-MB raw-evidence ZIP for the original recent audits and a separate **2.8-MB
 - [x] Produce a cumulative **provisional** audit CSV and detailed raw-evidence report.
 - [x] **Archive the provisional cumulative CSV, provenance, report, historical input and audit script**, preserving original bytes; keep the raw ZIP in a checksum-verified private Library archive (not a public release).
 - [x] **Reconcile the 83 historical rows** against raw GitHub Actions evidence, retain original v1, and document the one patch-identity correction in a reviewed v2.
-- [ ] **Validate the 31 provisional FAIL cases across 15 distinct tasks** against the intended behavior and strength/relevance of each added test; distinguish genuine counterexamples from invalid or environment-sensitive assertions.
-- [ ] **Triage 14 UNVERIFIED cases**: prioritize exact-patch preservation for the four overlap cases and skipped-test/backend limitations; rerun only with controlled, documented fixes, keeping original results.
+- [x] **Document an AI-assisted semantic validity review for all 31 FAILs across 15 tasks**, with evidence-backed dispositions, opposing interpretations, and open questions; no raw label changes.
+- [ ] Seek independent/human issue-specific confirmation for unresolved or environment-sensitive FAIL tests before claiming final semantic correctness.
+- [ ] **Step 7 (next): Triage 14 UNVERIFIED cases and freeze analysis labels**, with explicit exclusion/sensitivity policies for the Step 6 review; prioritize four patch-overlap cases and skipped/backend-limited tests. Any rerun must preserve original evidence.
 - [ ] Freeze a reviewed label manifest with explicit exclusions/uncertainty, then match each exact run/patch with **predefined, frozen trajectory messiness indicators**.
 - [ ] Perform task-aware predictive analysis (including repeated-instance dependence), uncertainty checks, and robustness/sensitivity analyses; only then write up the paper.
 
