@@ -5,6 +5,38 @@
 
 This log should record **what actually changed**, not hoped-for progress. The newest entry comes first. When a past conclusion needs correction, add a new dated correction entry with sources; do not erase the original record. Every entry should give (a) scope, (b) verified result, (c) files/commit/log evidence, (d) unresolved issues, (e) next handoff.
 
+## 2026-11-12 — Step 7: 14-case UNVERIFIED triage and provisional analysis-label freeze
+
+**Milestone/scope:** Step 7 **DONE for documentary triage and versioned provisional eligibility/sensitivity screening**. **No human oracle, no fresh per-patch ZIP examination, no Docker rerun, no new trajectory indicator, and no alteration of any prior runner outcome.** Step 8 is NEXT.
+
+**Source-based verification this session:**
+- Read [AGENTS.md](../AGENTS.md), [PROJECT_STATE](PROJECT_STATE.md) and this log before proceeding. Queried [recent commits](https://github.com/Foysal-Munsy/sweabs-free-eval/commits/main/) and [Actions history](https://github.com/Foysal-Munsy/sweabs-free-eval/actions) for changes. The documented v2 remained the latest evaluation-label data before this Step 7 screening.
+- Independently re-joined the [198-run v2 CSV](../results/2026-11-12/sweabs_full_198_cumulative_v2.csv) to 83 historical + 115 recent [audit-evidence CSVs](../results/2026-11-12/MANIFEST.md) on sample/offset and checked instance, patch SHA and outcome. **198/198 evidence matches, 198 unique (sample, instance, patch) identities, 73 tasks, no mismatches**. Joined all 31 FAIL against the [Step 6 review ledger](../results/2026-11-12/STEP6_FAIL_REVIEW_31.csv): **31/31 matched**, with 9 supported, 4 invalid-test, 2 environment-sensitive, 16 unresolved.
+- Looked up GitHub Actions artifact metadata for the **11 workflow runs** containing the 14 UNVERIFIED records; all 14 expected `sweabs-result-*-*` per-patch artifact names were present and not expired. **Did not download or re-examine each raw ZIP in this session; prior detailed audit tables remain the substantive raw-evidence basis.**
+- Triaged **14 UNVERIFIED across 6 tasks**: **9 skipped/backend coverage; 4 original-model/augmented-test-file overlaps; 1 large generated-patch integrity gap**. None was promoted to observed PASS/FAIL.
+
+**Artifacts created, linked and GitHub-fetched:**
+- [198-row STEP7_ANALYSIS_LABELS_v1.csv](../results/2026-11-12/STEP7_ANALYSIS_LABELS_v1.csv) — initial commit [7c772e8](https://github.com/Foysal-Munsy/sweabs-free-eval/commit/7c772e8ddfdf4d69d8e3996c8dba9691d2d11c57), 51,518 bytes; [14-row STEP7_UNVERIFIED_TRIAGE_14.csv](../results/2026-11-12/STEP7_UNVERIFIED_TRIAGE_14.csv) — [68a3cfd](https://github.com/Foysal-Munsy/sweabs-free-eval/commit/68a3cfd377fd51df4d66d796d043a5e50e5bab38), 7,965 bytes.
+- [Source-constrained deterministic rebuild/check script](../scripts/build_step7_analysis_labels.py) — [26d7fb4](https://github.com/Foysal-Munsy/sweabs-free-eval/commit/26d7fb4c2f2f0b07808e1decbd5aa38946863f84); [Step 7 documentary report with competing interpretations and exact decisions](../results/2026-11-12/STEP7_TRIAGE_AND_LABEL_POLICY.md) — [04d0aa3](https://github.com/Foysal-Munsy/sweabs-free-eval/commit/04d0aa319d156a7fe71fb4e6bcad48aa82168be3).
+- [Evidence manifest](../results/2026-11-12/MANIFEST.md) includes **GitHub-read-back byte lengths and recomputed SHA-256** for these four new artifacts. The isolated local terminal could not resolve GitHub to clone, so the Python `--check` was **not** independently run against a cloned checkout; that end-to-end reproducibility check remains **unverified**. The generating logic was validated at the join/count/output level in this session.
+
+**Provisional analysis-policy freeze (before feature extraction):**
+
+| Scenario | 0 (runner PASS) | 1 (provisional FAIL) | Excluded |
+| --- | ---: | ---: | ---: |
+| Conservative primary: PASS vs Step 6 review-supported `valid_failure` | 153 | 9 | 36 |
+| Sensitivity A: include unresolved/environment-sensitive FAIL | 153 | 27 | 18 |
+| Sensitivity B: all observed runner FAIL (includes 4 invalid-test reviews) | 153 | 31 | 14 |
+| Sensitivity C: hypothetical 9 skipped UNVERIFIED as PASS | 162 | 9 | 27 |
+
+**Limits/opposing interpretation:** The primary target has **162 rows / 61 distinct task IDs and only 9 positive FAIL observations across 5 tasks**; the data must not be treated as 162 independent task IDs or a gold-standard oracle. A runner-defined study could reasonably prefer all 31 FAILs; this alternative is preserved as Sensitivity B, with known test-validity weaknesses stated. The skipped-as-PASS scenario is *only an assumption* and does not reclassify v2. No predictive association is reported.
+
+**Unresolved evidence:** Four overlap runs require non-destructive exact-patch rerun design, nine backend-skipped runs require targeted coverage checks, `psf__requests-1142` needs full-patch integrity verification; independent validity review is still missing for Step 6 provisional judgments. Artifact retention is 14 days, with separate private raw backups documented in [manifest](../results/2026-11-12/MANIFEST.md). No task reruns were scheduled or performed.
+
+**Next exact action:** **Step 8 — freeze a theory-driven trajectory indicator specification** (event schema, parsing rules, run-level formulas and denominators, missingness, exact sample/instance/patch matching, leakage controls, task dependence), then test parser coverage without outcome-driven tuning. Track targeted reruns and human oracle checks as separate outstanding validity tasks; do not convert provisional Step 7 screens into final semantic truth.
+
+**Documentation synchronized:** PROJECT_STATE = yes; WORK_LOG = yes; README = yes; AGENTS = yes; results index = yes; archive manifest = yes. All public files; original v1/v2/raw materials unchanged.
+
 ## 2026-11-12 — Step 6: documented validity review of 31 provisional FAIL cases
 
 **Milestone/scope:** Step 6 DONE for **AI-assisted documentary review**, not independently executed semantic ground truth; Step 7 is NEXT. **No modifications to the 198-row v2 runner outcomes.**
