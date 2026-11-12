@@ -20,6 +20,9 @@ REV="b5515d1dce40036633293b70477f0633b24593f7"
 ABS="OpenAgentLab/SWE-Bench_Verified_ABS"
 TEST_REV="79fc07a8f4ce5e3720e069948073f5f910b7577b"
 ALLOWED={
+ "django__django-12039":{
+     "method":"indexes.test_whitespace_create_index",
+     "feature_flags":["supports_expression_indexes"]},
  "django__django-14434":{
      "method":"schema.tests.SchemaTests.test_func_unique_constraint_covering",
      "feature_flags":["supports_expression_indexes","supports_covering_indexes"]},
@@ -136,13 +139,15 @@ def execute(task,sample):
     detail=[x.strip()[:300] for x in lines if
        re.search(r"(^test_.*\.\.\. (?:ok|skipped|FAIL|ERROR)|^Ran \d+ tests?|^FAILED \(|^OK$|^System check|^Creating test database|^Destroying test database|^ERROR:|^FAIL:)",x)]
     status="INCOMPLETE_SETUP_OR_ENVIRONMENT"
-    if (supported and exit_code==0 and any(re.search(r"^Ran 1 test",x) for x in lines) and
-            any(re.search(r"\.\.\. ok\s*$",x) for x in lines)):
+    ran=[int(n) for n in re.findall(r"(?m)^Ran (\\d+) tests? in",output)]
+    clean_ok=bool(re.search(r"(?m)^OK\\s*$",output))
+    reported_skips=bool(re.search(r"(?m)^OK \\(skipped=\\d+\\)",output))
+    failed_summary=bool(re.search(r"(?m)^FAILED \\(",output))
+    if supported and exit_code==0 and len(ran)==1 and ran[0]>0 and clean_ok and not reported_skips:
         status="TARGETED_TEST_PASSED_ON_POSTGRES"
-    elif (supported and exit_code!=0 and
-            any(re.search(r"^Ran 1 test",x) for x in lines)):
+    elif supported and exit_code!=0 and len(ran)==1 and failed_summary:
         status="TARGETED_TEST_FAILED_ON_POSTGRES"
-    elif any("skipped" in x.lower() for x in detail):
+    elif reported_skips or any("skipped" in x.lower() for x in detail):
         status="TARGET_SKIPPED_OR_INCOMPLETE"
     elif exit_code==0:
         status="AMBIGUOUS_ZERO_EXIT"
@@ -157,6 +162,9 @@ def execute(task,sample):
        "method_label":target,
        "target_execution_exit_code":exit_code,
        "target_execution_status":status,
+       "observed_unittest_total":ran[0] if len(ran)==1 else None,
+       "observed_unittest_clean_ok":clean_ok,
+       "observed_unittest_reported_skips":reported_skips,
        "timed_out":timed_out,
        "wall_seconds":duration,
        "bounded_test_status_lines":detail[-28:],
