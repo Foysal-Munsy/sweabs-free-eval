@@ -14,7 +14,7 @@ This README is the **public summary**. For a precise human/AI continuation point
 
 ## Research status — 2026-11-12
 
-**Milestone: all 198 stronger-test attempts and audits complete; Step 8 indicators frozen before extraction, Step 9 features exactly matched, and Step 10 exploratory AUROCs computed.** Step 6 reviewed the 31 FAILs and Step 7 retained 14 UNVERIFIED with explicit provisional analysis screens. None is an independent human/maintainer semantic oracle. **Step 11 technical reproduction and task-aware robustness now PASS; independent semantic validity/coverage review remains the current unfinished gate.**
+**Milestone: all 198 stronger-test attempts and audits complete; Step 8 indicators frozen before extraction, Step 9 features exactly matched, and Step 10 exploratory AUROCs computed.** Step 6 reviewed the 31 FAILs and Step 7 retained 14 UNVERIFIED with explicit provisional analysis screens. None is an independent human/maintainer semantic oracle. **Step 11 technical reproduction and task-aware robustness PASS; 45-case source/test crosswalk, 14 original-ZIP re-audit, and 9-case augmented test-method coverage attribution now PASS. Independent human/controlled semantic validity and backend-specific reruns remain the unfinished gate.**
 
 | Subset | Originally passing agent runs | Evaluation attempts | PASS | FAIL | UNVERIFIED |
 | --- | ---: | ---: | ---: | ---: | ---: |
@@ -95,6 +95,24 @@ The read-only [GitHub Actions Step 11 workflow](.github/workflows/step11-reprodu
 
 **Unfinished Step 11 semantic validity gate:** 16 unresolved and 2 environment-sensitive FAIL reviews, invalid enhanced tests and 14 UNVERIFIED runner outcomes still need independent adjudication/controlled evidence or explicit limitation decisions. Their old v2/Step 7 labels were NOT modified. **No final semantic validity, reliable classifier, external generalization, or journal submission readiness is claimed.**
 
+## Step 11 validity follow-up — original artifacts independently re-audited
+
+Pinned [Gemini 3 Flash trajectories](https://huggingface.co/datasets/tarsur385/swe-verified-gemini3-flash-trajectories) and [SWE-ABS augmented tests](https://huggingface.co/datasets/OpenAgentLab/SWE-Bench_Verified_ABS) were independently cross-matched for **45 exact agent patches** (31 provisional FAIL + 14 UNVERIFIED, 20 tasks). **All 31 reviewed FAIL test-patch hashes matched** the pinned test dataset. All **four** originally suspected model/test-file collision cases share an exact modified file. The Requests patch has **65 generated `build/`-path files** requiring full tested-tree integrity checks. [Crosswalk JSON](results/2026-11-12/STEP11_SEMANTIC_STRUCTURAL_CROSSWALK_v1.json) · [CI success](https://github.com/Foysal-Munsy/sweabs-free-eval/actions/runs/43262365929).
+
+All **14/14** original per-run Actions result ZIPs were freshly downloaded and source identity/test-patch SHA compared; **14 original test-output digests** are documented, and skipped-test totals match raw log entries. No ZIP or full raw log was added publicly. [Raw ZIP audit](results/2026-11-12/STEP11_RAW_ARTIFACT_REAUDIT14_v1.json) · [CI success](https://github.com/Foysal-Munsy/sweabs-free-eval/actions/runs/43263048387).
+
+**Newly defined augmented test-method attribution** distinguishes total runner skips from newly added tests across all three samples per affected task:
+
+| Task | Added `test_*` methods per run | Found passed | Found skipped | Not found in verbose log | Total suite skips |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| `django-12039` | 13 | 9 | 4 | 0 | 4 |
+| `django-14434` | 1 | 1 | 0 | 0 | 28 |
+| `django-15503` | 10 | 8 | 1 | 1 | 1 |
+
+The critical nuance is **`django-14434`'s newly added method passed despite 28 suite-level skips**. That does **not** yet certify all modified existing methods or backend coverage; the Step 7 UNVERIFIED label remains unchanged. For `django-15503`, one added method was not observed in the verbose test log. [9-run method attribution](results/2026-11-12/STEP11_SKIP_ATTRIBUTION_9_v1.json) · [CI success](https://github.com/Foysal-Munsy/sweabs-free-eval/actions/runs/43264326911) · [Complete semantic-gate report](results/2026-11-12/STEP11_SEMANTIC_VALIDITY_GATE_v1.md).
+
+**Still not independently established:** original issue's complete semantic correctness for the disputed enhanced assertions; full coverage of unsupported PostgreSQL/JSON tests; exact preserved model patch for file overlaps; full built-file integrity for Requests; human/maintainer adjudication; held-out prediction. **No original runner labels, frozen Step 7 outcome policy or Step 8 indicator definitions changed.**
+
 ## Dataset and reproducibility
 
 | Component | Frozen source |
@@ -160,7 +178,8 @@ A 5.1-MB raw-evidence ZIP for the original recent audits and a separate **2.8-MB
 - [x] **Step 9:** Extract and exact-match all 198 run features with pinned patch hashes; [coverage table](results/2026-11-12/STEP9_COVERAGE_v1.json); independent Python reproduction pending.
 - [x] **Step 10:** Compute four prespecified individual-indicator AUROCs under four label screens, task-cluster intervals and [limitations](results/2026-11-12/STEP10_QUANTITATIVE_REPORT_v1.md) — **exploratory, not a validated predictor**.
 - [x] **Step 11 technical gates:** Independently reproduced pinned Python feature extraction, Step 10 AUROCs, task-aware exploratory robustness, and 12 selected raw-message spot checks (168 checks, 0 discrepancies) in [successful CI](https://github.com/Foysal-Munsy/sweabs-free-eval/actions/runs/43260088649).
-- [ ] **Step 11 semantic gate (NEXT):** Resolve/document unresolved strengthened-test validity and backend coverage issues before claiming substantive reliability prediction.
+- [x] **Step 11 documentary/source evidence:** Verify 45 pinned source models/tests, fresh 14/14 original ZIPs and nine skipped-coverage method-to-log mappings (no runner relabel).
+- [ ] **Step 11 semantic gate (NEXT):** Independently adjudicate unresolved enhanced assertions, verify in-place modified test methods, resolve backend/exact-patch gaps and record controlled reruns or tightly bounded limitations before substantive predictive claims.
 - [ ] Perform task-aware predictive analysis (including repeated-instance dependence), uncertainty checks, and robustness/sensitivity analyses; only then write up the paper.
 
 **Only preliminary in-sample descriptive AUROCs are reported; no validated predictive performance, reliable semantic ground truth, or causal relationship is claimed.** The research question remains open.
