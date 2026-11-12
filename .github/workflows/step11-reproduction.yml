@@ -2,6 +2,12 @@ name: Step 11 - Independent reproduction (read-only)
 
 on:
   workflow_dispatch:
+    inputs:
+      repeat_short_retention_checks:
+        description: "Re-download original ZIPs for archival re-audit (uses GitHub artifact egress; normally OFF)"
+        required: false
+        type: boolean
+        default: false
   push:
     branches: [main]
     paths:
@@ -75,6 +81,7 @@ jobs:
             echo 'STEP11_STRUCTURAL_CROSSWALK_END'
           fi
       - name: Fresh per-patch ZIP inspection for all 14 UNVERIFIED
+        if: github.event_name == 'workflow_dispatch' && inputs.repeat_short_retention_checks == true
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -83,6 +90,7 @@ jobs:
           cat results/2026-11-12/STEP11_RAW_ARTIFACT_REAUDIT14_v1.json
           echo 'STEP11_RAW_ZIP_AUDIT_END'
       - name: Attribute nine skipped runs to newly added augmented test method names
+        if: github.event_name == 'workflow_dispatch' && inputs.repeat_short_retention_checks == true
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -91,6 +99,7 @@ jobs:
           cat results/2026-11-12/STEP11_SKIP_ATTRIBUTION_9_v1.json
           echo 'STEP11_SKIP_ATTRIBUTION_END'
       - name: Attribute Django-14434 inserted assertions in existing methods using pinned Django base
+        if: github.event_name == 'workflow_dispatch' && inputs.repeat_short_retention_checks == true
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -99,6 +108,8 @@ jobs:
           cat results/2026-11-12/STEP11_INPLACE_METHOD_AUDIT_DJANGO14434_v1.json
           echo 'STEP11_INPLACE_DJANGO14434_END'
       - name: Inspect declared but unobserved Django-15503 Oracle test method
+        # By default, consult independently verified immutable ZIP/method ledgers
+        # instead of repeating fragile high-egress artifact downloads.
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
