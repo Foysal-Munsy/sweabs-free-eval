@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Step 10: prespecified univariate AUROCs with task-cluster bootstrap.
 No model training, threshold search, iid-run confidence intervals, or label changes.
-Uses only Python standard library. Run at repo root:
+Uses only Python standard library. v2 fixes low-bit LCG modulo sampling from v1. Run at repo root:
  python scripts/step10_analyze_frozen_features.py
  python scripts/step10_analyze_frozen_features.py --check
 """
@@ -13,7 +13,7 @@ ROOT=Path(__file__).resolve().parents[1]
 D=ROOT/"results/2026-11-12"
 FEATURES=D/"STEP9_TRAJECTORY_FEATURES_v1.csv"
 LABELS=D/"STEP7_ANALYSIS_LABELS_v1.csv"
-OUT=D/"STEP10_AUROC_TASK_CLUSTER_v1.json"
+OUT=D/"STEP10_AUROC_TASK_CLUSTER_v2.json"
 SEED=20261112
 B=500
 PREDICTORS=[
@@ -53,7 +53,7 @@ def bootstrap(rows,seed=SEED,b=B):
         draw=[]
         for _ in keys:
             state=(1664525*state+1013904223)&0xffffffff
-            chosen=keys[state%len(keys)]
+            chosen=keys[(state*len(keys))//(1<<32)]  # high-bit scaling avoids short cycles when len(keys) is power-of-two
             draw.extend(groups[chosen])
         result=roc_auc(draw)
         if result is not None:values.append(result)
