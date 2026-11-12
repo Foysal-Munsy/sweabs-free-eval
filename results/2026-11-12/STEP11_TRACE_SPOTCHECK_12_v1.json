@@ -1,0 +1,119 @@
+{
+  "n_indicator_comparisons": 168,
+  "n_mismatches": 0,
+  "n_trajectories": 12,
+  "rows": [
+    {
+      "checked_indicators": 14,
+      "instance_id": "astropy__astropy-12907",
+      "mismatched_indicators": {},
+      "offset": 0,
+      "patch_sha256": "eedb2b9e4654ff629d84a74ac8554b999241a152ad9188d951743fc6c07c463d",
+      "raw_outcome_v2": "PASS",
+      "sample": 1
+    },
+    {
+      "checked_indicators": 14,
+      "instance_id": "astropy__astropy-14309",
+      "mismatched_indicators": {},
+      "offset": 1,
+      "patch_sha256": "a976156bce7fae9b5b7cc9c3bf6b0afd12d25149080cc7a59535080902d099ce",
+      "raw_outcome_v2": "PASS",
+      "sample": 1
+    },
+    {
+      "checked_indicators": 14,
+      "instance_id": "django__django-11206",
+      "mismatched_indicators": {},
+      "offset": 5,
+      "patch_sha256": "f1b691b3a97fc05ac5b9ae7cc4016aa830e3adf7a76f1077b8e44044363c2ac0",
+      "raw_outcome_v2": "FAIL",
+      "sample": 1
+    },
+    {
+      "checked_indicators": 14,
+      "instance_id": "django__django-12039",
+      "mismatched_indicators": {},
+      "offset": 10,
+      "patch_sha256": "13c384a48bed11df0ebfeae126594ab1edd5ec67cca9905e4363150875ee2f60",
+      "raw_outcome_v2": "UNVERIFIED",
+      "sample": 1
+    },
+    {
+      "checked_indicators": 14,
+      "instance_id": "astropy__astropy-12907",
+      "mismatched_indicators": {},
+      "offset": 0,
+      "patch_sha256": "846b740a0367d1026f113de0bbf27e8760fe780d9b8697d1855e07d3f61b9fa4",
+      "raw_outcome_v2": "PASS",
+      "sample": 2
+    },
+    {
+      "checked_indicators": 14,
+      "instance_id": "astropy__astropy-13236",
+      "mismatched_indicators": {},
+      "offset": 1,
+      "patch_sha256": "838ac849582f5522022fe77a28aa3b9c47ae2ead25662bc9b6fd0caf8a4a0adc",
+      "raw_outcome_v2": "PASS",
+      "sample": 2
+    },
+    {
+      "checked_indicators": 14,
+      "instance_id": "django__django-10097",
+      "mismatched_indicators": {},
+      "offset": 4,
+      "patch_sha256": "310c12410ce1dc7455f2145c41f3b7ca50bc20d3fd16ecc20c215e20a44be8b7",
+      "raw_outcome_v2": "FAIL",
+      "sample": 2
+    },
+    {
+      "checked_indicators": 14,
+      "instance_id": "django__django-12039",
+      "mismatched_indicators": {},
+      "offset": 11,
+      "patch_sha256": "fe1d826efc0c3281c514f807709714080b7087d037da4ece719ccb3255632d54",
+      "raw_outcome_v2": "UNVERIFIED",
+      "sample": 2
+    },
+    {
+      "checked_indicators": 14,
+      "instance_id": "astropy__astropy-12907",
+      "mismatched_indicators": {},
+      "offset": 0,
+      "patch_sha256": "f680b2846a58084793c2bca27cbe17c2fef889170ae0cc2a588010040119afe3",
+      "raw_outcome_v2": "PASS",
+      "sample": 3
+    },
+    {
+      "checked_indicators": 14,
+      "instance_id": "astropy__astropy-13236",
+      "mismatched_indicators": {},
+      "offset": 1,
+      "patch_sha256": "3b3686342a86f7858aecd44573d9707fbf1462115fdab6b65ac1974eca90faf8",
+      "raw_outcome_v2": "PASS",
+      "sample": 3
+    },
+    {
+      "checked_indicators": 14,
+      "instance_id": "django__django-10097",
+      "mismatched_indicators": {},
+      "offset": 4,
+      "patch_sha256": "1a48d6c688e8ad002eb41aad66af7e64ea0feef9ef8298d8535357c160b960aa",
+      "raw_outcome_v2": "FAIL",
+      "sample": 3
+    },
+    {
+      "checked_indicators": 14,
+      "instance_id": "django__django-11206",
+      "mismatched_indicators": {},
+      "offset": 7,
+      "patch_sha256": "2b74b39168d3927e80ecce18cc14f3a5b869c56bfc2ffb5643af427693cc65a7",
+      "raw_outcome_v2": "UNVERIFIED",
+      "sample": 3
+    }
+  ],
+  "scope_limit": "Independent software recount of selected raw trajectory messages; not human review or oracle confirmation of strengthened-test outcomes",
+  "selection": "for each sample (1,2,3): first two PASS, first FAIL and first UNVERIFIED, sorted by Step 7 offset",
+  "source_dataset": "tarsur385/swe-verified-gemini3-flash-trajectories",
+  "source_revision": "b5515d1dce40036633293b70477f0633b24593f7"
+}
