@@ -55,30 +55,34 @@ jobs:
           if [ "$GITHUB_EVENT_NAME" = "push" ]; then
             python - <<'PY' > batch.env
           import json
-          import os
+          import subprocess
           from pathlib import Path
 
-          event = json.loads(Path(os.environ["GITHUB_EVENT_PATH"]).read_text())
-          head = event.get("head_commit") or {}
-          changed = set(head.get("modified", []) + head.get("added", []))
-          files = (
-              ".github/sweabs-sample2-batch.json",
-              ".github/sweabs-sample3-batch.json",
-          )
-          selected = [path for path in files if path in changed]
-          if len(selected) != 1:
-              raise SystemExit(f"Expected exactly one batch manifest change, found: {selected}")
+          # GitHub push events produced by the Contents API may omit file lists.
+          # The commit title selects which restricted manifest was intentionally pushed.
+          subject = subprocess.check_output(
+              ["git", "log", "-1", "--pretty=%s"], text=True
+          ).strip()
+          files = {
+              2: ".github/sweabs-sample2-batch.json",
+              3: ".github/sweabs-sample3-batch.json",
+          }
+          matched = [n for n in files if subject.startswith(f"Run Sample {n} batch")]
+          if len(matched) != 1:
+              raise SystemExit(f"Unrecognized batch-trigger commit: {subject}")
 
-          payload = json.loads(Path(selected[0]).read_text())
+          selected_sample = matched[0]
+          path = files[selected_sample]
+          payload = json.loads(Path(path).read_text())
           sample, offset, count = (payload.get(k) for k in ("sample", "offset", "count"))
-          if selected[0] == files[0]:
+          if selected_sample == 2:
               valid = sample == 2 and offset in (20, 30, 40, 50, 60)
               expected_count = 8 if offset == 60 else 10
           else:
               valid = sample == 3 and offset in (0, 10, 20, 30, 40, 50, 60)
               expected_count = 7 if offset == 60 else 10
           if not valid or count != expected_count:
-              raise SystemExit(f"Invalid batch configuration: {payload} (from {selected[0]})")
+              raise SystemExit(f"Invalid batch configuration: {payload} (from {path})")
           print(f"SAMPLE={sample}")
           print(f"OFFSET={offset}")
           print(f"COUNT={count}")
