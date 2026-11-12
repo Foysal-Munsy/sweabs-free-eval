@@ -1,0 +1,70 @@
+name: Step 11 - Full augmented Django module recheck on PostgreSQL
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/step11-django-full-postgres.yml"
+permissions:
+  contents: read
+jobs:
+  run-full-augmented-module:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix:
+        include:
+          - task: django__django-15503
+            sample: 1
+          - task: django__django-15503
+            sample: 2
+          - task: django__django-15503
+            sample: 3
+          - task: django__django-14434
+            sample: 1
+          - task: django__django-14434
+            sample: 2
+          - task: django__django-14434
+            sample: 3
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: python -m pip install 'datasets==4.8.5' 'huggingface_hub==1.33.0'
+      - name: Reconstruct frozen original agent patch with full augmented test file
+        run: |
+          python scripts/step11_django_full_module_driver.py prepare \
+            --task ${{ matrix.task }} --sample ${{ matrix.sample }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.9"
+      - name: Install pinned original Django and PostgreSQL Python dependencies
+        run: |
+          DIR="scratch/step11-django-${{ matrix.task == 'django__django-15503' && '15503' || '14434' }}-sample${{ matrix.sample }}/django"
+          python -m pip install -e "./$DIR"
+          python -m pip install 'psycopg2-binary==2.9.9'
+      - name: Execute complete augmented test module with new versioned evidence
+        run: |
+          python scripts/step11_django_full_module_driver.py execute \
+            --task ${{ matrix.task }} --sample ${{ matrix.sample }}
+      - name: Check historical evidence is untouched
+        run: |
+          git diff --exit-code -- results/2026-11-12/sweabs_full_198_cumulative_v2.csv \
+            results/2026-11-12/STEP7_ANALYSIS_LABELS_v1.csv
