@@ -5,6 +5,28 @@
 
 This log should record **what actually changed**, not hoped-for progress. The newest entry comes first. When a past conclusion needs correction, add a new dated correction entry with sources; do not erase the original record. Every entry should give (a) scope, (b) verified result, (c) files/commit/log evidence, (d) unresolved issues, (e) next handoff.
 
+## 2026-11-12 — Step 4: archived audited results with a private raw-evidence backup
+
+**Milestone / scope:** Step 4 evidence preservation, completed for the repository owner's durable access; **public raw-ZIP release deferred**. Step 5 historical audit consistency remains pending.
+
+**Actions and verified evidence:**
+- Rechecked the local originals before archival: **198 cumulative rows** (Sample 1: 63, Sample 2: 68, Sample 3: 67; 153 PASS, 32 FAIL, 13 UNVERIFIED), **115 detailed evidence rows** (48 Sample 2 and 67 Sample 3), and unchanged source SHA-256 checksums.
+- Committed the [198-row CSV](../results/2026-11-12/sweabs_full_198_cumulative_audited.csv), [115-row evidence CSV](../results/2026-11-12/sweabs_samples2_3_full_audit_evidence_115.csv), [audit report](../results/2026-11-12/sweabs_full_198_audit_report.md), [historical 83-row CSV](../results/2026-11-12/sweabs_samples1_2_first83_cumulative.csv), and the [original offline audit script](../results/2026-11-12/sweabs_full_audit.py) under an immutable dated archival directory.
+- Detected that an initial content-reader pass normalized CSV CRLF and trimmed a terminal newline; corrected and committed **byte-identical** originals. Re-fetched GitHub content and verified the first three source SHA-256 digests matched local originals. Historical input/script content and original byte sizes also matched after GitHub read-back.
+- Created a [hash and storage manifest](../results/2026-11-12/MANIFEST.md) and [results index](../results/README.md).
+- Uploaded the **5,136,675-byte raw evidence bundle** privately to the owner's ChatGPT Library at `/Research/SWE-ABS/2026-11-12/sweabs_full_audit_evidence_bundle.zip`. Retrieved it back from Library, verified SHA-256 `b7f5fd76f747a23a83fb5b2d5e2c355d6123c2e2c9ddfe6fea974b3ac3c73d99`, passed ZIP integrity test (`testzip() is None`), and confirmed 140 entries. The raw bundle is **not on public GitHub** and excludes original Sample 1 raw per-patch ZIPs.
+- Limited regex-based scanning found email-like and password-like test strings inside nested raw artifacts; it found no clear GitHub PAT/AWS-key/private-key markers. This **does not** certify safety for public release, so no public raw-ZIP upload was made.
+
+**Verified files and checksums:** see [the authoritative manifest](../results/2026-11-12/MANIFEST.md), which records each byte count and digest. GitHub write/read-back confirmation is recorded by the repository's file history and SHA values in that manifest.
+
+**What did not happen:** No label changes, feature extraction, statistical analysis, semantic FAIL review, or benchmark reruns. No claim that a public reader can download the raw private archive.
+
+**Decision and limitation:** Step 4 may be marked **DONE for owner-accessible durable preservation**. Public release of raw artifacts requires stronger screening and is deferred as a reproducibility/publication concern. This is separate from analysis label validity.
+
+**Next exact action:** **Step 5 — reconcile the 83 historical rows** using available per-patch logs, patch/base/test integrity, and current conservative audit policy; retain an append-only corrections table if anything changes.
+
+**Documentation synchronized:** PROJECT_STATE = yes; WORK_LOG = yes; README = yes; AGENTS = yes.
+
 ## 2026-11-12 — Established project handoff documentation
 
 **Milestone:** Documentation organization; research Step 4 (durable evidence archiving) **not completed**.
