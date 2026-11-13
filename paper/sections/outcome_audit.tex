@@ -1,0 +1,46 @@
+\section{Outcome-Validity Audit and Cohort Dependence}\label{sec:auditing}
+\subsection{Sampling and classification transparency}
+Table~\ref{tab:cohort} separates distinct agent runs from distinct tasks. All 198 selected trajectories had a recorded original benchmark success, yet their strengthened-test outcomes remained provisional and could not all be safely assigned to a binary target. A simple binary conversion of the 14 UNVERIFIED rows would introduce extra assumptions that the historical runner did not verify.
+
+\begin{table}[t]
+\caption{Original strengthened-test attempt counts. Different samples may share a task identifier.}
+\label{tab:cohort}
+\centering
+\begin{tabular}{lrrrr}
+\toprule
+Source sample & Runs & PASS & FAIL & UNVERIFIED\\
+\midrule
+1 & 63 & 48 & 10 & 5\\
+2 & 68 & 53 & 11 & 4\\
+3 & 67 & 52 & 10 & 5\\
+\midrule
+Total &198 &153 &31 &14\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Historical runner records and the agent patch form a \emph{measurement chain}: the original passing agent trajectory provides the submitted patch; that patch must survive baseline checkout and augmented-test installation; the relevant tests must execute; their assertions must be defensible relative to the task; and tool or CI success must not be confused with task success. These gates are conceptually distinct. Passing the first gates does not guarantee the last.
+
+\subsection{Why 31 runner failures are not 31 gold positives}
+The 31 runner FAIL rows include nine review-supported issue-aligned cases, four enhanced-test assertions classified as invalid, two Python/runtime-sensitive cases, and 16 whose issue-level semantic validity could not be resolved from available documentary evidence. Even the nine supported cases are \emph{provisional}: the categorization was AI-assisted issue/PR/test review, not independent human or maintainer adjudication.
+
+\begin{table}[t]
+\caption{Documentary review of 31 original runner FAIL records. These are not independent semantic gold labels.}
+\label{tab:reviewdispositions}
+\centering
+\begin{tabular}{lr}
+\toprule
+Review status & Runner FAIL runs\\
+\midrule
+Issue-aligned (review-supported) &9\\
+Invalid augmented assertion &4\\
+Environment-sensitive contract &2\\
+Unresolved issue-level validity &16\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The nine positive records in the conservative analysis arise from only \emph{five} task identifiers. A task-cluster bootstrap protects against treating all runs as independent, but it cannot turn five positive task families into a well-powered set of independent defect mechanisms. The cohort is also selected conditional on original PASS: it does not represent all coding-agent attempts.
+
+\subsection{Three distinct objects of inference}
+An \emph{execution result} describes a suite and environment. A \emph{documentary review category} describes available issue/test reasoning. A \emph{semantic defect label} would require a validated contract and independent assessment. This study has the first two in versioned form, but not the third. The missing third object is a scientific limitation, not a formatting issue.
