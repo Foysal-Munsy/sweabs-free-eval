@@ -4,7 +4,7 @@ Reproducible GitHub Actions evaluation of **coding-agent patches that originally
 
 > **Research question:** Among originally successful coding-agent trajectories, do lightweight trajectory-level messiness indicators predict failure under strengthened tests?
 
-This repository now covers **strengthened-test evaluation, exact-match trajectory feature extraction, and exploratory task-aware AUROC analysis**. A validated classifier, independently adjudicated semantic labels, external/generalization testing, and paper writing have **not** been completed. The outcomes below remain *provisional augmented-test labels*, not final correctness judgments.
+This repository now covers **strengthened-test evaluation, exact-match trajectory feature extraction, exploratory task-aware AUROC analysis, and source-recount-verified qualitative case studies**. A validated classifier, independently adjudicated semantic labels, external/generalization testing, and paper writing have **not** been completed. The outcomes below remain *provisional augmented-test labels*, not final correctness judgments.
 
 ### Project continuity and research handoff
 
@@ -12,9 +12,9 @@ This README is the **public summary**. For a precise human/AI continuation point
 
 > The repository and the linked handoff documents are public. Operational details belong in the handoff docs, but secrets and sensitive/private data do not. These records must be updated together when the verified research state changes.
 
-## Research status — 2026-11-12
+## Research status — 2026-11-13
 
-**Milestone: all 198 stronger-test attempts and audits complete; Step 8 indicators frozen before extraction, Step 9 features exactly matched, and Step 10 exploratory AUROCs computed.** Step 6 reviewed the 31 FAILs and Step 7 retained 14 UNVERIFIED with explicit provisional analysis screens. None is an independent human/maintainer semantic oracle. **Step 11 DONE for the reproducible, scope-limited runner-association pilot, after new controlled tests and an explicit validity/limitations decision. Step 12 qualitative case studies NEXT.** Human/maintainer semantic gold labels and external predictive validation remain **unverified**; neither Step 11 closure nor a green CI proves journal readiness. [Formal evidence/claim boundary](results/2026-11-12/STEP11_SCOPE_LIMITED_CLOSURE_DECISION_v1.md).
+**Milestone: all 198 stronger-test attempts and audits complete; Step 8 indicators frozen before extraction, Step 9 features exactly matched, and Step 10 exploratory AUROCs computed.** Step 6 reviewed the 31 FAILs and Step 7 retained 14 UNVERIFIED with explicit provisional analysis screens. None is an independent human/maintainer semantic oracle. **Steps 11–12 DONE at their explicitly bounded scopes: Step 11 independent technical checks; Step 12 prespecified eight-case qualitative analysis and 8/8 exact raw-source recount (112 feature comparisons, zero mismatches). Step 13 manuscript NEXT; Step 14 submission audit TODO.** Human/maintainer semantic gold labels and external predictive validation remain **unverified**; neither Step 11 closure nor a green CI proves journal readiness. [Formal evidence/claim boundary](results/2026-11-12/STEP11_SCOPE_LIMITED_CLOSURE_DECISION_v1.md).
 
 | Subset | Originally passing agent runs | Evaluation attempts | PASS | FAIL | UNVERIFIED |
 | --- | ---: | ---: | ---: | ---: | ---: |
@@ -135,7 +135,17 @@ The Step 7 UNVERIFIED labels remain unchanged. [9-run method attribution](result
 
 **What remains UNVERIFIED:** independent semantic gold correctness of the 31 runner failures (9 documentary-supported, 4 invalid-test, 2 environment-sensitive, 16 unresolved), exact original SWE-ABS Docker equivalence, external predictive validation and journal publication readiness. Our bounded Step 11 milestone is closed **by formally limiting the scientific claim**, *not* by inventing human oracle agreement. A semantic-defect prediction paper must reopen this validity work.
 
-**Next milestone:** **Step 12 qualitative case studies** with prespecified exact-run selection, contradictory examples and opposing interpretations; Step 13 manuscript, Step 14 submission audit follow.
+**Next milestone:** **Step 13 full manuscript drafting** with checked sources, original frozen labels, task-cluster results, eight nonrepresentative case examples and explicit semantic-truth limitations; Step 14 submission/readiness audit follows.
+
+## Step 12 completed — reproducible qualitative case studies (2026-11-13)
+
+The [Step 12 selection protocol](docs/STEP12_CASE_SELECTION_PROTOCOL_v1.md) was **committed before examining chosen individual cases**. It deterministically selected eight distinct original issue/task IDs: high- and low-duplicate-command examples in both conservative runner PASS and review-supported FAIL, plus four fixed validity/coverage challenges. Every case retains its full `(sample,instance_id,patch_sha256)` identity, original label, source-run link, opposing interpretation and unverified evidence boundary.
+
+[Eight-case report](results/2026-11-13/STEP12_QUALITATIVE_CASE_REPORT_v1.md) · [versioned source roster](results/2026-11-13/STEP12_CASE_ROSTER_v1.json) · [archived source recount](results/2026-11-13/STEP12_SOURCE_RECOUNT_8_v1.json) · [successful CI #43440488895](https://github.com/Foysal-Munsy/sweabs-free-eval/actions/runs/43440488895) (**8 pinned exact traces / 112 independently checked indicator values / zero mismatches**). No original raw trajectory messages or private ZIPs were published.
+
+**Illustrative contradiction:** one selected strengthened-test **PASS** had duplicate-terminal-command rate **0.400**, while one documentary-supported **FAIL** had **0.021739**. This is a predeclared descriptive illustration, not a representative error-rate estimate or valid prediction test. Additional cases show a disputed RFC850 test expectation, Python-version-sensitive Django callback tests, skipped SQLite coverage later probed on PostgreSQL, and a source/augmented-test overlap. Original v2 **153 PASS / 31 provisional FAIL / 14 UNVERIFIED** and Step 7 conservative **153/9/36** are **unchanged**; no human/maintainer semantic ground truth or held-out validation is claimed.
+
+**Step 13 is now first unfinished:** write the full research manuscript within the formally limited negative/inconclusive in-sample runner-association thesis. Step 14 remains venue-specific submission and reproducibility audit.
 
 ## Dataset and reproducibility
 
@@ -205,8 +215,8 @@ A 5.1-MB raw-evidence ZIP for the original recent audits and a separate **2.8-MB
 - [x] **Step 11 documentary/source evidence:** Verify 45 pinned source models/tests, fresh 14/14 original ZIPs and nine skipped-coverage method-to-log mappings (no runner relabel).
 - [x] **Step 11 in-place coverage provenance:** Map nine Django-14434 modified existing methods and prove one method skipped in all three samples; confirm Django-15503's unobserved Oracle method against SHA-identified source/log evidence.
 - [x] **Step 11 — DONE for bounded runner-association research scope:** Exact-patch controlled PostgreSQL/overlap/Requests checks completed, reproducibility reconciled, and an explicit **unverified semantic-gold limitation decision** archived. [Formal closure](results/2026-11-12/STEP11_SCOPE_LIMITED_CLOSURE_DECISION_v1.md).
-- [ ] **Step 12 (NEXT):** Versioned qualitative case selection and source-backed opposing/counterexample analysis under original frozen labels.
-- [ ] Step 13: Draft the paper, accurately reporting the already-computed task-cluster AUROCs, sensitivity tests, scope limitations and external validity gaps.
+- [x] **Step 12 — DONE (bounded qualitative scope):** [precommitted eight-slot case selection](docs/STEP12_CASE_SELECTION_PROTOCOL_v1.md), [exact-run roster](results/2026-11-13/STEP12_CASE_ROSTER_v1.json), [case-study report with counterexamples](results/2026-11-13/STEP12_QUALITATIVE_CASE_REPORT_v1.md), [source recount](results/2026-11-13/STEP12_SOURCE_RECOUNT_8_v1.json) independently verified in [successful CI #43440488895](https://github.com/Foysal-Munsy/sweabs-free-eval/actions/runs/43440488895): 8/8 pinned trajectories, 112 field checks, 0 mismatches; original labels unchanged.
+- [ ] **Step 13 (NEXT):** Draft the paper, accurately reporting corrected task-cluster AUROCs, all sensitivity tests, eight prespecified qualitative cases, opposing views, and semantic/external-validity limits.
 - [ ] Step 14: Final manuscript, reproducibility, citations, mentor feedback and venue-specific submission audit.
 
 **Only preliminary in-sample descriptive AUROCs are reported; no validated predictive performance, reliable semantic ground truth, or causal relationship is claimed.** The research question remains open.
