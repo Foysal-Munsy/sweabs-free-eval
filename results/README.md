@@ -6,6 +6,8 @@
 
 The source-checked v0.1 [Overleaf manuscript](../paper/main.tex), [BibTeX](../paper/references.bib), and [claim/evidence matrix](../paper/CLAIM_EVIDENCE_MATRIX.md) are available separately under `paper/`, with detailed import/build instructions [here](../paper/README.md). [Step 13 scope](../docs/STEP13_MANUSCRIPT_SCOPE_v1.md) preserves original frozen labels and a claim of negative/inconclusive primary runner association and strong label-policy sensitivity. This manuscript does not reproduce old synthetic composite results or claim real semantic defect prediction. [Initial successful PDF and BibTeX CI #43449363076](https://github.com/Foysal-Munsy/sweabs-free-eval/actions/runs/43449363076). Final PDF layout check, author review, and venue compliance remain outstanding. Step 14 is not yet underway.
 
+**Step 13 typesetting update:** the [final corrected-source PDF and Overleaf ZIP workflow #43450060997](https://github.com/Foysal-Munsy/sweabs-free-eval/actions/runs/43450060997) succeeded; original frozen Step7/8/10 and v2 results remain untouched. Sources are under [paper/](../paper/README.md). Technical compile success is not human review.
+
 ## Step 12 — reproducible qualitative cases (2026-11-13)
 
 - [Fixed eight-slot case-selection protocol](../docs/STEP12_CASE_SELECTION_PROTOCOL_v1.md) — committed *before* selecting individual cases ([commit dd2be953](https://github.com/Foysal-Munsy/sweabs-free-eval/commit/dd2be9537095c81d47ae6eb4a71cb2caa7ff9b94)); four high/low primary PASS/FAIL ranks and four fixed validity/coverage challenges.
