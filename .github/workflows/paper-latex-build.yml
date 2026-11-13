@@ -1,0 +1,32 @@
+name: Step 13 - Compile Overleaf manuscript
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "paper/**"
+      - ".github/workflows/paper-latex-build.yml"
+permissions:
+  contents: read
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build journal-style paper with BibTeX
+        uses: xu-cheng/latex-action@v4
+        with:
+          root_file: main.tex
+          working_directory: paper
+          texlive_version: 2025
+      - name: Check PDF exists and experimental results unchanged
+        run: |
+          test -s paper/main.pdf
+          git diff --exit-code -- results/2026-11-12 results/2026-11-13 docs/STEP8_FROZEN_INDICATORS_v1.md
+      - name: Upload manuscript PDF preview
+        uses: actions/upload-artifact@v4
+        with:
+          name: step13-manuscript-preview
+          path: paper/main.pdf
+          retention-days: 14
