@@ -12,4 +12,9 @@
 | New PostgreSQL and patch-preserving probes cannot rewrite historical outcomes | [Step 11 bounded closure](../results/2026-11-12/STEP11_SCOPE_LIMITED_CLOSURE_DECISION_v1.md) | Controlled runtime is not original Docker replay |
 | SWE-bench / SWE-ABS / AgentLens / TraceProbe / LLM-SE guidelines bibliography | Verified primary proceedings and preprint/publisher URLs in \`references.bib\` | Initial source audit; fuller novelty survey pending |
 | Synthetic 80-run AUROC .663 and odds ratio 2.18 | September historical draft | Not current empirical results |
+| Original source sample counts 63/68/67 and status breakdown | [198-run runner v2](../results/2026-11-12/sweabs_full_198_cumulative_v2.csv) | Original immutable counts, not 198 independent tasks |
+| Review disposition 9/4/2/16 | [Step 6 31-row review](../results/2026-11-12/STEP6_FAIL_REVIEW_31.csv) | Documentary evidence, not human gold |
+| Duplicate rate task-macro AUROC 0.522 primary/0.741 runner-only, within-project 0.390/0.738, leave-positive-task-out 0.382–0.620/0.683–0.759 | [Step 11 post-hoc robustness](../results/2026-11-12/STEP11_EXPLORATORY_ROBUSTNESS_v1.json) | Distinct estimands, different comparable subsets, NOT cross-validation |
+| Primary post-hoc trajectory length baseline AUROC 0.660, Spearman duplicate/steps −0.112 | [Step 11 post-hoc robustness](../results/2026-11-12/STEP11_EXPLORATORY_ROBUSTNESS_v1.json) | Exploratory only, not tuned precommit baseline |
+| SWE-Cycle and original/updated SWE-bench Verified discussion | [arXiv SWE-Cycle](https://arxiv.org/abs/2605.13139); [OpenAI 2024](https://openai.com/index/introducing-swe-bench-verified/); [OpenAI 2026](https://openai.com/index/why-we-no-longer-evaluate-swe-bench-verified/) | Verified external sources; contamination in the Gemini 3 Flash sample is UNVERIFIED |
 | Human semantic ground truth; external prediction; Q1 readiness | None | **UNVERIFIED / NOT ESTABLISHED** |
