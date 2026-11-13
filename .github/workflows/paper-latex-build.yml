@@ -24,6 +24,16 @@ jobs:
         run: |
           test -s paper/main.pdf
           git diff --exit-code -- results/2026-11-12 results/2026-11-13 docs/STEP8_FROZEN_INDICATORS_v1.md
+      - name: Bundle Overleaf-importable source ZIP
+        run: |
+          cd paper
+          zip -q ../step13-overleaf-source.zip main.tex references.bib README.md CLAIM_EVIDENCE_MATRIX.md
+      - name: Upload Overleaf project ZIP
+        uses: actions/upload-artifact@v4
+        with:
+          name: step13-overleaf-source
+          path: step13-overleaf-source.zip
+          retention-days: 14
       - name: Upload manuscript PDF preview
         uses: actions/upload-artifact@v4
         with:
