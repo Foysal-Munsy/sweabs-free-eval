@@ -1,0 +1,82 @@
+{
+  "audit_date": "2026-11-13",
+  "code_workflow": "./.github/workflows/step12-qualitative-audit.yml",
+  "ci_run_id": 43440488895,
+  "ci_run_url": "https://github.com/Foysal-Munsy/sweabs-free-eval/actions/runs/43440488895",
+  "ci_conclusion": "success",
+  "verified_step_names": [
+    "Recompute all eight roster identities from frozen data",
+    "Independently recount eight exact original raw trajectories",
+    "Assert historical labels/features not modified by analysis"
+  ],
+  "selection_protocol_commit": "dd2be9537095c81d47ae6eb4a71cb2caa7ff9b94",
+  "exact_cases": [
+    {
+      "slot": "PRIMARY_FAIL_HIGH",
+      "sample": 1,
+      "offset": 53,
+      "instance_id": "sympy__sympy-15599",
+      "patch_sha256": "ea1dbe72023645b09c6213b43535323a2c19c19f1bcad12fbfec457e8da2597d"
+    },
+    {
+      "slot": "PRIMARY_FAIL_LOW",
+      "sample": 2,
+      "offset": 28,
+      "instance_id": "django__django-14311",
+      "patch_sha256": "f667c7687a13b7f6c378c09c26d8f260b3c9c0988e0d03edac97735d5ec5515b"
+    },
+    {
+      "slot": "PRIMARY_PASS_HIGH",
+      "sample": 1,
+      "offset": 25,
+      "instance_id": "django__django-13820",
+      "patch_sha256": "210dd33a31251bffa604484405e2186908f3aa355a66b27ea45c9ac3a6da94c6"
+    },
+    {
+      "slot": "PRIMARY_PASS_LOW",
+      "sample": 3,
+      "offset": 8,
+      "instance_id": "django__django-11333",
+      "patch_sha256": "b94e7c5db0640b70b164821dda8d1490cb6f2046d250444b545d27b1149524c5"
+    },
+    {
+      "slot": "INVALID_TEST_CHALLENGE",
+      "sample": 1,
+      "offset": 8,
+      "instance_id": "django__django-11848",
+      "patch_sha256": "c9669210346bd110928fda85d34aebdef01129f7a383d772fb5590e2a1e3f1c3"
+    },
+    {
+      "slot": "ENVIRONMENT_CHALLENGE",
+      "sample": 2,
+      "offset": 38,
+      "instance_id": "django__django-15916",
+      "patch_sha256": "5614f9fd2100c36f6b588bc62c6dd3ef88978472aca1554d7467387406abab05"
+    },
+    {
+      "slot": "SKIPPED_COVERAGE_CHALLENGE",
+      "sample": 1,
+      "offset": 10,
+      "instance_id": "django__django-12039",
+      "patch_sha256": "13c384a48bed11df0ebfeae126594ab1edd5ec67cca9905e4363150875ee2f60"
+    },
+    {
+      "slot": "PATCH_OVERLAP_CHALLENGE",
+      "sample": 3,
+      "offset": 7,
+      "instance_id": "django__django-11206",
+      "patch_sha256": "2b74b39168d3927e80ecce18cc14f3a5b869c56bfc2ffb5643af427693cc65a7"
+    }
+  ],
+  "feature_fields_compared": 14,
+  "feature_comparisons": 112,
+  "mismatches": 0,
+  "pinned_source_recounted": 8,
+  "distinct_tasks": 8,
+  "source_dataset": "tarsur385/swe-verified-gemini3-flash-trajectories",
+  "source_revision": "b5515d1dce40036633293b70477f0633b24593f7",
+  "raw_trace_text_released": false,
+  "original_runner_outcomes_relabelled": false,
+  "semantic_human_oracle_performed": false,
+  "scope_limit": "Independent raw event recount of eight deterministically chosen cases verifies Step 8/9 derived metrics, not external prediction or human-adjudicated semantic correctness."
+}
