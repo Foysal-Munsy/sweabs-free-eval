@@ -1,3 +1,9 @@
+## Mentor handoff refinement (v0.2 — 2026-11-13)
+
+- Added [cohort/validity section](../paper/sections/outcome_audit.tex), [task-aware robustness and source-computed AUROC interval figure](../paper/sections/robustness_and_plot.tex), [future blinded human annotation protocol](../paper/sections/interpretation_and_validation.tex), and [data/AI disclosure section](../paper/sections/reproducibility_and_ethics.tex).
+- Added [mentor review brief](../paper/MENTOR_REVIEW_BRIEF.md), [old-to-current review response](../paper/REVIEW_RESPONSE_MATRIX_v1.md), and [source-verified literature audit](../paper/LITERATURE_SOURCE_AUDIT_2026-11-13.md). New references are SWE-Cycle, the original 2024 SWE-bench Verified release, and the February 2026 benchmark limitations report.
+- These changes are documentation/manuscript extensions, **not** changes to four frozen indicators, label targets, patch identities, or original runner output. Step 13 remains **IN PROGRESS until the mentor/coauthors review claims and approve any needed additional experiments**. Step 14 has not started.
+
 # Step 13 manuscript scope — initial draft v0.1 (2026-11-13)
 
 **Technical audit:** [GitHub build #43450060997](https://github.com/Foysal-Munsy/sweabs-free-eval/actions/runs/43450060997) SUCCESS; four-page journal-style PDF, parsed BibTeX, Overleaf source ZIP and PDF preview archived as short-lived workflow artifacts; original experimental data unchanged. Human visual/semantic/citation review remains unverified.
