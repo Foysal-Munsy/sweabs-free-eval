@@ -1,6 +1,7 @@
 \documentclass[journal]{IEEEtran}
 \usepackage{amsmath,amssymb,booktabs,graphicx,cite,url}
 \usepackage[hidelinks]{hyperref}
+\usepackage{tikz}
 \begin{document}
 \title{Does Messy Mean Wrong? Label-Sensitive Trajectory Signals Under Strengthened Coding-Agent Tests}
 \author{Authors and affiliations to be confirmed\thanks{Internal draft, 13 November 2026. Not submitted or independently semantically adjudicated.}}
@@ -22,9 +23,9 @@ A preceding September draft in this project examined a synthetic six-indicator c
 The contribution is a reproducible, bounded study of trajectory-process association \emph{conditional on originally passing evaluation}, with careful sensitivity to stronger-test label validity. It is not a new trained detector and does not establish causal effects of agent actions.
 
 \section{Related Work}
-SWE-bench operationalizes software-maintenance tasks from GitHub issues and executable tests \cite{jimenez2024swebench}. SWE-ABS improves test coverage and adversarial strength and documents that pass rates are affected by enhanced evaluation \cite{yu2026sweabs}. These works motivate evaluating more than the original available tests, but the stronger suite remains an operational measurement rather than a mathematical oracle.
+SWE-bench operationalizes software-maintenance tasks from GitHub issues and executable tests \cite{jimenez2024swebench}. The 500-task Verified subset underwent a separate human audit of original task and issue quality \cite{openai2024verified}; this audit is not an assessment of the newly introduced SWE-ABS assertions. SWE-ABS improves test coverage and adversarial strength and documents that pass rates are affected by enhanced evaluation \cite{yu2026sweabs}. These works motivate evaluating more than the original available tests, but the stronger suite remains an operational measurement rather than a mathematical oracle.
 
-AgentLens assesses successful agent trajectories relative to process-quality references, detecting behaviors such as blind retries, verification omissions, and regressions \cite{sahoo2026agentlens}. TraceProbe provides trajectory-structure diagnostics and identifies cases in which process anti-patterns may primarily indicate task difficulty \cite{shu2026traceprobe}. Our exact-run source pairing and documentary label sensitivity are a different, narrower target. We make no claim to be the first work on trajectory behavior or on stronger tests.
+AgentLens assesses successful agent trajectories relative to process-quality references, detecting behaviors such as blind retries, verification omissions, and regressions \cite{sahoo2026agentlens}. TraceProbe provides trajectory-structure diagnostics and identifies cases in which process anti-patterns may primarily indicate task difficulty \cite{shu2026traceprobe}. SWE-Cycle additionally examines environment reconstruction, implementation, verification and full end-to-end issue resolution, using a hybrid execution-aware judge \cite{guan2026swecycle}. Our exact-run source pairing and documentary label sensitivity are a different, narrower target. We make no claim to be the first work on trajectory behavior or on stronger tests.
 
 Recent community guidance stresses accurate LLM-use reporting, reproducible configuration, human evaluation when automated judgments stand in for expert assessments, and explicit limitations \cite{baltes2026guidelines}. Our technical reproduction checks meet part of that standard; the absence of independent semantic gold judgments remains a substantial gap.
 
@@ -67,6 +68,8 @@ Skipped-as-PASS scenario &162&9&27\\
 \end{table}
 
 The primary 162 eligible rows cover 61 tasks but only \emph{five} distinct positive tasks; multiple positive samples from the same issue do not create independent evidence. All 153 original PASS records are \emph{runner-observed} PASS, not fully adjudicated semantic correctness.
+
+\input{sections/outcome_audit}
 
 \section{Frozen Process Indicators}
 The four indicators were specified on 12 November 2026 before all-run feature extraction and the inspection of feature--outcome associations. This is a project-stage freeze, \emph{not} a claim of prospective preregistration before all prior outcome inspection. Terminal commands are normalized by collapsing whitespace and retaining letter case.
@@ -130,6 +133,8 @@ Skipped-as-PASS &0.478&0.588&0.481&0.448\\
 
 The same duplicate-command score has AUROC $0.721$ (CI $0.565$--$0.857$) when the reviewed \texttt{invalid\_test} records are excluded but unresolved and environment-sensitive runner failures are retained, and $0.708$ ($0.562$--$0.834$) when all runner FAILs are included. A hypothetical skipped-as-PASS analysis has AUROC $0.478$ ($0.255$--$0.686$). These are meaningfully different \emph{label policies}, not competing estimates of independently established true bug prevalence. None supports a calibrated or externally generalizable early-warning classifier.
 
+\input{sections/robustness_and_plot}
+
 \section{Prespecified Qualitative Case Studies}
 The Step 12 selection rule was committed before inspection of individual selected cases. The first four slots deterministically chose the highest and lowest duplicate-command-rate primary PASS and FAIL examples while excluding already chosen task identifiers; four further slots selected invalid-test, environment, skip and patch-overlap challenges. All eight identities were checked against the exact patch hashes. GitHub Actions independently recounted eight raw source traces and 112 indicator values with zero mismatches. The cases are \emph{outcome-ranked illustrative extremes}, not a representative sample.
 
@@ -149,6 +154,8 @@ Task difficulty may jointly increase repeated commands and stronger-test failure
 \subsection{Implications}
 A practical process-warning signal would require independent semantic labels, more distinct positive tasks, task-disjoint replication on other agents, then prospective thresholds, precision--recall and calibration where relevant. These are proposed extensions, not experiments silently added after observing our results. A credible alternative scientific takeaway is that code-agent evaluation needs careful \emph{oracle auditing} alongside process diagnostics, even when the underlying predictive association is weak.
 
+\input{sections/interpretation_and_validation}
+
 \section{Threats to Validity}
 \textbf{Outcome validity:} Only nine of 31 provisional runner FAILs have documentary support; no expert human gold labels exist for the 31, and all 153 runner PASS labels remain test-limited. Fourteen historical UNVERIFIED outcomes are unchanged by new separate-runtime checks. A green CI run is not an agent-level PASS.
 
@@ -161,6 +168,8 @@ A practical process-warning signal would require independent semantic labels, mo
 \textbf{Reproducibility:} Public derived artifacts, pinned source revision, exact patch hashes, scripts and CI provenance are provided, but the original Docker-tested trees and privately held result ZIPs are not wholly republished; subsequent PostgreSQL and patch-preserving executions are not identical historical runs.
 
 \textbf{AI-assisted research and manuscript preparation:} AI-assisted documentary review and ChatGPT GPT-6-assisted manuscript drafting do not replace independent expert evaluation. Human authors must verify the final scientific content, bibliography, originality, author list and venue-specific required disclosures before submission \cite{baltes2026guidelines}.
+
+\input{sections/reproducibility_and_ethics}
 
 \section{Conclusion}
 We analyzed four prespecified trajectory indicators against strengthened-test runner outcomes for 198 originally successful coding-agent runs. Conservative reviewed positive labels yield duplicate-command AUROC $0.489$ with wide task-cluster uncertainty; broader runner-outcome policies yield $0.708$--$0.721$ for the unchanged same indicator. The evidence therefore does not establish a robust semantic-defect predictor, but does establish substantial sensitivity to provisional label policy. Eight exact-patch cases identify contradictions and validity challenges behind this quantitative difference. Future research needs independent semantic adjudication and stronger task/model replication before using process cleanliness as a reliable substitute for tested correctness.
