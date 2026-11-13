@@ -1,3 +1,9 @@
+## Mentor-review refinement v0.2 — 13 November 2026
+
+The manuscript now includes four separately editable source sections in [sections/](sections/): outcome validity and sample counts, task-aware robustness plus a deterministic TikZ interval figure, interpretive/expert-adjudication boundaries, and replication/AI disclosure. An updated [mentor review brief](MENTOR_REVIEW_BRIEF.md), [historical review-response matrix](REVIEW_RESPONSE_MATRIX_v1.md), and [verified literature audit](LITERATURE_SOURCE_AUDIT_2026-11-13.md) are included in the Overleaf ZIP. The [read-only manuscript workflow](../.github/workflows/paper-latex-build.yml) imports all section source files when building ZIP artifacts.
+
+**Mentor-ready scope is limited to review of the scientific framing and evidence**. It is NOT the same as a final, journal-submission-ready manuscript; author/coauthor approval, comprehensive novelty survey, human semantic labels and external validation are outstanding.
+
 # Overleaf-compatible research manuscript (Step 13 draft v0.1)
 
 **Verified CI:** [Final corrected-source run #43450060997](https://github.com/Foysal-Munsy/sweabs-free-eval/actions/runs/43450060997) compiled a four-page PDF with BibTeX and uploaded both the Overleaf-importable source ZIP and PDF preview (short-lived GitHub Actions artifacts). Open that run and select the corresponding artifact in its Artifacts area. Source revision/checks remain in the research repository; this is only draft v0.1.
