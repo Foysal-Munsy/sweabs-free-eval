@@ -5,6 +5,22 @@
 
 This log should record **what actually changed**, not hoped-for progress. The newest entry comes first. When a past conclusion needs correction, add a new dated correction entry with sources; do not erase the original record. Every entry should give (a) scope, (b) verified result, (c) files/commit/log evidence, (d) unresolved issues, (e) next handoff.
 
+## 2026-11-13 — Step 13 initiated: evidence-grounded Overleaf manuscript draft
+
+**Status:** Step 13 **IN PROGRESS**, Step 14 TODO. Original experimental method, feature definitions, test-run data and labels unchanged.
+
+**Completed and checked:**
+1. Inspected September synthetic six-indicator historical draft and reviewer-style Major Revision assessment. The old 80-record synthetic AUROC 0.663 and odds ratio 2.18 are **not current real-data findings** and are not presented as such.
+2. Re-opened [project state](PROJECT_STATE.md), corrected [Step 10 results](../results/2026-11-12/STEP10_AUROC_TASK_CLUSTER_v2.json), [Step 11 bounded closure](../results/2026-11-12/STEP11_SCOPE_LIMITED_CLOSURE_DECISION_v1.md), [Step 12 case report](../results/2026-11-13/STEP12_QUALITATIVE_CASE_REPORT_v1.md) and [8-source/112-indicator audit](../results/2026-11-13/STEP12_SOURCE_RECOUNT_8_v1.json).
+3. Verified initial bibliographic records against ICLR 2024 SWE-bench proceedings, ICML 2026 SWE-ABS PMLR page, AgentLens 2026 arXiv, TraceProbe 2026 arXiv and Empirical Software Engineering LLM-SE guidelines published online November 2026. This is an **initial citation check, not a comprehensive novelty study**.
+4. Created [full-section academic manuscript](../paper/main.tex), [versioned references.bib](../paper/references.bib), [Overleaf import instructions](../paper/README.md), [claim-to-evidence matrix](../paper/CLAIM_EVIDENCE_MATRIX.md), and [Step 13 paper-scope record](STEP13_MANUSCRIPT_SCOPE_v1.md) in [commit 43b21ad7](https://github.com/Foysal-Munsy/sweabs-free-eval/commit/43b21ad7f119c91b67b42b53a38b3c7fdd2a75de). The paper covers abstract, introduction, related work, RQs, methods, frozen features, clustered statistics, real results, eight cases, discussion, validity threats, and conclusion.
+5. Added [read-only manuscript LaTeX CI](../.github/workflows/paper-latex-build.yml) compiling IEEEtran and BibTeX and uploading a PDF preview, without rerunning or changing original experiment data. Current draft retains four real frozen indicators, historical 153 PASS /31 provisional FAIL /14 UNVERIFIED, conservative 153/9/36 and five primary FAIL tasks.
+6. Synchronized PROJECT_STATE, WORK_LOG, public README, AGENTS and results index in this session. GitHub read-backs are required for completion.
+
+**Still unverified:** human author/mentor acceptance, final author names/order and affiliations, comprehensive reference/novelty check, independent semantic gold, out-of-sample predictive replication, original Docker-runtime equivalence for new controlled checks and Q1 journal suitability. A successful LaTeX compile checks typesetting rather than scientific correctness.
+
+**Exact next action:** verify the Step 13 PDF build and visually inspect pages, then perform coauthor/mentor scientific and citation review; keep Step 13 IN PROGRESS until these gates are passed. Step 14 remains a separate future scientific reproducibility and journal compliance audit.
+
 ## 2026-11-13 — Step 12 completed: prespecified eight-case qualitative analysis and independent source recount
 
 **Milestone/scope:** Step 12 **NEXT → DONE for fixed, illustrative, source-backed case studies**, not independent human-oracle adjudication. Step 13 **NEXT**, Step 14 TODO. No methodological amendment to the Step 7/Step 8/Step 10 frozen runner-association analysis.
