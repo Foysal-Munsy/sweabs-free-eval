@@ -5,6 +5,23 @@
 
 This log should record **what actually changed**, not hoped-for progress. The newest entry comes first. When a past conclusion needs correction, add a new dated correction entry with sources; do not erase the original record. Every entry should give (a) scope, (b) verified result, (c) files/commit/log evidence, (d) unresolved issues, (e) next handoff.
 
+## 2026-11-13 — Step 13 mentor-review refinement (source-backed, technical PDF pass)
+
+**Status:** Step 13 still **IN PROGRESS**, but mentor-review candidate prepared. Step 14 not started. Original v2 label 153/31/14, Step 7 primary 153/9/36, four frozen indicators, task-bootstrap output and source patch hashes unchanged.
+
+1. Re-opened the real-data project state, Step 9 coverage, corrected Step 10 AUROCs, original Step 6/7 validity manifests, Step 11 exploratory robustness JSON and Step 12 source-verified cases. Examined the old September synthetic reviewer feedback without treating synthetic effects as current.
+2. Checked and added three explicit current external sources: [SWE-Cycle 2026](https://arxiv.org/abs/2605.13139), [SWE-bench Verified original human subset 2024](https://openai.com/index/introducing-swe-bench-verified/), and [SWE-bench Verified limitations February 2026](https://openai.com/index/why-we-no-longer-evaluate-swe-bench-verified/). The last is **benchmark-level commentary, not proof of model-specific contamination**. Existing ICLR 2024 SWE-bench, ICML/PMLR 2026 SWE-ABS, AgentLens/TraceProbe preprints and LLM-SE guidelines remain in the bibliography.
+3. Added [cohort/outcome validity source](../paper/sections/outcome_audit.tex), [four-policy AUROC/CI TikZ figure and task-aware robustness checks](../paper/sections/robustness_and_plot.tex), [competing interpretations and blinded human-oracle extension plan](../paper/sections/interpretation_and_validation.tex) and [replication/AI-use disclosure](../paper/sections/reproducibility_and_ethics.tex); integrated these into [manuscript](../paper/main.tex) and [bibliography](../paper/references.bib) in [commit 8b19038c](https://github.com/Foysal-Munsy/sweabs-free-eval/commit/8b19038c14e8d4093c9f1d9423a0878e02661238).
+4. Produced [mentor research brief](../paper/MENTOR_REVIEW_BRIEF.md), [old-review response matrix](../paper/REVIEW_RESPONSE_MATRIX_v1.md), and [2026 primary source check](../paper/LITERATURE_SOURCE_AUDIT_2026-11-13.md). Updated claim-to-evidence ledger and Overleaf ZIP workflow to include all section and review files.
+5. [Read-only expanded paper CI #43454789699 SUCCESS](https://github.com/Foysal-Munsy/sweabs-free-eval/actions/runs/43454789699) compiled a **six-page** PDF and uploaded an Overleaf project ZIP plus PDF preview. The workflow also checked no changes to frozen original results. A software build is **not independent human visual/scientific audit**.
+6. Synchronized PROJECT_STATE, WORK_LOG, README, AGENTS, results index and manuscript guide to preserve an unambiguous first unfinished Step 13 handoff.
+
+**Interpretation and opposing views:** A descriptive, weak/conservative process association can still contribute as a cautionary measurement audit, but five distinct positive tasks and no independently validated semantic oracle may be insufficient for a high-selectivity journal. The runner-only 0.708 feature association and the primary 0.489 are distinct label policies, not competing estimates of known true-defect prediction. Task clustering does not solve selection bias.
+
+**Unverified:** mentor/coauthor endorsement, final author list and disclosure, comprehensive Q1 novelty review and venue-specific rules, semantic correctness, more independent positive tasks, cross-agent prediction, historical Docker equivalence and visual inspection of final journal pages.
+
+**Exact next action:** mentor scientific review of the six-page PDF and decision brief; respond to requested methods/validation revisions, then close Step 13 only after formal author and citation checks. Step 14 later.
+
 ## 2026-11-13 — Step 13 initiated: evidence-grounded Overleaf manuscript draft
 
 **Status:** Step 13 **IN PROGRESS**, Step 14 TODO. Original experimental method, feature definitions, test-run data and labels unchanged.
