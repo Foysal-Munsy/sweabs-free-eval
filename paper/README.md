@@ -1,5 +1,7 @@
 # Overleaf-compatible research manuscript (Step 13 draft v0.1)
 
+**Verified CI:** [Final corrected-source run #43450060997](https://github.com/Foysal-Munsy/sweabs-free-eval/actions/runs/43450060997) compiled a four-page PDF with BibTeX and uploaded both the Overleaf-importable source ZIP and PDF preview (short-lived GitHub Actions artifacts). Open that run and select the corresponding artifact in its Artifacts area. Source revision/checks remain in the research repository; this is only draft v0.1.
+
 **Status:** Complete initial source-grounded manuscript draft, not author-reviewed or journal-submission-ready.
 
 **Use in Overleaf:** Import the entire \`paper/\` folder as a new project, with main document \`main.tex\`; compiler **pdfLaTeX**; bibliography **BibTeX**. It uses the standard \`IEEEtran\` journal class as a working layout, **not** a verified target-journal-specific template. The GitHub Actions LaTeX workflow produces a PDF artifact without changing any frozen experiment file.
