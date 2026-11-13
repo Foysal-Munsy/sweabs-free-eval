@@ -1,6 +1,14 @@
 # Research results and audit artifacts
 
-**Current stage (2026-11-12):** 198 stronger-test attempts and 83+115 raw audits complete; original v2 **153 PASS / 31 FAIL / 14 UNVERIFIED** unchanged. Step 8 versioned frozen indicators, Step 9 exact-match features (198/198) and Step 10 provisional task-aware univariate AUROCs are archived. These are not independently adjudicated semantic labels, a trained classifier or a generalization claim. **Step 11 DONE for the bounded, versioned runner-association research scope** with controlled exact-patch PostgreSQL/overlap/Requests evidence and formal unverified-semantic-truth limitations. [Closure decision](2026-11-12/STEP11_SCOPE_LIMITED_CLOSURE_DECISION_v1.md) · [controlled evidence freeze](2026-11-12/STEP11_CONTROLLED_EVIDENCE_FREEZE_v1.json), [CI success #43276679251](https://github.com/Foysal-Munsy/sweabs-free-eval/actions/runs/43276679251). **Step 12 qualitative case studies NEXT.**
+**Current stage (2026-11-13):** 198 stronger-test attempts and 83+115 raw audits complete; original v2 **153 PASS / 31 FAIL / 14 UNVERIFIED** unchanged. Step 8 versioned frozen indicators, Step 9 exact-match features (198/198) and Step 10 provisional task-aware univariate AUROCs are archived. These are not independently adjudicated semantic labels, a trained classifier or a generalization claim. **Step 11 DONE for the bounded, versioned runner-association research scope** with controlled exact-patch PostgreSQL/overlap/Requests evidence and formal unverified-semantic-truth limitations. [Closure decision](2026-11-12/STEP11_SCOPE_LIMITED_CLOSURE_DECISION_v1.md) · [controlled evidence freeze](2026-11-12/STEP11_CONTROLLED_EVIDENCE_FREEZE_v1.json), [CI success #43276679251](https://github.com/Foysal-Munsy/sweabs-free-eval/actions/runs/43276679251). **Step 12 qualitative cases DONE for eight source-recount-verified illustrations (112 comparisons, zero mismatches); Step 13 manuscript NEXT; Step 14 audit TODO.**
+
+## Step 12 — reproducible qualitative cases (2026-11-13)
+
+- [Fixed eight-slot case-selection protocol](../docs/STEP12_CASE_SELECTION_PROTOCOL_v1.md) — committed *before* selecting individual cases ([commit dd2be953](https://github.com/Foysal-Munsy/sweabs-free-eval/commit/dd2be9537095c81d47ae6eb4a71cb2caa7ff9b94)); four high/low primary PASS/FAIL ranks and four fixed validity/coverage challenges.
+- [Machine-readable eight-case exact identity roster](2026-11-13/STEP12_CASE_ROSTER_v1.json) — eight different task IDs, full model patch SHA-256, original runner outcome and source runs, frozen process statistics.
+- [Qualitative interpretation and opposing views](2026-11-13/STEP12_QUALITATIVE_CASE_REPORT_v1.md) — examples and counterexamples, invalid strengthened-test and runtime-dependent labels, original vs new controlled evidence, limitations for every case.
+- [Raw-source independent recount audit](2026-11-13/STEP12_SOURCE_RECOUNT_8_v1.json) · [successful CI #43440488895](https://github.com/Foysal-Munsy/sweabs-free-eval/actions/runs/43440488895) — pinned Hugging Face revision, eight exact patch SHA matches and **112 field comparisons / zero mismatches**; no raw trace text released.
+- [Reproduction script](../scripts/step12_cases.py) · [read-only workflow](../.github/workflows/step12-qualitative-audit.yml). Existing v2 runner/Step7 labels and Step8 indicators **unchanged**. **First unfinished milestone: Step 13 manuscript**, followed by Step 14 submission audit. These case illustrations cannot establish human semantic truth or model generalization.
 
 ## Step 11 final scope-limited completion (2026-11-12)
 
@@ -11,7 +19,7 @@
 - **Large Requests patch:** [74 changed files incl. 65 generated build paths](2026-11-12/STEP11_REQUESTS_FULL_PATCH_RECONSTRUCTION_v1.json) reconstructed from pinned base, all 74 model-file hashes unchanged after augmented test patch ([CI #43271576166](https://github.com/Foysal-Munsy/sweabs-free-eval/actions/runs/43271576166)). This does not prove original historical Docker tree integrity.
 - **Hard limitations:** No independent human/maintainer gold semantic oracle for 31 runner FAILs (9 documentary-supported, 4 invalid-test, 2 environment-sensitive, 16 unresolved); original **14 UNVERIFIED remain UNVERIFIED**; no external classifier validation. Step11 is finished **by an explicit narrow claim/limitation decision**, not by proving every stronger test is valid or every original problem resolved. If a journal requires semantic bug prediction, reopen validation.
 
-**First unfinished milestone: Step 12** — prespecified qualitative sample/counterexample selection and evidence-backed case studies. Steps13–14 manuscript and journal-specific submission audit follow.
+**First unfinished milestone: Step 13 manuscript drafting** — source-check the full paper and carry over the frozen quantitative findings plus the eight nonrepresentative Step 12 qualitative examples; Step 14 submission/reproducibility audit follows.
 
 ## Current version: Step 5, 83-run reconciliation
 
@@ -79,6 +87,6 @@ Alternative target scenarios (0/1/excluded): noninvalid FAIL **153/27/18**, all 
 
 **Private raw data:** Two checksum-verified ZIP archives are backed up in the owner's ChatGPT Library (historical 83 and Sample 2/3 combined). They contain raw logs/test fixtures and **are not publicly hosted here**. The public GitHub files are audit tables, scripts, and reports only.
 
-**Next milestone: Step 12 qualitative case studies**, under the formal [Step11 bounded scope and semantic-truth limitations](2026-11-12/STEP11_SCOPE_LIMITED_CLOSURE_DECISION_v1.md). Preserve conservative and prespecified alternate labels, include contradictory cases, and never promote broadened-runner associations to independently proven semantic defect prediction.
+**Step 12 completed, Step 13 manuscript NEXT**, under the formal [Step11 bounded scope and semantic-truth limitations](2026-11-12/STEP11_SCOPE_LIMITED_CLOSURE_DECISION_v1.md). Preserve conservative and prespecified alternate labels, include contradictory cases, and never promote broadened-runner associations to independently proven semantic defect prediction.
 
 For current research state: [PROJECT_STATE.md](../docs/PROJECT_STATE.md) · [WORK_LOG.md](../docs/WORK_LOG.md).
