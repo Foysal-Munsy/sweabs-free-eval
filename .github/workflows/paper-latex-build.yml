@@ -27,7 +27,7 @@ jobs:
       - name: Bundle Overleaf-importable source ZIP
         run: |
           cd paper
-          zip -q -r ../step13-overleaf-source.zip main.tex references.bib README.md CLAIM_EVIDENCE_MATRIX.md MENTOR_REVIEW_BRIEF.md REVIEW_RESPONSE_MATRIX_v1.md LITERATURE_SOURCE_AUDIT_2026-11-13.md sections
+          zip -q -r ../step13-overleaf-source.zip main.tex references.bib README.md CLAIM_EVIDENCE_MATRIX.md sections
       - name: Upload Overleaf project ZIP
         uses: actions/upload-artifact@v4
         with:
