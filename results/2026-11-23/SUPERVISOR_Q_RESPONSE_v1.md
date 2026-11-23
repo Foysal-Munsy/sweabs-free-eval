@@ -5,6 +5,10 @@
 ## Q1 — Editing after verification
 The original frozen [Step 8 specification](../../docs/STEP8_FROZEN_INDICATORS_v1.md) and [Step 9 Python extractor](../../scripts/step9_extract_trajectory_features.py) define `editor_after_last_verification` as the **count of `file_editor` calls strictly after the final regex-recognized verification `terminal` call**. If no recognized test call exists, assign missing; *not zero*. Seven of 198 runs have no recognized verification; six of 162 eligible primary runs are missing this feature, leaving 156 in the relevant primary AUROC.
 
+### Implementation ordering caveat discovered during this audit (unverified impact)
+
+The frozen formula is unambiguous, but the Step 9 extractor stores `ix` as the **assistant message index**, not the index of each tool call inside `assistant.tool_calls`. A small synthetic example containing `terminal("pytest")` followed by `file_editor` *in one assistant message* returns **zero** instead of the conceptually correct **one**. Across the archived 198 rows, `tool_calls_total` equals `assistant_message_count` **for all 198**; this is consistent with one call per assistant message but does **not logically prove it**. The exact number of multi-tool-call assistant messages at the pinned source revision is **UNVERIFIED** because the 296 original raw message arrays were not re-audited for this edge case in this analysis. A raw-source per-message tool-call cardinality audit is needed before claiming zero residual implementation defects. If multi-call messages occur in matched runs, amend the extractor with a globally increasing per-tool-call sequence number, recompute the affected feature, and publish new versioned results; do not overwrite archived data.
+
 ## Q2 — Binary verification feature / interval diagnostics
 The oriented score is `-any_verification` (higher = less recognized checking). In the primary 162-run cohort **all 9 provisional FAIL runs have recognized verification**. Of 153 runner PASS runs, 147 have verification and six do not. Therefore the binary scores yield **1377 positive/negative pairs: 0 favorable rankings, 1323 ties (96.078%), 54 unfavorable rankings**, and exact oriented AUROC **0.480392**. The near-constant/tied score constrains the numerical bootstrap distribution but is *not evidence of high true precision*.
 
@@ -18,6 +22,8 @@ Reproduction of original Python v2 task-cluster LCG (500 resamples, seed 2026111
 - Bin 0.48–0.49: original 500 = 185, alternate 10,000 = 3720
 - Bin 0.49–<0.50: original 500 = 89, alternate 10,000 = 1714
 - Bin =0.50: original 500 = 9, alternate 10,000 = 165
+
+One additional purely hypothetical check illustrates *label uncertainty outside the archived bootstrap*: one unresolved original runner FAIL `sympy__sympy-24066` sample 1 has `any_verification=0`. If **that one run alone** were newly accepted as an issue-aligned positive (with the 153 PASS unchanged), the same verification AUROC would be **0.530392** rather than 0.480392. This is *not* a new semantic classification: it shows that a narrow within-policy bootstrap interval does not cover uncertainty over which labels are defensible.
 
 ## Q3 — Adjudication consistency and borderline-case sensitivity
 An actual *across-time intra-rater* consistency/repeat-review estimate cannot be computed: the historical ledger contains one documentary review, not two time-stamped blinded reviews of each case. Among 15 original runner-FAIL task IDs, **14 have identical documentary categories across their recorded run samples**; `django__django-14999` is mixed (one issue-aligned case, two unresolved), because the failing assertions differ. This is **within-task descriptive agreement across distinct cases**, not inter-rater or temporal reliability.

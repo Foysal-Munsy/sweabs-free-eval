@@ -42,6 +42,7 @@ The conservative analysis is inconclusive: the primary interval spans 0.5, and o
 | [Methodology](docs/METHODOLOGY.md) | Population, exact patch matching, indicators, label policy and analysis design |
 | [Reproducibility](docs/REPRODUCIBILITY.md) | Pinned inputs, checks, computing environment and evidence boundaries |
 | [Results](results/) | Archived run outcomes, validity reviews, AUROC JSON and qualitative audit |
+| [Supervisor diagnostic extension (2026-11-23)](results/2026-11-23/) | Post-hoc bootstrap/tie diagnostics, borderline-case sensitivity, task summaries and 31-case evidence profiles |
 | [Code](scripts/) | Evaluation, extraction, statistical analysis and audit scripts |
 | [Tests](tests/) | Parser and pipeline unit tests |
 | [Workflows](.github/workflows/) | Docker evaluation, source-audit CI and read-only manuscript compilation |

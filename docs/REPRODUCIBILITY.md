@@ -32,6 +32,12 @@ python scripts/step12_cases.py --check --recount-source
 
 The source-backed checks download public trajectories and may require substantial bandwidth and memory. They do **not** rerun all SWE-ABS augmented Docker tests. See the [Step 11 reproduction workflow](../.github/workflows/step11-reproduction.yml) ([successful audited run #43260088649](https://github.com/Foysal-Munsy/sweabs-free-eval/actions/runs/43260088649)) and [Step 12 case audit workflow](../.github/workflows/step12-qualitative-audit.yml) ([successful run #43440488895](https://github.com/Foysal-Munsy/sweabs-free-eval/actions/runs/43440488895)).
 
+## Additional supervisor-question diagnostics (2026-11-23)
+
+[Versioned post-hoc supplement](../results/2026-11-23/) contains a checked reproduction of the Step 10 binary-verification bootstrap interval, exact tie counts, hypothetical outcome-eligibility toggles, five positive-task summaries and 31 documentary evidence profiles. It does **not** replace the original results, adjudicate semantic ground truth, or add new Docker tests. Its duplicate analysis of the original v2 CI matched all 496 valid two-class resamples' interval endpoints; a separate 10,000-draw PRNG diagnostic had similar endpoints. **Small-positive-task uncertainty remains substantial.**
+
+**Chronological tool-call edge to audit:** The frozen Step 8 concept counts editor calls after the *last tool call* recognized as verification. The Step 9 extractor currently uses **assistant message index** `ix`, so a hypothetical verification tool call followed by `file_editor` within the *same* assistant message would return 0 rather than 1. All 198 recorded rows happen to have `tool_calls_total == assistant_message_count`, but that aggregate equality alone does not prove there were no multi-call messages. Therefore exact individual tool-call sequencing in the pinned raw source remains an **unverified edge case**; inspect raw `assistant.tool_calls` lengths per message and, if relevant, release a versioned implementation amendment and analysis. Do not silently edit the original Step 8 definition or replace frozen v1 CSVs.
+
 ## Manuscript
 
 `paper/` provides a working IEEEtran journal-style LaTeX manuscript. The paper-build workflow compiles it with BibTeX and publishes a PDF preview plus an import-ready source ZIP as short-retention GitHub Actions artifacts:
