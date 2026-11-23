@@ -1,0 +1,223 @@
+{
+  "status": "POST_HOC_SUPERVISOR_DIAGNOSTICS_NOT_HUMAN_ORACLE",
+  "analysis_date": "2026-11-23",
+  "input_features": "results/2026-11-12/STEP9_TRAJECTORY_FEATURES_v1.csv",
+  "input_labels": "results/2026-11-12/STEP7_ANALYSIS_LABELS_v1.csv",
+  "review_ledger": "results/2026-11-12/STEP6_FAIL_REVIEW_31.csv",
+  "original_bootstrap": "results/2026-11-12/STEP10_AUROC_TASK_CLUSTER_v2.json",
+  "primary": {
+    "positive_runs": 9,
+    "negative_runs": 153,
+    "positive_task_ids": 5,
+    "auroc_verification": 0.4803921568627451,
+    "positive_verification_counts": {
+      "no_recognized": 0,
+      "recognized": 9
+    },
+    "negative_verification_counts": {
+      "no_recognized": 6,
+      "recognized": 147
+    },
+    "pairwise_verification": {
+      "auc": 0.4803921568627451,
+      "pos": 9,
+      "neg": 153,
+      "win": 0,
+      "tie": 1323,
+      "lose": 54,
+      "pairs": 1377,
+      "tieRate": 0.9607843137254902
+    },
+    "pairwise_duplicate": {
+      "auc": 0.48946986201888165,
+      "pos": 9,
+      "neg": 153,
+      "win": 664,
+      "tie": 20,
+      "lose": 693,
+      "pairs": 1377,
+      "tieRate": 0.014524328249818447
+    }
+  },
+  "bootstrap": {
+    "original_rng_500": {
+      "requested": 500,
+      "valid": 496,
+      "invalid": 4,
+      "ci95": [
+        0.4592153105345912,
+        0.4967948717948718
+      ],
+      "median": 0.48176274944567626,
+      "minimum": 0.4444444444444444,
+      "maximum": 0.5,
+      "exact_half": 9,
+      "less_than_044": 0
+    },
+    "independent_xorshift_10000": {
+      "requested": 10000,
+      "valid": 9940,
+      "invalid": 60,
+      "ci95": [
+        0.4588607594936709,
+        0.49683544303797467
+      ],
+      "median": 0.4811320754716981,
+      "minimum": 0.43137254901960786,
+      "maximum": 0.5,
+      "exact_half": 165,
+      "less_than_044": 2
+    },
+    "histogram": [
+      {
+        "bin": "<0.44",
+        "original500": 0,
+        "independent10000": 2
+      },
+      {
+        "bin": "0.44–0.45",
+        "original500": 5,
+        "independent10000": 45
+      },
+      {
+        "bin": "0.45–0.46",
+        "original500": 10,
+        "independent10000": 261
+      },
+      {
+        "bin": "0.46–0.47",
+        "original500": 46,
+        "independent10000": 1174
+      },
+      {
+        "bin": "0.47–0.48",
+        "original500": 152,
+        "independent10000": 2859
+      },
+      {
+        "bin": "0.48–0.49",
+        "original500": 185,
+        "independent10000": 3720
+      },
+      {
+        "bin": "0.49–<0.50",
+        "original500": 89,
+        "independent10000": 1714
+      },
+      {
+        "bin": "=0.50",
+        "original500": 9,
+        "independent10000": 165
+      }
+    ],
+    "reproduced_original_ci": true
+  },
+  "unresolved_sensitivity": {
+    "run:2": {
+      "scenarios": 120,
+      "min": 0.47831253713606653,
+      "median": 0.5558526440879382,
+      "max": 0.5822935234699941
+    },
+    "run:3": {
+      "scenarios": 560,
+      "min": 0.49727668845315903,
+      "median": 0.576797385620915,
+      "max": 0.6171023965141612
+    },
+    "task:2": {
+      "scenarios": 28,
+      "min": 0.514161220043573,
+      "median": 0.5898692810457516,
+      "max": 0.6496265172735761
+    },
+    "task:3": {
+      "scenarios": 56,
+      "min": 0.5443510737628384,
+      "median": 0.6217864923747277,
+      "max": 0.682237600922722
+    }
+  },
+  "task_summaries": [
+    {
+      "task_id": "django__django-11999",
+      "primary_positive_runs": 1,
+      "primary_negative_runs": 2,
+      "positive_samples": "3",
+      "duplicate_min": 0.142857142857,
+      "duplicate_max": 0.142857142857,
+      "error_min": 0.107142857143,
+      "error_max": 0.107142857143,
+      "post_verify_edits_min": 0,
+      "post_verify_edits_max": 0,
+      "verification_all_positive": true
+    },
+    {
+      "task_id": "django__django-14311",
+      "primary_positive_runs": 3,
+      "primary_negative_runs": 0,
+      "positive_samples": "1;2;3",
+      "duplicate_min": 0.0217391304348,
+      "duplicate_max": 0.16,
+      "error_min": 0.173913043478,
+      "error_max": 0.347826086957,
+      "post_verify_edits_min": 0,
+      "post_verify_edits_max": 1,
+      "verification_all_positive": true
+    },
+    {
+      "task_id": "django__django-14999",
+      "primary_positive_runs": 1,
+      "primary_negative_runs": 0,
+      "positive_samples": "1",
+      "duplicate_min": 0.159090909091,
+      "duplicate_max": 0.159090909091,
+      "error_min": 0.272727272727,
+      "error_max": 0.272727272727,
+      "post_verify_edits_min": 0,
+      "post_verify_edits_max": 0,
+      "verification_all_positive": true
+    },
+    {
+      "task_id": "matplotlib__matplotlib-25775",
+      "primary_positive_runs": 1,
+      "primary_negative_runs": 0,
+      "positive_samples": "2",
+      "duplicate_min": 0.183673469388,
+      "duplicate_max": 0.183673469388,
+      "error_min": 0.285714285714,
+      "error_max": 0.285714285714,
+      "post_verify_edits_min": 0,
+      "post_verify_edits_max": 0,
+      "verification_all_positive": true
+    },
+    {
+      "task_id": "sympy__sympy-15599",
+      "primary_positive_runs": 3,
+      "primary_negative_runs": 0,
+      "positive_samples": "1;2;3",
+      "duplicate_min": 0.166666666667,
+      "duplicate_max": 0.285714285714,
+      "error_min": 0.142857142857,
+      "error_max": 0.238095238095,
+      "post_verify_edits_min": 3,
+      "post_verify_edits_max": 9,
+      "verification_all_positive": true
+    }
+  ],
+  "adjudication_consistency": {
+    "original_fail_task_ids": 15,
+    "uniform_task_status": 14,
+    "mixed_task_status": [
+      {
+        "task": "django__django-14999",
+        "values": [
+          "valid_failure",
+          "unresolved",
+          "unresolved"
+        ]
+      }
+    ],
+    "temporal_intra_rater_reassessment": "NOT_AVAILABLE"
+  }
+}
